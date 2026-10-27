@@ -645,6 +645,9 @@ tfoot td.stk{background:#EEF0F3}
 .dctr b{font-size:20px;font-weight:600;line-height:1.15;letter-spacing:-.01em}
 .dctr span{font-size:14px;line-height:1.25;margin:0;max-width:96px}
 .dctr em{font-size:14px;font-weight:500;line-height:1.25;margin:0}
+/* status cells in wrapping columns may break onto two lines (long readiness statuses) */
+td.wrap .st{white-space:normal;align-items:flex-start;min-width:150px}
+td.wrap .st i{flex:none;margin-top:.45em}
 </style>
 </head>
 <body style="margin:0">

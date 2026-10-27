@@ -645,6 +645,9 @@ tfoot td.stk{background:#EEF0F3}
 .dctr b{font-size:20px;font-weight:600;line-height:1.15;letter-spacing:-.01em}
 .dctr span{font-size:14px;line-height:1.25;margin:0;max-width:96px}
 .dctr em{font-size:14px;font-weight:500;line-height:1.25;margin:0}
+/* status cells in wrapping columns may break onto two lines (long readiness statuses) */
+td.wrap .st{white-space:normal;align-items:flex-start;min-width:150px}
+td.wrap .st i{flex:none;margin-top:.45em}
 </style>
 </head>
 <body style="margin:0">
@@ -1310,39 +1313,47 @@ document.querySelectorAll(".mgrp").forEach(g=>{const sub=$(g.getAttribute("aria-
 
 // ===== Are You Ready? (SOP Readiness) (Pilot/SOP Trial) =====
 // Sample data (own seed). Each part has an SOP readiness confirmation: OK, NG or Confirmation Pending.
-// Eleven readiness fields, each with its own applicable population and status values:
-//   two-state fields (Yes/No, Completed/Pending, Closed/Pending, Done/Pending, Ready/Not Ready): ready = first state
-//   Tier 2 Preparedness: OK / NG / Evaluation Pending (ready = OK)
-//   Manpower Readiness and Process Audit: planned vs actual counts (ready % = actual ÷ planned, capped at the plan per part)
-// Part wise % = ready ÷ applicable parts (or actual ÷ planned). Vendor wise % = average of each vendor's own readiness % (every vendor weighted equally).
+// Eleven readiness fields, each with its own applicable population; an applicable part takes exactly one status per field.
+// Readiness % is not a defined KPI, so it is derived from what each status means for SOP (r = the ready status):
+//   Tool Readiness: ready = Parts with Permanent Tool (temporary tools and tools under modification are not SOP ready)
+//   Line Readiness: Completed · Manpower: Available Yes · Part Evaluation / Tier 2 Preparedness: OK
+//   Process Audit / PPVT: All Points Closed Yes · Packaging: Sufficient Trolleys/Bins Yes · IFM: Station Available Yes
+//   Pre ECN Disposal: ready = Parts Available In Plant/Warehouse Yes
+//   Spare Kit Verification: Completed
+// Part wise % = ready ÷ applicable parts. Vendor wise % = average of each vendor's own readiness % (every vendor weighted equally).
 const RR=rng(1487);
-const F=[{k:"tool",l:"Tool Readiness",t:"bin",s:["Yes","No"],a:1},{k:"line",l:"Line Readiness",t:"bin",s:["Completed","Pending"],a:1},{k:"peval",l:"Part Evaluation",t:"bin",s:["Completed","Pending"],a:1},
-  {k:"man",l:"Manpower Readiness",t:"cnt",s:["Trained Planned","Trained Actual"],a:.55},{k:"t2",l:"Tier 2 Preparedness",t:"tri",s:["OK","NG","Evaluation Pending"],a:.8},
-  {k:"pa",l:"Process Audit",t:"cnt",s:["Planned Audits","Actual Audits"],a:.85},{k:"ppvt",l:"PPVT",t:"bin",s:["Closed","Pending"],a:.7},{k:"ecn",l:"Pre ECN Disposal",t:"bin",s:["Done","Pending"],a:.35},
-  {k:"pack",l:"Packaging Readiness",t:"bin",s:["Yes","No"],a:1},{k:"ifm",l:"IFM Readiness",t:"bin",s:["Ready","Not Ready"],a:1},{k:"spk",l:"Spare Kit Verification",t:"bin",s:["Yes","No"],a:.4}];
+const F=[{k:"tool",l:"Tool Readiness",s:["Parts with Permanent Tool","Parts with Temporary Tool","Tool Under Modification"],c:["ok","tbc","po"],r:0,rl:"with a permanent tool",a:1},
+  {k:"line",l:"Line Readiness",s:["Completed","Pending"],c:["ok","tbc"],r:0,rl:"line readiness completed",a:1},
+  {k:"man",l:"Manpower Readiness",s:["Availability: Yes","Availability: No"],c:["ok","bad"],r:0,rl:"with manpower available",a:.55},
+  {k:"peval",l:"Part Evaluation",s:["OK","NG","Evaluation Pending"],c:["ok","bad","tbc"],r:0,rl:"evaluated OK",a:1},
+  {k:"t2",l:"Tier 2 Preparedness",s:["OK","NG","Evaluation Pending"],c:["ok","bad","tbc"],r:0,rl:"Tier 2 OK",a:.8},
+  {k:"pa",l:"Process Audit",s:["All Points Closed: Yes","All Points Closed: No"],c:["ok","bad"],r:0,rl:"with all audit points closed",a:.85},
+  {k:"ppvt",l:"PPVT",s:["All Points Closed: Yes","All Points Closed: No"],c:["ok","bad"],r:0,rl:"with all PPVT points closed",a:.7},
+  {k:"ecn",l:"Pre ECN Disposal",s:["Parts Available In Plant/Warehouse: Yes","Parts Available In Plant/Warehouse: No"],c:["ok","bad"],r:0,rl:"with parts available in plant/warehouse",a:.35},
+  {k:"pack",l:"Packaging Readiness",s:["Sufficient Trolleys/Bins: Yes","Sufficient Trolleys/Bins: No"],c:["ok","bad"],r:0,rl:"with sufficient trolleys or bins",a:1},
+  {k:"ifm",l:"IFM Readiness",s:["Station Available: Yes","Station Available: No"],c:["ok","bad"],r:0,rl:"with an IFM station available",a:1},
+  {k:"spk",l:"Spare Kit Verification",s:["Completed","Not Completed"],c:["ok","tbc"],r:0,rl:"spare kit verified",a:.4}];
 const SOPS=[["OK","SOP Readiness OK","ok"],["NG","SOP Readiness NG","bad"],["Pending","SOP Readiness Confirmation Pending","tbc"]];
 PARTS.forEach(p=>{const b=(MODELS.indexOf(p.model)*5+DLIST.indexOf(p.dept)*3)%10/40;p.sr={};
   F.forEach((f,i)=>{const app=RR()<f.a,q=.62+((i*7)%10)/40-b;let v=null;
-    if(app){if(f.t==="bin")v=RR()<q?0:1;else if(f.t==="tri"){const x=RR();v=x<q?0:x<q+.12?1:2}else{const pl=1+Math.floor(RR()*(f.k==="man"?6:3));v={pl,ac:Math.max(0,pl-(RR()<q?0:1+Math.floor(RR()*2)))}}}
-    p.sr[f.k]=app?v:null});
+    if(app){if(RR()<q)v=f.r;else{const o=f.s.map((_,j)=>j).filter(j=>j!==f.r);v=o[Math.floor(RR()*o.length)]}}
+    p.sr[f.k]=v});
   const x=RR();p.sop=x<.5-b?"OK":x<.68-b?"NG":"Pending";p.one=1;SOPS.forEach(([k])=>p["s_"+k]=+(p.sop===k));
   // per-field counts used by graphs and tables
-  F.forEach(f=>{const v=p.sr[f.k];p["a_"+f.k]=+(v!==null);if(f.t==="cnt"){p[f.k+"_pl"]=v?v.pl:0;p[f.k+"_ac"]=v?Math.min(v.ac,v.pl):0;p["r_"+f.k]=+(!!v&&v.ac>=v.pl)}
-    else{f.s.forEach((_,j)=>p[f.k+"_"+j]=+(v===j));p["r_"+f.k]=+(v===0)}})});
+  F.forEach(f=>{const v=p.sr[f.k];p["a_"+f.k]=+(v!==null);f.s.forEach((_,j)=>p[f.k+"_"+j]=+(v===j));p["r_"+f.k]=+(v===f.r)})});
 const sum=(r,f)=>r.reduce((a,p)=>a+p[f],0),grp=(rows,key,groups)=>groups.map(g=>rows.filter(p=>p[key]===g)),has=f=>p=>p[f]>0;
 const word=k=>k==="model"?"Model":"Department";
 const groupsOf=(rows,key)=>{const all=key==="model"?MODELS:DLIST,g=all.filter(x=>rows.some(p=>p[key]===x));return g.length?g:all};
-const partPct=(r,f)=>f.t==="cnt"?(sum(r,f.k+"_pl")?pct(sum(r,f.k+"_ac"),sum(r,f.k+"_pl")):null):(sum(r,"a_"+f.k)?pct(sum(r,"r_"+f.k),sum(r,"a_"+f.k)):null);
+const partPct=(r,f)=>sum(r,"a_"+f.k)?pct(sum(r,"r_"+f.k),sum(r,"a_"+f.k)):null;
 // vendor wise: each vendor's own readiness % on the field, averaged so every vendor counts equally
-function venPct(r,f){const vs={};r.filter(p=>p["a_"+f.k]).forEach(p=>{const o=vs[p.vname]=vs[p.vname]||{a:0,r:0};if(f.t==="cnt"){o.a+=p[f.k+"_pl"];o.r+=p[f.k+"_ac"]}else{o.a++;o.r+=p["r_"+f.k]}});
+function venPct(r,f){const vs={};r.filter(p=>p["a_"+f.k]).forEach(p=>{const o=vs[p.vname]=vs[p.vname]||{a:0,r:0};o.a++;o.r+=p["r_"+f.k]});
   const L=Object.entries(vs).filter(([,o])=>o.a).map(([n,o])=>[n,o.r/o.a*100]);if(!L.length)return null;L.sort((a,b)=>a[1]-b[1]);
   return{pc:Math.round(L.reduce((a,x)=>a+x[1],0)/L.length),n:L.length,lo:L[0],hi:L[L.length-1]}}
 const svals=r=>({total:r.length,ok:sum(r,"s_OK"),ng:sum(r,"s_NG"),pen:sum(r,"s_Pending")});
 const TILES={ov:[{m:"total",l:"Total Parts",c:"t-total",bar:"tot"},{m:"ok",l:"SOP Readiness OK",c:"t-ok",bar:"ok"},{m:"ng",l:"SOP Readiness NG",c:"t-bad",bar:"bad"},{m:"pen",l:"SOP Readiness Confirmation Pending",c:"t-tbc",bar:"tbc"}]};
 const TF={ok:"s_OK",ng:"s_NG",pen:"s_Pending"};
-// series colours per status position
-const SK={bin:["ok","tbc"],tri:["ok","bad","tbc"],cnt:["pt","ok"]};
-const ser=f=>f.t==="cnt"?[[f.k+"_pl",f.s[0],"pt"],[f.k+"_ac",f.s[1],"ok"]]:f.s.map((s,j)=>[f.k+"_"+j,s,SK[f.t][j]]);
+// one series per status of the field, coloured by what the status means
+const ser=f=>f.s.map((s,j)=>[f.k+"_"+j,s,f.c[j]]);
 S.leftType="part";S.sopF=0;S.rby="model";S.tview="dept";
 
 // ---------- tables ----------
@@ -1356,13 +1367,13 @@ const aggT=key=>({title:"SOP Readiness Details",agg:agg(key),q:r=>[r[key]],group
   count:rows=>`${rows.length} ${key==="dept"?"departments":"vendors"} · ${sum(rows,"one")} parts`});
 const DEPT_T=aggT("dept"),VEN_T=aggT("vname");
 const dash='<span style="color:var(--subtle)">-</span>';
-const fval=(p,f)=>{const v=p.sr[f.k];if(v===null)return null;return f.t==="cnt"?`${Math.min(v.ac,v.pl)}/${v.pl} ${f.k==="man"?"trained":"done"}`:f.s[v]};
+const fval=(p,f)=>{const v=p.sr[f.k];return v===null?null:f.s[v]};
 const PART_T={title:"SOP Readiness Details",groups:[["Part Details",6],["SOP",1],["Readiness Fields",11]],
   cols:[["model","Model"],["no","Part Number"],["name","Part Name"],["pic","PIC"],["dept","Department"],["vname","Vendor"],["sop","SOP Readiness"],...F.map(f=>["f_"+f.k,f.l])],
   cell:(p,k)=>k.startsWith("f_")?(fval(p,F.find(f=>"f_"+f.k===k))??"-"):k==="sop"?(p.sop==="Pending"?"Confirmation Pending":p.sop):p[k],
   row:p=>`<tr><td class="id">${p.model}</td><td class="id">${p.no}</td><td class="wrap">${p.name}</td><td class="wrap">${p.pic}</td><td>${p.dept}</td><td class="wrap">${p.vname}</td>`+
     `<td>${stCell(p.sop==="Pending"?"Confirmation Pending":p.sop,{OK:"ok",NG:"bad",Pending:"tbc"}[p.sop])}</td>`+
-    F.map(f=>{const v=fval(p,f);if(v===null)return`<td>${dash}</td>`;const ok=p["r_"+f.k];return`<td>${stCell(v,ok?"ok":f.t==="tri"&&p.sr[f.k]===1?"bad":"tbc")}</td>`}).join("")+`</tr>`,
+    F.map(f=>{const v=fval(p,f);if(v===null)return`<td>${dash}</td>`;return`<td class="wrap">${stCell(v,f.c[p.sr[f.k]])}</td>`}).join("")+`</tr>`,
   count:rows=>`${rows.length} parts`};
 [DEPT_T,VEN_T,PART_T].forEach(t=>t.tileFilter=m=>m==="total"?null:has(TF[m]));
 
@@ -1377,7 +1388,7 @@ const PAGECFG={
   renderLeft(){const rows=scoped(),ven=S.leftType==="ven",vals=F.map(f=>ven?(venPct(rows,f)||{}).pc??0:partPct(rows,f)??0),sel=S.sopF;
     const bg=F.map((_,i)=>i===sel?"#1447E6":css("--ini-bar")),bd=F.map((_,i)=>i===sel?"#1447E6":css("--ini-bar-bd"));
     const o=chartOpts({suffix:"%",callbacks:{label:c=>{const f=F[c.dataIndex];if(ven){const v=venPct(rows,f);return v?[` Average vendor readiness: ${v.pc}% across ${v.n} vendors`,` Lowest: ${v.lo[0]} ${Math.round(v.lo[1])}% · highest: ${v.hi[0]} ${Math.round(v.hi[1])}%`]:" No applicable vendors"}
-      return f.t==="cnt"?` ${sum(rows,f.k+"_ac")} of ${sum(rows,f.k+"_pl")} ${f.s[0].toLowerCase().replace("planned","")} done (${c.raw}%)`.replace("  "," "):` ${sum(rows,"r_"+f.k)} of ${sum(rows,"a_"+f.k)} applicable parts ${f.s[0].toLowerCase()} (${c.raw}%)`},
+      return[` ${sum(rows,"r_"+f.k)} of ${sum(rows,"a_"+f.k)} applicable parts ${f.rl} (${c.raw}%)`,` Ready = ${f.s[f.r]}`]},
       footer:it=>it[0].dataIndex===sel?"Selected · breakdown shown on the right":"Click to break this field down on the right"}});
     o.scales.y.max=100;o.scales.y.ticks.callback=v=>v+"%";o.scales.y.title={display:true,text:ven?"Average vendor readiness (%)":"Parts ready (%)",color:"#4A5565",font:{size:14},auto:false};
     o.scales.x.ticks={...o.scales.x.ticks,autoSkip:false,maxRotation:0,font:c=>({weight:c.index===sel?"700":"400"})};
@@ -1387,20 +1398,19 @@ const PAGECFG={
     o.onHover=(e,els,ch)=>ch.canvas.classList.toggle("clickable",els.length>0);
     drawChart("L",{noTotal:true,minPer:100,data:{labels:F.map(f=>f.l.split(" ").length>1?[f.l.split(" ").slice(0,-1).join(" "),f.l.split(" ").slice(-1)[0]]:f.l),datasets:[{label:ven?"Average vendor readiness":"Parts ready",data:vals,suffix:"%",backgroundColor:bg,borderColor:bd,borderWidth:1,borderRadius:TOPR,borderSkipped:"bottom",maxBarThickness:36,categoryPercentage:.7,barPercentage:.85}]},options:o});
     $("cap-left").textContent=`${ven?"Vendor":"Part"} Wise SOP Readiness · 11 Fields`;$("lg-left").innerHTML=legendHtml([[ven?"Average vendor readiness (%)":"Parts ready (%)","ini"]])+`<span><i style="background:#1447E6;border-color:#1447E6"></i>Selected field</span>`;
-    $("n-left").textContent=ven?"Vendor wise: each vendor's readiness % on the field, averaged so every vendor counts equally":"Part wise: ready ÷ applicable parts for each field (Manpower and Process Audit: actual ÷ planned)"},
+    $("n-left").textContent=ven?"Vendor wise: each vendor's readiness % on the field, averaged so every vendor counts equally":"Part wise: parts in the ready status ÷ applicable parts for each field · hover a column to see which status counts as ready"},
   renderRight(){const f=F[S.sopF],rows=scoped(),key=S.rby,groups=groupsOf(rows,key),G=grp(rows,key,groups),SR=ser(f);
     $("ctx-right").innerHTML=`<div class="seg" role="group" aria-label="Group chart by"><button data-rby="model" class="${key==="model"?"on":""}">By Model</button><button data-rby="dept" class="${key==="dept"?"on":""}">By Department</button></div>`+
       [`<span class="tag brand">${f.l}</span>`].concat(filterTags()).join("");
     if(!sum(rows,"a_"+f.k))return showEmpty("Not applicable",`No parts in this selection are applicable for ${f.l}.`);showRight();
     drawChart("R",{data:{labels:groups,datasets:SR.map(([k,l,c])=>Object.assign(ds(l,G.map(r=>sum(r,k)),c,{maxBarThickness:SR.length>2?24:28}),{f:has(k)}))},
-      callbacks:{footer:it=>{const i=it[0].dataIndex,r=i<G.length?G[i]:rows;return f.t==="cnt"?`${pct(sum(r,f.k+"_ac"),sum(r,f.k+"_pl"))}% of plan`:`${sum(r,"a_"+f.k)} applicable parts · ${partPct(r,f)??0}% ${f.s[0].toLowerCase()}`}},totFooter:true});
+      callbacks:{footer:it=>{const i=it[0].dataIndex,r=i<G.length?G[i]:rows;return`${sum(r,"a_"+f.k)} applicable parts · ${partPct(r,f)??0}% ready (${f.s[f.r]})`}},totFooter:true});
     $("cap-right").textContent=`${word(key)} Wise ${f.l}`;$("lg-right").innerHTML=legendHtml(SR.map(([,l,c])=>[l,c]));
-    $("n-right").textContent=f.t==="cnt"?`${sum(rows,f.k+"_ac")} of ${sum(rows,f.k+"_pl")} ${f.k==="man"?"planned trainings done":"planned audits done"} on ${sum(rows,"a_"+f.k)} applicable parts`:
-      `${sum(rows,"a_"+f.k)} applicable parts = ${SR.map(([k,l])=>`${sum(rows,k)} ${l.toLowerCase()}`).join(" + ")}`},
+    $("n-right").textContent=`${sum(rows,"a_"+f.k)} applicable parts = ${SR.map(([k,l])=>`${sum(rows,k)} ${l}`).join(" + ")} · ready = ${f.s[f.r]}`},
   alerts(rows){const out={crit:[],mgmt:[],ins:[],sum:[]},v=svals(rows);if(!v.total)return out;
     const P=F.map(f=>[f,partPct(rows,f)]).filter(x=>x[1]!==null).sort((a,b)=>a[1]-b[1]);
     if(v.ng)out.crit.push({k:v.ng,s:"Parts with SOP readiness NG",t:`${v.ng} parts are SOP readiness NG`,d:`${v.pen} more awaiting confirmation.`,o:"Programme Head"});
-    P.slice(0,3).forEach(([f,pc])=>out.crit.push({k:pc+"%",s:`${f.l} is among the least ready fields`,t:`${f.l} is only ${pc}% ready`,d:f.t==="cnt"?`${sum(rows,f.k+"_ac")} of ${sum(rows,f.k+"_pl")} planned done.`:`${sum(rows,"a_"+f.k)-sum(rows,"r_"+f.k)} applicable parts not ready.`,o:"Section Head"}));
+    P.slice(0,3).forEach(([f,pc])=>out.crit.push({k:pc+"%",s:`${f.l} is among the least ready fields`,t:`${f.l} is only ${pc}% ready`,d:`${sum(rows,"a_"+f.k)-sum(rows,"r_"+f.k)} applicable parts not ready.`,o:"Section Head"}));
     const vt=F.map(f=>[f,venPct(rows,f)]).filter(x=>x[1]).sort((a,b)=>a[1].lo[1]-b[1].lo[1])[0];if(vt)out.crit.push({k:Math.round(vt[1].lo[1])+"%",s:`${vt[1].lo[0]} on ${vt[0].l}`,t:`${vt[1].lo[0]} is only ${Math.round(vt[1].lo[1])}% ready on ${vt[0].l}`,d:"Lowest vendor readiness on any field.",o:"Purchase"});
     out.sum.push({k:`${pct(v.ok,v.total)}%`,s:"Of parts confirmed SOP ready",t:`${v.ok} of ${v.total} parts are SOP readiness OK`,d:`${v.ng} NG, ${v.pen} confirmation pending.`,o:"Programme Head"});
     P.slice(-2).reverse().forEach(([f,pc])=>out.sum.push({k:pc+"%",s:`${f.l} is among the most ready fields`,t:`${f.l} is ${pc}% ready`,d:"One of the two highest of the 11 fields.",o:"Programme Head"}));
@@ -1409,7 +1419,8 @@ const PAGECFG={
     if(bd[0])out.sum.push({k:bd[0][1]+"%",s:`SOP ready in ${bd[0][0]}, the best of any department`,t:`${bd[0][0]} has ${bd[0][1]}% of parts SOP readiness OK`,d:"Highest of all departments.",o:`${bd[0][0]} Team`});
     const t2=F.find(f=>f.k==="t2");out.ins=[bd.length>1&&{k:bd[bd.length-1][1]+"%",s:`SOP ready in ${bd[bd.length-1][0]}, the lowest of any department`,t:`${bd[bd.length-1][0]} is lowest at ${bd[bd.length-1][1]}% SOP readiness OK`,d:"Lowest of all departments.",o:`${bd[bd.length-1][0]} Team`},
       {k:sum(rows,"t2_1"),s:"Tier 2 preparedness NG",t:`${sum(rows,"t2_1")} applicable parts have Tier 2 preparedness NG`,d:`${sum(rows,"t2_2")} still under evaluation.`,o:"Purchase"},
-      {k:`${pct(sum(rows,"man_ac"),sum(rows,"man_pl"))}%`,s:"Of planned manpower trained",t:`${sum(rows,"man_ac")} of ${sum(rows,"man_pl")} planned operators trained`,d:"Manpower Readiness.",o:"Production"},
+      {k:sum(rows,"tool_1")+sum(rows,"tool_2"),s:"Parts not yet on a permanent tool",t:`${sum(rows,"tool_1")} parts on temporary tools and ${sum(rows,"tool_2")} with the tool under modification`,d:"Tool Readiness.",o:"Tooling Team"},
+      {k:sum(rows,"ecn_1"),s:"Pre ECN Disposal: parts not available in plant/warehouse",t:`${sum(rows,"ecn_1")} applicable parts are not available in the plant or warehouse`,d:"Pre ECN Disposal not ready.",o:"Logistics"},
       {k:`${pct(v.pen,v.total)}%`,s:"Of parts awaiting SOP readiness confirmation",t:`${v.pen} parts are awaiting SOP readiness confirmation`,d:"Neither OK nor NG yet.",o:"Programme Head"}].filter(Boolean);
     return out}
 };
