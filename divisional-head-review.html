@@ -692,6 +692,30 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .aitabs .sup.on{background:linear-gradient(120deg,#9B6BE8,#6D3BCB)}
 .aitiles.sup{--ac:#6D3BCB;--acb:#F8F5FF}
 .dr-band.sup{background:linear-gradient(120deg,#9B6BE8,#6D3BCB)}
+/* quarter balls (Divisional Head Review · Activity Status Summary) */
+.hball{display:inline-block;vertical-align:middle}
+.hball .hbo{fill:#fff}.hball .hbf{fill:#344054}.hball .hbx{stroke:#98A2B3;stroke-width:1}.hball .hbr{fill:none;stroke:#344054;stroke-width:1.5}
+td.hb{text-align:center}
+.legend.hbl{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:8px 18px;margin:16px 0 0;padding:12px 14px;border:1px solid var(--border);border-radius:8px;background:#FAFBFC}
+.legend.hbl b{font-weight:600;color:var(--heading)}.legend.hbl span{display:inline-flex;align-items:center;gap:6px;color:var(--heading)}.legend.hbl em{font-style:normal;color:var(--body)}.legend.hbl[hidden]{display:none}
+th.ctr{text-align:center}th.ctr button{margin:0 auto}
+.hbcell{display:inline-flex;align-items:center;gap:10px}.hbcell .st{min-width:0}
+.hbcell .st{align-items:center}.hbcell .st i{margin-top:0}
+/* Divisional Head Review: single full-width chart; quality risk heat map cells */
+.charts.solo{grid-template-columns:minmax(0,1fr)}.charts.solo>.card:nth-child(2){display:none}
+td.heat{font-weight:600;text-align:center}
+td.heat.ok{background:var(--ok-bg)!important;color:var(--ok)}td.heat.tbc{background:var(--tbc-bg)!important;color:var(--tbc)}td.heat.bad{background:var(--bad-bg)!important;color:var(--bad)}
+.pcell{display:inline-flex;align-items:center;gap:10px}
+.pbar{display:inline-block;width:64px;height:6px;border-radius:3px;background:#EEF0F3;overflow:hidden;flex:none}
+.pbar i{display:block;height:100%;border-radius:3px}.pbar i.ok{background:var(--ok-bar-bd)}.pbar i.tbc{background:var(--tbc-bar-bd)}.pbar i.bad{background:var(--bad-bar-bd)}.pbar i.na{background:var(--na-bar-bd)}
+.ovs{display:inline-flex;align-items:center;gap:10px;font-size:20px}.ovs .hball{width:24px;height:24px}
+.ovdot{display:inline-block;width:22px;height:22px;border-radius:50%;vertical-align:middle;margin:5px 0}.ovdot.ok{background:var(--ok-bar-bd)}.ovdot.tbc{background:var(--tbc-bar-bd)}.ovdot.bad{background:var(--bad-bar-bd)}.ovdot.na{background:var(--na-bar-bd)}
+/* Upcoming Milestones alerts segment (New Product Development Trials) */
+.aitabs .mil{color:#0E7C86}
+.aitabs .mil.on{background:linear-gradient(120deg,#2BB3BD,#0E7C86)}
+.aitiles.mil{--ac:#0E7C86;--acb:#F0FBFC}
+.dr-band.mil{background:linear-gradient(120deg,#2BB3BD,#0E7C86)}
+.aitiles.mil .aitile strong{font-size:22px}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1193,13 +1217,13 @@ html,body{overflow-x:clip}
         </div>
         <div class="airow"><div class="aitiles" id="aitiles"></div><button class="viewmore" id="ai-more" aria-haspopup="dialog">View More<svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m14 0-4 4m4-4-4-4"/></svg></button></div>
       </section>
-      <section class="card off" aria-label="Summary">
+      <section class="card" aria-label="Summary">
         <div class="tabs" role="tablist" id="tabs"></div>
         <div class="tiles" id="tiles"></div>
         <div class="helper" id="tab-helper" hidden></div>
         <div class="hint" id="tile-hint"></div>
       </section>
-      <div class="charts w32">
+      <div class="charts">
         <section class="card">
           <div class="card-head"><div><h2 id="lt-h">Overall Readiness by Activity</h2><p class="sub" id="lt-s">Readiness % of applicable parts for 8 key activities · for the selected model, fuel type and variant</p></div><div class="xwrap"><button class="xbtn" data-x="L" aria-haspopup="true" aria-label="Export overall chart"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/></svg>Export</button><div class="menu-pop xmenu" data-xm="L" hidden></div></div></div>
           <div class="ctx"></div>
@@ -1207,13 +1231,13 @@ html,body{overflow-x:clip}
           <div class="chart-cap" id="cap-left"></div><div class="legend" id="lg-left"></div><div class="note" id="n-left"></div>
         </section>
         <section class="card">
-          <div class="card-head"><div><h2>Total Parts by Department</h2><p class="sub">Parts and share of total for the selected model, fuel type and variant · select a department to filter the part table</p></div><div class="head-tools"><div class="xwrap"><button class="xbtn" data-x="R" aria-haspopup="true" aria-label="Export breakdown chart"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/></svg>Export</button><div class="menu-pop xmenu" data-xm="R" hidden></div></div></div></div>
+          <div class="card-head"><div><h2>Total Parts by Department</h2><p class="sub">Parts and share of total · select a department to filter the part table</p></div><div class="head-tools"><div class="xwrap"><button class="xbtn" data-x="R" aria-haspopup="true" aria-label="Export breakdown chart"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/></svg>Export</button><div class="menu-pop xmenu" data-xm="R" hidden></div></div></div></div>
           <div class="ctx" id="ctx-right"></div>
           <div class="chart-box"><div class="chart-scroll"><div class="chart-inner"><canvas id="c-right" role="img" aria-label="Contextual breakdown chart"></canvas></div></div><div class="empty" id="e-right" hidden></div></div>
           <div class="chart-cap" id="cap-right"></div><div class="legend" id="lg-right"></div><div class="note" id="n-right"></div>
         </section>
       </div>
-<section class="card" aria-labelledby="ds-h"><div class="card-head"><div><h2 id="ds-h">Readiness Summary</h2><p class="sub" id="ds-sub">Activity status, newness, escalations and risk areas for the selected model, fuel type and variant</p></div><div class="xwrap"><button class="xbtn" data-x="ds" aria-haspopup="true" aria-label="Export table"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/></svg>Export</button><div class="menu-pop xmenu" data-xm="ds" hidden></div></div></div><div class="ctx tvrow"><div class="radios" role="radiogroup" aria-label="Table shown"><label><input type="radio" name="ds-view" value="act" checked>Activity Status Summary</label><label><input type="radio" name="ds-view" value="new">Key Newness Details</label><label><input type="radio" name="ds-view" value="esc">Escalations</label><label><input type="radio" name="ds-view" value="risk">Risk Areas</label></div></div><label class="qlabel" for="ds-q">Enter search term to query the table <svg class="ic subtle" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.44 2.44 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0"/></svg></label><div class="qrow"><div class="qsearch"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg><input id="ds-q" type="search" placeholder="Search by Activity, Supplier, Category & More"></div><div class="fbtn"><button id="ds-fbtn" aria-expanded="false" aria-controls="ds-fpanel"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/></svg><span id="ds-flabel">Filters</span><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button></div><span class="count" id="ds-count"></span></div><div class="chips" id="ds-chips" hidden></div><div class="fpanel" id="ds-fpanel" hidden></div><div class="tbl-wrap"><table class="ds-tbl"><thead id="ds-thead"></thead><tbody id="ds-body"></tbody></table></div><div class="pager"><span id="ds-page"></span><div class="pg" id="ds-pg"></div></div></section>
+<section class="card" aria-labelledby="ds-h"><div class="card-head"><div><h2 id="ds-h">Readiness Summary</h2><p class="sub" id="ds-sub">Activity status, newness, escalations and risk areas for the selected model, fuel type and variant</p></div><div class="xwrap"><button class="xbtn" data-x="ds" aria-haspopup="true" aria-label="Export table"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/></svg>Export</button><div class="menu-pop xmenu" data-xm="ds" hidden></div></div></div><div class="ctx tvrow"><div class="radios" role="radiogroup" aria-label="Table shown"><label><input type="radio" name="ds-view" value="act" checked>Activity Status Summary</label><label><input type="radio" name="ds-view" value="new">Key Newness Details</label><label><input type="radio" name="ds-view" value="esc">Escalations</label><label><input type="radio" name="ds-view" value="risk">Quality Risk Heat Map</label></div></div><label class="qlabel" for="ds-q">Enter search term to query the table <svg class="ic subtle" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.44 2.44 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0"/></svg></label><div class="qrow"><div class="qsearch"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg><input id="ds-q" type="search" placeholder="Search by Activity, Supplier, Category & More"></div><div class="fbtn"><button id="ds-fbtn" aria-expanded="false" aria-controls="ds-fpanel"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/></svg><span id="ds-flabel">Filters</span><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button></div><span class="count" id="ds-count"></span></div><div class="chips" id="ds-chips" hidden></div><div class="fpanel" id="ds-fpanel" hidden></div><div class="tbl-wrap"><table class="ds-tbl"><thead id="ds-thead"></thead><tbody id="ds-body"></tbody></table></div><div class="pager"><span id="ds-page"></span><div class="pg" id="ds-pg"></div></div><div class="legend hbl" id="ds-hbl"></div></section>
 
 
 
@@ -1542,7 +1566,7 @@ function fitTable(tb){const w=tb&&tb.closest(".tbl-wrap");if(!w||!w.clientWidth)
   const hr=tb.querySelector("thead tr:last-child"),span=tb.querySelector("thead [rowspan]");
   if(!fits||!hr||span){Object.assign(tb.style,{width:"",minWidth:""});return}
   const ths=[...hr.children],nat=ths.map(th=>th.getBoundingClientRect().width),r0=tb.querySelector("tbody tr"),
-    wt=ths.map((_,i)=>{const td=r0&&r0.children.length===ths.length?r0.children[i]:null;return td&&td.classList.contains("wrap")?2:1});
+    wt=ths.map((_,i)=>{const td=r0&&r0.children.length===ths.length?r0.children[i]:null;return td&&td.classList.contains("wrap")?2:td&&td.classList.contains("num")&&!td.querySelector(".pcell")?.6:1});
   // columns whose natural width exceeds their share keep it; the rest split what is left in proportion to their weight
   let fixed=new Set(),share=0;for(let k=0;k<ths.length;k++){const free=W-[...fixed].reduce((a,i)=>a+nat[i],0),wsum=wt.reduce((a,x,i)=>fixed.has(i)?a:a+x,0);share=free/wsum;
     const more=ths.map((_,i)=>i).filter(i=>!fixed.has(i)&&nat[i]>share*wt[i]);if(!more.length)break;more.forEach(i=>fixed.add(i))}
@@ -1606,11 +1630,11 @@ function bindTable(){
 }
 
 // ===== Alerts drawer (items come from the page) =====
-const DR={sup:{l:"Support Required",e:"No support needed in the current selection."},crit:{l:"Key Alerts",e:"No critical issues in the current selection."},mgmt:{l:"Management Summary",e:"Nothing needs management review in the current selection."},ins:{l:"Key Insights",e:"Not enough data in the current selection for insights."}};
+const DR={mil:{l:"Upcoming Milestones",e:"No upcoming milestones in the current selection."},sup:{l:"Support Required",e:"No support needed in the current selection."},crit:{l:"Key Alerts",e:"No critical issues in the current selection."},mgmt:{l:"Management Summary",e:"Nothing needs management review in the current selection."},ins:{l:"Key Insights",e:"Not enough data in the current selection for insights."}};
 // Page rules give the first items; each segment is topped up to 5 with plain facts from the page's own tile metrics
 // (where a metric is highest by department or model in the current selection), so every statement comes from the data shown.
 function topUp(A0,rows){
-  if(PAGECFG.ownAlerts)return{crit:[...A0.crit,...A0.mgmt],mgmt:[...(A0.sum||[])],ins:[...A0.ins],sup:[...(A0.sup||[])]};
+  if(PAGECFG.ownAlerts)return{crit:[...A0.crit,...A0.mgmt],mgmt:[...(A0.sum||[])],ins:[...A0.ins],sup:[...(A0.sup||[])],mil:[...(A0.mil||[])]};
   // Key Alerts = page alert rules (incl. former management alerts); Management Summary = progress facts; Key Insights = page insights.
   // Each is topped up to 5 with specific facts (named PICs, vendors, departments, models) computed from the current top-level selection.
   const A={crit:[...A0.crit,...A0.mgmt],mgmt:[],ins:[...A0.ins]};if(!rows.length)return A;
@@ -1657,7 +1681,7 @@ function overview(t){const num="\\d[\\d,]*(?:\\.\\d+)?%?";let m=t.match(new RegE
   m=t.match(new RegExp("(?<![\\w-]|Model |Rank |Tier )("+num+")(?![\\w-])"));return{k:m?m[1]:"",s:t}}
 function renderAlerts(){
   const A=topUp(PAGECFG.alerts(scoped()),scoped());
-  ["crit","mgmt","ins","sup"].forEach(k=>{if($("n-"+k))$("n-"+k).textContent=(A[k]||[]).length});
+  ["crit","mgmt","ins","sup","mil"].forEach(k=>{if($("n-"+k))$("n-"+k).textContent=(A[k]||[]).length});
   // segmented alert tiles: up to 5 items of the selected segment; View More opens the drawer with the full list
   const seg=S.aseg||"mgmt",ov=i=>i.k?{k:i.k,s:i.s}:overview(i.t),ord=A[seg].map((i,x)=>({i,x,o:ov(i)})).sort((a,b)=>(!a.o.k)-(!b.o.k)||a.x-b.x),it5=ord.slice(0,5);
   document.querySelectorAll("[data-a]").forEach(b=>{const on=b.dataset.a===seg;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
@@ -1894,9 +1918,13 @@ const dot=(st,k)=>`<span class="sdot ${k||ACOL[st]}" title="${st}"></span>`;
 // link to an activity dashboard carrying the filters that dashboard has (Model, Department, PIC); row values take precedence
 function carry(file,row={}){const F=S.F,pick=k=>row[k]!==undefined?[].concat(row[k]):(F[k]||[]);return dashLink(file,{model:pick("model"),dept:pick("dept"),pic:pick("pic")})}
 // Activity Status Summary row (No., Activity link, Status, Progress, Group, U/I, NG, OK, Not Ready)
-function actRow(i,o){const A=ACTS.find(a=>a[0]===o.k);return`<tr><td class="num">${i}</td><td class="wrap act"><a class="alink" href="${carry(A[2])}" title="Open ${A[1]}">${A[1]}</a></td><td>${stCell(o.status,ACOL[o.status])}</td>`+
-  `<td class="num">${o.pc}% <span class="subtle">(${o.actual}/${o.plan})</span></td><td>${o.group}</td><td class="num">${o["U/I"]}</td><td class="num">${o.NG}</td><td class="num">${o.OK}</td><td class="num">${o["Not Ready"]}</td></tr>`}
-const ACT_COLS=[["no","No."],["aname","Activity"],["status","Status"],["pc","Progress (Actual/Plan)"],["group","Group"],["U/I","U/I"],["NG","NG"],["OK","OK"],["Not Ready","Not Ready"]];
+function actRow(i,o){const A=ACTS.find(a=>a[0]===o.k);return`<tr><td class="num">${i}</td><td class="wrap act"><a class="alink" href="${carry(A[2])}" title="Open ${A[1]}">${A[1]}</a></td><td>${hball(o.n?pct(o.actual,o.n):0,`${o.status} · ${o.actual} of ${o.n} parts finished (${o.n?pct(o.actual,o.n):0}%)`)}</td>`+
+  `<td class="num"><span class="pcell"><span class="pbar" aria-hidden="true"><i class="${ACOL[o.status]}" style="width:${o.pc}%"></i></span>${o.pc}% <span class="subtle">(${o.actual}/${o.plan})</span></span></td><td>${o.group}</td><td class="num">${o["U/I"]}</td><td class="num">${o.NG}</td><td class="num">${o.OK}</td><td class="num">${o["Not Ready"]}</td></tr>`}
+// quarter ball: progress rounded to the nearest quarter (0, 25, 50, 75 or 100%)
+function hball(pc,tip){const q=Math.round(pc/25),r=9,c=11,a=q*Math.PI/2,x=c+r*Math.sin(a),y=c-r*Math.cos(a);
+  const fill=q===0?"":q===4?`<circle cx="${c}" cy="${c}" r="${r}" class="hbf"/>`:`<path d="M${c} ${c}V${c-r}A${r} ${r} 0 ${q>2?1:0} 1 ${x.toFixed(2)} ${y.toFixed(2)}Z" class="hbf"/>`;
+  return`<svg class="hball" width="22" height="22" viewBox="0 0 22 22" role="img" aria-label="${tip}"><title>${tip}</title><circle cx="${c}" cy="${c}" r="${r}" class="hbo"/>${fill}<path d="M${c} ${c-r}V${c+r}M${c-r} ${c}H${c+r}" class="hbx"/><circle cx="${c}" cy="${c}" r="${r}" class="hbr"/></svg>`}
+const ACT_COLS=[["no","No."],["aname","Activity"],["status","Overall Status"],["pc","Progress (Actual/Plan)"],["group","Group"],["U/I","U/I"],["NG","NG"],["OK","OK"],["Not Ready","Not Ready"]];
 const actCell=(r,f)=>f==="aname"?ACTS.find(a=>a[0]===r.k)[1]:r[f];
 // ===== Mini table: same markup, search, column filters, chips, sorting and pager/"Show more" as the main table, for extra tables on summary pages =====
 // v() returns the current view: {cols:[[key,label,sortable]], filters:[[key,label,"cat"|"text"|"num"]], rows(), row(r), cell(r,k), sort:{k,dir}, sv(r,k), count(rows), csv:[header,(r)=>[]]}
@@ -1914,7 +1942,7 @@ function MiniT(id,v,o={}){const st={q:"",cf:{},sort:null,page:0,more:false},E=s=
     if(t==="text")return`<label class="fcell" for="${fid}"><span>${l}</span><input id="${fid}" data-mf="${k}" data-t="text" placeholder="Contains…" value="${f.v||""}" class="${f.v?"set":""}"></label>`;
     return`<div class="fcell"><span>${l}</span><div class="range"><input data-mf="${k}" data-t="num" data-b="min" type="number" placeholder="Min" value="${f.min??""}" aria-label="${l} minimum"><input data-mf="${k}" data-t="num" data-b="max" type="number" placeholder="Max" value="${f.max??""}" aria-label="${l} maximum"></div></div>`}).join("")}</div>`}
   function render(){const x=V(),R=rows(),P=o.pageSize||PAGE0,more=!!o.more;
-    E("thead").innerHTML=x.thead?x.thead(thBtn):`<tr>${x.cols.map(([k,l,srt],i)=>`<th class="${i<2?"stk s"+i:""}${st.sort.k===k?" sorted":""}${x.num&&x.num.includes(k)?" num":""}">${thBtn(k,l,srt)}</th>`).join("")}</tr>`;
+    E("thead").innerHTML=x.thead?x.thead(thBtn):`<tr>${x.cols.map(([k,l,srt],i)=>`<th class="${i<2?"stk s"+i:""}${st.sort.k===k?" sorted":""}${x.num&&x.num.includes(k)?" num":""}${x.ctr&&x.ctr.includes(k)?" ctr":""}">${thBtn(k,l,srt)}</th>`).join("")}</tr>`;
     const pages=Math.max(1,Math.ceil(R.length/P));st.page=Math.min(st.page,pages-1);
     const shown=more?(st.more?R:R.slice(0,P)):R.slice(st.page*P,st.page*P+P);
     E("body").innerHTML=shown.map(x.row).join("")||`<tr><td colspan="${x.ncols||x.cols.length}" class="none">${x.empty||"Nothing matches. Clear the search or table filters to see more."}</td></tr>`;
@@ -1970,14 +1998,21 @@ function risks(rows){const okp=k=>rows.length?pct(rows.filter(p=>p.act[k].st==="
   return[["Tool Completion",rpc(rows,"tool"),"Parts with tool ready"],["Drawing Freeze",rpc(rows,"drw"),"Parts with drawing released"],["Lab Testing",rpc(rows,"lab"),"Applicable parts with lab testing done"],
     ["Supplier Capacity",rpc(rows,"supp"),"Parts with supplier approval"],["Process Capability",rpc(rows,"insp"),"Parts with inspection standard ready"],
     ["New Technology Validation",nw?{Low:85,Medium:70,High:45}[nw.risk]:null,`${nw?nw.d:""} validation`],["Tier 2 Approval",okp("t2"),"Parts with Tier 2 compilation OK"]].map(([a,pc,b])=>({a,pc,b,l:lvl(pc)}))}
-const SECV=[["act","Activity Status Summary"],["new","Key Newness Details"],["esc","Escalations"],["risk","Risk Areas"]];
+// NP5 and NP6 are shown as "-" in the Activity Status Summary (no department-wise progress tracked for them in this view, as in the reference)
+const NOPROG=["NP5","NP6"];
+const SECV=[["act","Activity Status Summary"],["new","Key Newness Details"],["esc","Escalations"],["risk","Quality Risk Heat Map"]];
 const SDC={["Completed"]:"ok",["Under Validation"]:"ini",["Lab Test Running"]:"ini",["Design Freeze Pending"]:"tbc",["Installation 20%"]:"bad"};
 // Readiness Summary: one table card, four views (same table component as the part table)
 const DVIEW={
-  act:()=>({cols:ACT_COLS,filters:[["status","Status","cat"],["group","Group","cat"],["pc","Progress %","num"]],num:["no","pc","U/I","NG","OK","Not Ready"],
-    rows:()=>{const R=scoped();return ACTS.map(([a],i)=>Object.assign(actStats(R,a),{no:i+1}))},cell:actCell,sort:{k:"no",dir:1},
-    row:o=>actRow(o.no,o),count:R=>`${R.length} activities`,
-    csv:[["No.","Activity","Status","Progress (Actual/Plan)","Group","U/I","NG","OK","Not Ready"],o=>[o.no,actCell(o,"aname"),o.status,`${o.pc}% (${o.actual}/${o.plan})`,o.group,o["U/I"],o.NG,o.OK,o["Not Ready"]]]}),
+  // Activity Status Summary: each department's progress on each activity as a quarter ball (finished parts ÷ parts), with the overall status
+  act:()=>({cols:[["aname","Activity"],...DLIST.map(d=>[d,d]),["status","Overall Status"]],filters:[["status","Overall Status","cat"],...DLIST.map(d=>[d,d+" progress %","num"])],num:[],ctr:DLIST,
+    rows:()=>{const R=scoped();return ACTS.map(([a],i)=>{const o=Object.assign(actStats(R,a),{no:i+1,aname:ACTS[i][1]});
+      DLIST.forEach(d=>{const P=R.filter(p=>p.dept===d);o["n_"+d]=P.length;o["a_"+d]=P.filter(p=>["OK","NG"].includes(p.act[a].st)).length;o[d]=P.length&&!NOPROG.includes(d)?pct(o["a_"+d],P.length):null});return o})},
+    cell:(o,k)=>DLIST.includes(k)?(o[k]==null?"-":o[k]):o[k],sv:(o,k)=>DLIST.includes(k)?(o[k]??-1):k==="aname"?o.no:o[k],sort:{k:"aname",dir:1},
+    row:o=>{const A=ACTS[o.no-1];return`<tr><td class="wrap act"><a class="alink" href="${carry(A[2])}" title="Open ${A[1]}">${A[1]}</a></td>`+
+      DLIST.map(d=>`<td class="hb">${o[d]==null?"-":hball(o[d],`${d} · ${o["a_"+d]} of ${o["n_"+d]} parts finished (${o[d]}%)`)}</td>`).join("")+`<td>${stCell(o.status,ACOL[o.status])}</td></tr>`},
+    count:R=>`${R.length} activities`,
+    csv:[["Activity",...DLIST.map(d=>d+" progress %"),"Overall Status"],o=>[o.aname,...DLIST.map(d=>o[d]==null?"-":o[d]),o.status]]}),
   new:()=>({cols:[["c","Category"],["d","Details"],["risk","Risk"],["st","Status"]],filters:[["c","Category","cat"],["risk","Risk","cat"],["st","Status","cat"]],
     rows:newness,sort:{k:"c",dir:1},sv:(x,k)=>k==="risk"?["Low","Medium","High"].indexOf(x.risk):x[k],
     row:x=>`<tr><td>${x.c}</td><td class="wrap">${x.d}</td><td>${stCell(x.risk,RISKC[x.risk])}</td><td>${stCell(x.st,SDC[x.st])}</td></tr>`,count:R=>`${R.length} newness items`,
@@ -1986,19 +2021,22 @@ const DVIEW={
     rows:()=>escal(scoped()),sort:{k:"days",dir:-1},
     row:x=>`<tr><td>${x.sup}</td><td class="wrap">${x.iss}</td><td class="num">${stCell(x.days+" days","bad")}</td><td>${x.own}</td></tr>`,count:R=>`${R.length} escalations`,
     csv:[["Supplier","Issue","Days Delay","Owner"],x=>[x.sup,x.iss,x.days,x.own]]}),
-  risk:()=>({cols:[["a","Risk Area"],["l","Risk Level"],["b","Measure"],["pc","Readiness"]],filters:[["l","Risk Level","cat"]],num:["pc"],
-    rows:()=>risks(scoped()),sort:{k:"l",dir:-1},sv:(x,k)=>k==="l"?["Low","Medium","High"].indexOf(x.l):k==="pc"?(x.pc??-1):x[k],cell:(x,k)=>k==="l"?(x.l||"-"):x[k],
-    row:x=>`<tr><td>${x.a}</td><td>${x.l?stCell(x.l,RISKC[x.l]):"-"}</td><td class="wrap">${x.b}</td><td class="num">${x.pc==null?"-":x.pc+"%"}</td></tr>`,count:R=>`${R.length} risk areas`,
-    csv:[["Risk Area","Risk Level","Measure","Readiness %"],x=>[x.a,x.l||"-",x.b,x.pc==null?"-":x.pc]]})};
-const DS=MiniT("ds",()=>DVIEW[S.dsec||"act"]());
+  risk:()=>({cols:[["a","Risk Area"],["l","Risk Level"]],ctr:["l"],filters:[["l","Risk Level","cat"]],
+    rows:()=>risks(scoped()),sort:{k:"l",dir:-1},sv:(x,k)=>k==="l"?["Low","Medium","High"].indexOf(x.l):x[k],cell:(x,k)=>k==="l"?(x.l||"-"):x[k],
+    row:x=>`<tr><td>${x.a}</td><td class="heat ${x.l?RISKC[x.l]:""}" title="${x.b}: ${x.pc==null?"-":x.pc+"%"}">${x.l||"-"}</td></tr>`,count:R=>`${R.length} risk areas`,
+    csv:[["Risk Area","Risk Level"],x=>[x.a,x.l||"-"]]})};
+const DS=MiniT("ds",()=>DVIEW[S.dsec||"act"](),{pageSize:20});
 
 const PAGECFG={
   defaultTab:"x",fitTables:true,ownAlerts:true,
   beforeRender(){PAGECFG.renderLeft()},
-  tabs:[{k:"x",label:"",icon:""}],tiles:()=>[],tileValues:()=>({}),
+  tabs:[{k:"x",label:"Parts by Department",icon:ic('grid')}],get tileCols(){return DLIST.length+1},
+  tiles:()=>[{m:"tot",l:"Total Parts",c:"t-total"},...DLIST.map(d=>({m:d,l:d,c:"t-total"}))],
+  tileValues:rows=>Object.fromEntries([["tot",rows.length],...DLIST.map(d=>[d,rows.filter(p=>p.dept===d).length])]),
+  tileHint:c=>c?(c.m==="tot"?"Showing all parts in the part table. Select the tile again to clear it.":`Showing ${c.l} parts in the part table. Select the tile again to clear it.`):"Select a department to show its parts in the part table.",
   filterOptions:F=>({fuel:FUELS[F.model[0]]||[],variant:VARIANTS}),
   exports:{ds:()=>[SECV.find(v=>v[0]===(S.dsec||"act"))[1],DS.csv()]},
-  init(){DS.bind();document.querySelectorAll("input[name=ds-view]").forEach(r=>r.onchange=()=>{if(!r.checked)return;S.dsec=r.value;DS.reset();DS.render()})},
+  init(){$("tiles").addEventListener("click",e=>{if(e.target.closest(".tile")&&S.metric)setTimeout(()=>document.querySelector('[aria-labelledby="t-h"]').scrollIntoView({behavior:"smooth",block:"start"}),80)});DS.bind();$("ds-hbl").innerHTML="<b>Department progress</b>"+[0,25,50,75,100].map(p=>`<span>${hball(p,p+"%")}${p}%</span>`).join("")+"<em>Share of each department's parts finished (OK or NG) · “-” means no parts in that department</em>";document.querySelectorAll("input[name=ds-view]").forEach(r=>r.onchange=()=>{if(!r.checked)return;S.dsec=r.value;DS.reset();DS.render();$("ds-hbl").hidden=r.value!=="act"})},
   afterPick(){if(S.gsel&&S.gsel.canvas==="c-right")setTimeout(()=>document.querySelector('[aria-labelledby="t-h"]').scrollIntoView({behavior:"smooth",block:"start"}),60)},
   table:{title:"Part Wise Readiness Details",
     groups:[["Part Details",9],["Readiness by Activity",8]],
@@ -2011,20 +2049,19 @@ const PAGECFG={
     const o=chartOpts({suffix:"%",callbacks:{label:c=>{const k=RACT[c.dataIndex][0],a=rows.filter(p=>p.rdy[k]!=="-");return` ${a.filter(p=>p.rdy[k]==="Ready").length} of ${a.length} applicable parts ready (${c.raw}%)`}}});
     o.onClick=()=>{};o.onHover=()=>{};o.scales.y.max=100;o.scales.y.ticks.callback=v=>v+"%";o.scales.y.title={display:true,text:"Parts ready (%)",color:"#4A5565",font:{size:14}};
     o.scales.x.ticks={...o.scales.x.ticks,autoSkip:false,maxRotation:0};
-    drawChart("L",{noTotal:true,minPer:78,data:{labels:RACT.map(([,l])=>l.split(" ")),datasets:[ds("Parts ready",vals,"ini",{suffix:"%",maxBarThickness:36})]},options:o});
-    $("cap-left").textContent="Readiness % of applicable parts";$("c-left").closest(".card").querySelector(".ctx").innerHTML=filterTags().join("");$("lg-left").innerHTML=legendHtml([["Parts ready (%)","ini"]]);
+    drawChart("L",{noTotal:true,minPer:78,data:{labels:RACT.map(([,l])=>l.split(" ")),datasets:[ds("Parts ready",vals,"ok",{suffix:"%",maxBarThickness:36})]},options:o});
+    $("cap-left").textContent="Readiness % of applicable parts";$("c-left").closest(".card").querySelector(".ctx").innerHTML=filterTags().join("");$("lg-left").innerHTML=legendHtml([["Parts ready (%)","ok"]]);
     $("n-left").textContent=""},
   // right: parts by department with count and share (Total last); a column filters the part table and scrolls to it
-  renderRight(){const rows=scoped(),D=DLIST.filter(d=>rows.some(p=>p.dept===d)),v=D.map(d=>rows.filter(p=>p.dept===d).length);
+  // right: parts by department with count and share (Total last); a column filters the part table and scrolls to it
+  renderRight(){DS.render();const rows=scoped(),D=DLIST.filter(d=>rows.some(p=>p.dept===d)),vv=D.map(d=>rows.filter(p=>p.dept===d).length);
     $("ctx-right").innerHTML=filterTags().join("");
     if(!rows.length)return showEmpty("No parts","No parts match this model, fuel type and variant.");showRight();
-    const pcl={id:"pcl",afterDatasetsDraw(ch){const c=ch.ctx,d=ch.data.datasets[0],n=ch.data.labels.length;c.save();c.font='500 14px "Inter",system-ui,sans-serif';c.fillStyle="#4A5565";c.textAlign="center";
-      ch.getDatasetMeta(0).data.forEach((b,j)=>{const x=d._realT!=null&&j===n-1?d._realT:d.data[j];c.fillStyle="#101828";c.fillText(x,b.x,b.y-25);c.fillStyle="#4A5565";c.font='400 14px "Inter",system-ui,sans-serif';c.fillText(`${pct(x,rows.length)}%`,b.x,b.y-7);c.font='500 14px "Inter",system-ui,sans-serif'});c.restore()}};
+    const pcl={id:"pcl",afterDatasetsDraw(ch){const c=ch.ctx,d=ch.data.datasets[0],n=ch.data.labels.length;c.save();c.textAlign="center";
+      ch.getDatasetMeta(0).data.forEach((b,j)=>{const x=d._realT!=null&&j===n-1?d._realT:d.data[j];c.font='500 14px "Inter",system-ui,sans-serif';c.fillStyle="#101828";c.fillText(x,b.x,b.y-25);c.font='400 14px "Inter",system-ui,sans-serif';c.fillStyle="#4A5565";c.fillText(`${pct(x,rows.length)}%`,b.x,b.y-7)});c.restore()}};
     const ro=chartOpts({callbacks:{label:c=>` ${c.raw} parts (${pct(c.raw,rows.length)}% of ${rows.length})`,footer:it=>it[0].dataIndex<D.length?"Click to show these parts in the table below":""}});ro.layout.padding.top=44;
-    drawChart("R",{plugins:[pcl],totFooter:true,data:{labels:D,datasets:[ds("Parts",v,"ini",{f:()=>true,maxBarThickness:40})]},options:ro});
-    {const inner=$("c-right").parentElement;inner.style.width="100%";inner.parentElement.parentElement.classList.remove("scrolls");CH.R.resize()}
-    $("cap-right").textContent="Parts and share of total";$("lg-right").innerHTML=legendHtml([["Parts (share of total)","ini"]]);
-    $("n-right").textContent=`${rows.length} parts in ${sel().m} · ${sel().f} · ${sel().v} · click a department to filter the part table`;DS.render()},
+    drawChart("R",{plugins:[pcl],totFooter:true,data:{labels:D,datasets:[ds("Parts",vv,"ini",{f:()=>true,maxBarThickness:40})]},options:ro});
+    $("cap-right").textContent="Parts and share of total";$("lg-right").innerHTML=legendHtml([["Parts (share of total)","ini"]]);$("n-right").textContent=""},
   alerts(rows){const out={crit:[],mgmt:[],ins:[],sum:[]};if(!rows.length)return out;const R=RACT.map(([k,l])=>({k,l,pc:rpc(rows,k)})).filter(x=>x.pc!=null),sc=`${sel().m} ${sel().v} ${sel().f}`;
     R.slice().sort((a,b)=>a.pc-b.pc).slice(0,2).forEach(x=>out.crit.push({k:x.pc+"%",s:`${x.l} readiness is among the lowest`,t:`${x.l} is only ${x.pc}% ready`,d:`For ${sc}.`,o:"Divisional Head"}));
     risks(rows).filter(x=>x.l==="High").slice(0,2).forEach(x=>out.crit.push({k:"High",s:`${x.a} is a high risk area`,t:`${x.a} risk is high`,d:`${x.b}: ${x.pc}%.`,o:"Divisional Head"}));

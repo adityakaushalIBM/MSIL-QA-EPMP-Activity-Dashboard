@@ -692,6 +692,30 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .aitabs .sup.on{background:linear-gradient(120deg,#9B6BE8,#6D3BCB)}
 .aitiles.sup{--ac:#6D3BCB;--acb:#F8F5FF}
 .dr-band.sup{background:linear-gradient(120deg,#9B6BE8,#6D3BCB)}
+/* quarter balls (Divisional Head Review · Activity Status Summary) */
+.hball{display:inline-block;vertical-align:middle}
+.hball .hbo{fill:#fff}.hball .hbf{fill:#344054}.hball .hbx{stroke:#98A2B3;stroke-width:1}.hball .hbr{fill:none;stroke:#344054;stroke-width:1.5}
+td.hb{text-align:center}
+.legend.hbl{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:8px 18px;margin:16px 0 0;padding:12px 14px;border:1px solid var(--border);border-radius:8px;background:#FAFBFC}
+.legend.hbl b{font-weight:600;color:var(--heading)}.legend.hbl span{display:inline-flex;align-items:center;gap:6px;color:var(--heading)}.legend.hbl em{font-style:normal;color:var(--body)}.legend.hbl[hidden]{display:none}
+th.ctr{text-align:center}th.ctr button{margin:0 auto}
+.hbcell{display:inline-flex;align-items:center;gap:10px}.hbcell .st{min-width:0}
+.hbcell .st{align-items:center}.hbcell .st i{margin-top:0}
+/* Divisional Head Review: single full-width chart; quality risk heat map cells */
+.charts.solo{grid-template-columns:minmax(0,1fr)}.charts.solo>.card:nth-child(2){display:none}
+td.heat{font-weight:600;text-align:center}
+td.heat.ok{background:var(--ok-bg)!important;color:var(--ok)}td.heat.tbc{background:var(--tbc-bg)!important;color:var(--tbc)}td.heat.bad{background:var(--bad-bg)!important;color:var(--bad)}
+.pcell{display:inline-flex;align-items:center;gap:10px}
+.pbar{display:inline-block;width:64px;height:6px;border-radius:3px;background:#EEF0F3;overflow:hidden;flex:none}
+.pbar i{display:block;height:100%;border-radius:3px}.pbar i.ok{background:var(--ok-bar-bd)}.pbar i.tbc{background:var(--tbc-bar-bd)}.pbar i.bad{background:var(--bad-bar-bd)}.pbar i.na{background:var(--na-bar-bd)}
+.ovs{display:inline-flex;align-items:center;gap:10px;font-size:20px}.ovs .hball{width:24px;height:24px}
+.ovdot{display:inline-block;width:22px;height:22px;border-radius:50%;vertical-align:middle;margin:5px 0}.ovdot.ok{background:var(--ok-bar-bd)}.ovdot.tbc{background:var(--tbc-bar-bd)}.ovdot.bad{background:var(--bad-bar-bd)}.ovdot.na{background:var(--na-bar-bd)}
+/* Upcoming Milestones alerts segment (New Product Development Trials) */
+.aitabs .mil{color:#0E7C86}
+.aitabs .mil.on{background:linear-gradient(120deg,#2BB3BD,#0E7C86)}
+.aitiles.mil{--ac:#0E7C86;--acb:#F0FBFC}
+.dr-band.mil{background:linear-gradient(120deg,#2BB3BD,#0E7C86)}
+.aitiles.mil .aitile strong{font-size:22px}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1189,7 +1213,7 @@ html,body{overflow-x:clip}
         <div class="aitabs" role="tablist" aria-label="Alerts and insights">
           <button class="mgmt on" data-a="mgmt" role="tab" aria-selected="true"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 4h12M6 4v16M6 4H5m13 0v16m0-16h1m-1 16H6m12 0h1M6 20H5M9 7h1v1H9zm5 0h1v1h-1zm-5 4h1v1H9zm5 0h1v1h-1zm-3 4h2a1 1 0 0 1 1 1v4h-4v-4a1 1 0 0 1 1-1"/></svg>Management Summary<span class="n" id="n-mgmt">0</span></button>
           <button class="crit" data-a="crit" role="tab" aria-selected="false"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0"/></svg>Key Alerts<span class="n" id="n-crit">0</span></button>
-          <button class="ins" data-a="ins" role="tab" aria-selected="false"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.872 9.687 20 6.56 17.44 4 4 17.44 6.56 20 16.873 9.687Zm0 0-2.56-2.56M6 7v2m0 0v2m0-2H4m2 0h2m7 7v2m0 0v2m0-2h-2m2 0h2M8 4h.01v.01H8zm2 2h.01v.01H10zm2-2h.01v.01H12zm8 8h.01v.01H20zm-2 2h.01v.01H18zm2 2h.01v.01H20z"/></svg>Key Insights<span class="n" id="n-ins">0</span></button>
+          <button class="ins" data-a="ins" role="tab" aria-selected="false"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.872 9.687 20 6.56 17.44 4 4 17.44 6.56 20 16.873 9.687Zm0 0-2.56-2.56M6 7v2m0 0v2m0-2H4m2 0h2m7 7v2m0 0v2m0-2h-2m2 0h2M8 4h.01v.01H8zm2 2h.01v.01H10zm2-2h.01v.01H12zm8 8h.01v.01H20zm-2 2h.01v.01H18zm2 2h.01v.01H20z"/></svg>Key Insights<span class="n" id="n-ins">0</span></button><button class="mil" data-a="mil" role="tab" aria-selected="false"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1m3-7h.01v.01H8zm4 0h.01v.01H12zm4 0h.01v.01H16zm-8 4h.01v.01H8zm4 0h.01v.01H12zm4 0h.01v.01H16z"/></svg>Upcoming Milestones<span class="n" id="n-mil">0</span></button>
         </div>
         <div class="airow"><div class="aitiles" id="aitiles"></div><button class="viewmore" id="ai-more" aria-haspopup="dialog">View More<svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m14 0-4 4m4-4-4-4"/></svg></button></div>
       </section>
@@ -1239,7 +1263,7 @@ html,body{overflow-x:clip}
 <div class="scrim" id="scrim" hidden></div>
 <aside class="drawer" id="drawer" hidden aria-label="Alerts and insights">
   <div class="dr-band" id="dr-band"><h2 id="dr-title">Alerts</h2><button class="dr-x" id="dr-x" aria-label="Close"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 18 17.94 6M18 18 6.06 6"/></svg></button></div>
-  <div class="dr-tabs"><div class="seg" role="tablist"><button data-d="mgmt">Management</button><button data-d="crit">Key Alerts</button><button data-d="ins">Insights</button></div></div>
+  <div class="dr-tabs"><div class="seg" role="tablist"><button data-d="mgmt">Management</button><button data-d="crit">Key Alerts</button><button data-d="ins">Insights</button><button data-d="mil">Milestones</button></div></div>
   <div class="dr-body" id="dr-body"></div>
   <p class="disclaim">Sample alerts generated by simple rules over the prototype data, not by AI. They follow your top level filters.</p>
 </aside>
@@ -1542,7 +1566,7 @@ function fitTable(tb){const w=tb&&tb.closest(".tbl-wrap");if(!w||!w.clientWidth)
   const hr=tb.querySelector("thead tr:last-child"),span=tb.querySelector("thead [rowspan]");
   if(!fits||!hr||span){Object.assign(tb.style,{width:"",minWidth:""});return}
   const ths=[...hr.children],nat=ths.map(th=>th.getBoundingClientRect().width),r0=tb.querySelector("tbody tr"),
-    wt=ths.map((_,i)=>{const td=r0&&r0.children.length===ths.length?r0.children[i]:null;return td&&td.classList.contains("wrap")?2:1});
+    wt=ths.map((_,i)=>{const td=r0&&r0.children.length===ths.length?r0.children[i]:null;return td&&td.classList.contains("wrap")?2:td&&td.classList.contains("num")&&!td.querySelector(".pcell")?.6:1});
   // columns whose natural width exceeds their share keep it; the rest split what is left in proportion to their weight
   let fixed=new Set(),share=0;for(let k=0;k<ths.length;k++){const free=W-[...fixed].reduce((a,i)=>a+nat[i],0),wsum=wt.reduce((a,x,i)=>fixed.has(i)?a:a+x,0);share=free/wsum;
     const more=ths.map((_,i)=>i).filter(i=>!fixed.has(i)&&nat[i]>share*wt[i]);if(!more.length)break;more.forEach(i=>fixed.add(i))}
@@ -1606,11 +1630,11 @@ function bindTable(){
 }
 
 // ===== Alerts drawer (items come from the page) =====
-const DR={sup:{l:"Support Required",e:"No support needed in the current selection."},crit:{l:"Key Alerts",e:"No critical issues in the current selection."},mgmt:{l:"Management Summary",e:"Nothing needs management review in the current selection."},ins:{l:"Key Insights",e:"Not enough data in the current selection for insights."}};
+const DR={mil:{l:"Upcoming Milestones",e:"No upcoming milestones in the current selection."},sup:{l:"Support Required",e:"No support needed in the current selection."},crit:{l:"Key Alerts",e:"No critical issues in the current selection."},mgmt:{l:"Management Summary",e:"Nothing needs management review in the current selection."},ins:{l:"Key Insights",e:"Not enough data in the current selection for insights."}};
 // Page rules give the first items; each segment is topped up to 5 with plain facts from the page's own tile metrics
 // (where a metric is highest by department or model in the current selection), so every statement comes from the data shown.
 function topUp(A0,rows){
-  if(PAGECFG.ownAlerts)return{crit:[...A0.crit,...A0.mgmt],mgmt:[...(A0.sum||[])],ins:[...A0.ins],sup:[...(A0.sup||[])]};
+  if(PAGECFG.ownAlerts)return{crit:[...A0.crit,...A0.mgmt],mgmt:[...(A0.sum||[])],ins:[...A0.ins],sup:[...(A0.sup||[])],mil:[...(A0.mil||[])]};
   // Key Alerts = page alert rules (incl. former management alerts); Management Summary = progress facts; Key Insights = page insights.
   // Each is topped up to 5 with specific facts (named PICs, vendors, departments, models) computed from the current top-level selection.
   const A={crit:[...A0.crit,...A0.mgmt],mgmt:[],ins:[...A0.ins]};if(!rows.length)return A;
@@ -1657,7 +1681,7 @@ function overview(t){const num="\\d[\\d,]*(?:\\.\\d+)?%?";let m=t.match(new RegE
   m=t.match(new RegExp("(?<![\\w-]|Model |Rank |Tier )("+num+")(?![\\w-])"));return{k:m?m[1]:"",s:t}}
 function renderAlerts(){
   const A=topUp(PAGECFG.alerts(scoped()),scoped());
-  ["crit","mgmt","ins","sup"].forEach(k=>{if($("n-"+k))$("n-"+k).textContent=(A[k]||[]).length});
+  ["crit","mgmt","ins","sup","mil"].forEach(k=>{if($("n-"+k))$("n-"+k).textContent=(A[k]||[]).length});
   // segmented alert tiles: up to 5 items of the selected segment; View More opens the drawer with the full list
   const seg=S.aseg||"mgmt",ov=i=>i.k?{k:i.k,s:i.s}:overview(i.t),ord=A[seg].map((i,x)=>({i,x,o:ov(i)})).sort((a,b)=>(!a.o.k)-(!b.o.k)||a.x-b.x),it5=ord.slice(0,5);
   document.querySelectorAll("[data-a]").forEach(b=>{const on=b.dataset.a===seg;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
@@ -1894,9 +1918,13 @@ const dot=(st,k)=>`<span class="sdot ${k||ACOL[st]}" title="${st}"></span>`;
 // link to an activity dashboard carrying the filters that dashboard has (Model, Department, PIC); row values take precedence
 function carry(file,row={}){const F=S.F,pick=k=>row[k]!==undefined?[].concat(row[k]):(F[k]||[]);return dashLink(file,{model:pick("model"),dept:pick("dept"),pic:pick("pic")})}
 // Activity Status Summary row (No., Activity link, Status, Progress, Group, U/I, NG, OK, Not Ready)
-function actRow(i,o){const A=ACTS.find(a=>a[0]===o.k);return`<tr><td class="num">${i}</td><td class="wrap act"><a class="alink" href="${carry(A[2])}" title="Open ${A[1]}">${A[1]}</a></td><td>${stCell(o.status,ACOL[o.status])}</td>`+
-  `<td class="num">${o.pc}% <span class="subtle">(${o.actual}/${o.plan})</span></td><td>${o.group}</td><td class="num">${o["U/I"]}</td><td class="num">${o.NG}</td><td class="num">${o.OK}</td><td class="num">${o["Not Ready"]}</td></tr>`}
-const ACT_COLS=[["no","No."],["aname","Activity"],["status","Status"],["pc","Progress (Actual/Plan)"],["group","Group"],["U/I","U/I"],["NG","NG"],["OK","OK"],["Not Ready","Not Ready"]];
+function actRow(i,o){const A=ACTS.find(a=>a[0]===o.k);return`<tr><td class="num">${i}</td><td class="wrap act"><a class="alink" href="${carry(A[2])}" title="Open ${A[1]}">${A[1]}</a></td><td>${hball(o.n?pct(o.actual,o.n):0,`${o.status} · ${o.actual} of ${o.n} parts finished (${o.n?pct(o.actual,o.n):0}%)`)}</td>`+
+  `<td class="num"><span class="pcell"><span class="pbar" aria-hidden="true"><i class="${ACOL[o.status]}" style="width:${o.pc}%"></i></span>${o.pc}% <span class="subtle">(${o.actual}/${o.plan})</span></span></td><td>${o.group}</td><td class="num">${o["U/I"]}</td><td class="num">${o.NG}</td><td class="num">${o.OK}</td><td class="num">${o["Not Ready"]}</td></tr>`}
+// quarter ball: progress rounded to the nearest quarter (0, 25, 50, 75 or 100%)
+function hball(pc,tip){const q=Math.round(pc/25),r=9,c=11,a=q*Math.PI/2,x=c+r*Math.sin(a),y=c-r*Math.cos(a);
+  const fill=q===0?"":q===4?`<circle cx="${c}" cy="${c}" r="${r}" class="hbf"/>`:`<path d="M${c} ${c}V${c-r}A${r} ${r} 0 ${q>2?1:0} 1 ${x.toFixed(2)} ${y.toFixed(2)}Z" class="hbf"/>`;
+  return`<svg class="hball" width="22" height="22" viewBox="0 0 22 22" role="img" aria-label="${tip}"><title>${tip}</title><circle cx="${c}" cy="${c}" r="${r}" class="hbo"/>${fill}<path d="M${c} ${c-r}V${c+r}M${c-r} ${c}H${c+r}" class="hbx"/><circle cx="${c}" cy="${c}" r="${r}" class="hbr"/></svg>`}
+const ACT_COLS=[["no","No."],["aname","Activity"],["status","Overall Status"],["pc","Progress (Actual/Plan)"],["group","Group"],["U/I","U/I"],["NG","NG"],["OK","OK"],["Not Ready","Not Ready"]];
 const actCell=(r,f)=>f==="aname"?ACTS.find(a=>a[0]===r.k)[1]:r[f];
 // ===== Mini table: same markup, search, column filters, chips, sorting and pager/"Show more" as the main table, for extra tables on summary pages =====
 // v() returns the current view: {cols:[[key,label,sortable]], filters:[[key,label,"cat"|"text"|"num"]], rows(), row(r), cell(r,k), sort:{k,dir}, sv(r,k), count(rows), csv:[header,(r)=>[]]}
@@ -1914,7 +1942,7 @@ function MiniT(id,v,o={}){const st={q:"",cf:{},sort:null,page:0,more:false},E=s=
     if(t==="text")return`<label class="fcell" for="${fid}"><span>${l}</span><input id="${fid}" data-mf="${k}" data-t="text" placeholder="Contains…" value="${f.v||""}" class="${f.v?"set":""}"></label>`;
     return`<div class="fcell"><span>${l}</span><div class="range"><input data-mf="${k}" data-t="num" data-b="min" type="number" placeholder="Min" value="${f.min??""}" aria-label="${l} minimum"><input data-mf="${k}" data-t="num" data-b="max" type="number" placeholder="Max" value="${f.max??""}" aria-label="${l} maximum"></div></div>`}).join("")}</div>`}
   function render(){const x=V(),R=rows(),P=o.pageSize||PAGE0,more=!!o.more;
-    E("thead").innerHTML=x.thead?x.thead(thBtn):`<tr>${x.cols.map(([k,l,srt],i)=>`<th class="${i<2?"stk s"+i:""}${st.sort.k===k?" sorted":""}${x.num&&x.num.includes(k)?" num":""}">${thBtn(k,l,srt)}</th>`).join("")}</tr>`;
+    E("thead").innerHTML=x.thead?x.thead(thBtn):`<tr>${x.cols.map(([k,l,srt],i)=>`<th class="${i<2?"stk s"+i:""}${st.sort.k===k?" sorted":""}${x.num&&x.num.includes(k)?" num":""}${x.ctr&&x.ctr.includes(k)?" ctr":""}">${thBtn(k,l,srt)}</th>`).join("")}</tr>`;
     const pages=Math.max(1,Math.ceil(R.length/P));st.page=Math.min(st.page,pages-1);
     const shown=more?(st.more?R:R.slice(0,P)):R.slice(st.page*P,st.page*P+P);
     E("body").innerHTML=shown.map(x.row).join("")||`<tr><td colspan="${x.ncols||x.cols.length}" class="none">${x.empty||"Nothing matches. Clear the search or table filters to see more."}</td></tr>`;
@@ -1999,6 +2027,12 @@ const GT=MiniT("gt",()=>({
   csv:[["Trial","Model","Lead Department","PIC","Planned Month","Status","Completion"],t=>[t.stage,t.model,t.dept,t.pic,MONTHS[t.month].l,t.status,t.comp]]
 }),{more:true,pageSize:8,selChips:()=>S.metric?`<span class="chip sel">Tile: ${tileLabel()}<button data-rm="__tile" aria-label="Clear tile selection">${ic("close",16)}</button></span>`:"",onChip:()=>{S.metric=null;render()}});
 
+// Upcoming Milestones (sample entries to be replaced by the programme calendar): date, milestone, detail, owner
+const MILESTONES=[["20 Nov 2026","YCA MC 27 PP Trial","PP trial build for the YCA model change (MC 27).","Programme Head"],
+  ["04 Dec 2026","YED MC 27 MPP Trial","MPP trial start for the YED model change.","Programme Head"],
+  ["18 Dec 2026","YHB CNG Pilot Trial","Pilot trial for the YHB CNG variant.","Programme Head"],
+  ["15 Jan 2027","YCA MC 27 MPP Trial","MPP trial for the YCA model change after PP sign-off.","Programme Head"],
+  ["26 Feb 2027","YTB Hybrid SOP","Start of production for the YTB hybrid.","Plant Head"]];
 const PAGECFG={
   defaultTab:"ov",fitTables:true,ownAlerts:true,tileHint:c=>c?`Showing ${c.l} trials in the schedule and filtering Things to Focus. Select the tile again to clear it.`:"Select a tile to show those trials in the schedule and filter Things to Focus.",clearMetricOnTab:true,get tileCols(){return S.cat==="ov"?4:3},
   tabs:[{k:"ov",label:"Overall Summary",icon:ic('home')},{k:"cmp",label:"Trial Completion",icon:ic('check-circle')}],
@@ -2015,7 +2049,7 @@ const PAGECFG={
   renderLeft(){},
   renderRight(){GT.render();const w=$("gt-body").closest(".tbl-wrap"),th=w.querySelector("th.gm.now");   // narrow screens: open the schedule around the current month
     if(th&&!w.$scrolled&&w.scrollWidth>w.clientWidth+4){w.$scrolled=1;const s1=w.querySelector("thead th.s1");w.scrollLeft=Math.max(0,th.offsetLeft-(s1?s1.offsetLeft+s1.offsetWidth:0)-3*th.offsetWidth)}},
-  alerts(){const T=trialsF(),out={crit:[],mgmt:[],ins:[],sum:[]};if(!T.length)return out;const v=tvals(T);
+  alerts(){const T=trialsF(),out={crit:[],mgmt:[],ins:[],sum:[],mil:MILESTONES.map(([dt,s,d,o])=>({k:dt,s,t:`${s} · ${dt}`,d,o}))};if(!T.length)return out;const v=tvals(T);
     T.filter(t=>t.status==="At Risk").slice(0,3).forEach(t=>out.crit.push({k:"At risk",s:`${t.model} ${t.stage} trial at risk`,t:`${t.model} ${t.stage} trial is at risk`,d:`Planned ${MONTHS[t.month].l} · lead ${t.dept}.`,o:t.pic}));
     if(v.del)out.crit.push({k:v.del,s:"Trials delayed",t:`${v.del} trials are delayed`,d:`${T.filter(t=>t.status==="Delayed"&&t.comp==="In Progress").length} of them still in progress.`,o:"Programme Head"});
     out.sum.push({k:v.tot,s:"Trials in the plan",t:`${v.tot} trials across ${new Set(T.map(t=>t.model)).size} models`,d:`${v.done} completed, ${v.prog} in progress, ${v.ns} not started.`,o:"Programme Head"},

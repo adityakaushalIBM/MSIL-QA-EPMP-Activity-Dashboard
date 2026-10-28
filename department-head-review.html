@@ -692,6 +692,24 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .aitabs .sup.on{background:linear-gradient(120deg,#9B6BE8,#6D3BCB)}
 .aitiles.sup{--ac:#6D3BCB;--acb:#F8F5FF}
 .dr-band.sup{background:linear-gradient(120deg,#9B6BE8,#6D3BCB)}
+/* quarter balls (Divisional Head Review · Activity Status Summary) */
+.hball{display:inline-block;vertical-align:middle}
+.hball .hbo{fill:#fff}.hball .hbf{fill:#344054}.hball .hbx{stroke:#98A2B3;stroke-width:1}.hball .hbr{fill:none;stroke:#344054;stroke-width:1.5}
+td.hb{text-align:center}
+.legend.hbl{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:8px 18px;margin:16px 0 0;padding:12px 14px;border:1px solid var(--border);border-radius:8px;background:#FAFBFC}
+.legend.hbl b{font-weight:600;color:var(--heading)}.legend.hbl span{display:inline-flex;align-items:center;gap:6px;color:var(--heading)}.legend.hbl em{font-style:normal;color:var(--body)}.legend.hbl[hidden]{display:none}
+th.ctr{text-align:center}th.ctr button{margin:0 auto}
+.hbcell{display:inline-flex;align-items:center;gap:10px}.hbcell .st{min-width:0}
+.hbcell .st{align-items:center}.hbcell .st i{margin-top:0}
+/* Divisional Head Review: single full-width chart; quality risk heat map cells */
+.charts.solo{grid-template-columns:minmax(0,1fr)}.charts.solo>.card:nth-child(2){display:none}
+td.heat{font-weight:600;text-align:center}
+td.heat.ok{background:var(--ok-bg)!important;color:var(--ok)}td.heat.tbc{background:var(--tbc-bg)!important;color:var(--tbc)}td.heat.bad{background:var(--bad-bg)!important;color:var(--bad)}
+.pcell{display:inline-flex;align-items:center;gap:10px}
+.pbar{display:inline-block;width:64px;height:6px;border-radius:3px;background:#EEF0F3;overflow:hidden;flex:none}
+.pbar i{display:block;height:100%;border-radius:3px}.pbar i.ok{background:var(--ok-bar-bd)}.pbar i.tbc{background:var(--tbc-bar-bd)}.pbar i.bad{background:var(--bad-bar-bd)}.pbar i.na{background:var(--na-bar-bd)}
+.ovs{display:inline-flex;align-items:center;gap:10px;font-size:20px}.ovs .hball{width:24px;height:24px}
+.ovdot{display:inline-block;width:22px;height:22px;border-radius:50%;vertical-align:middle;margin:5px 0}.ovdot.ok{background:var(--ok-bar-bd)}.ovdot.tbc{background:var(--tbc-bar-bd)}.ovdot.bad{background:var(--bad-bar-bd)}.ovdot.na{background:var(--na-bar-bd)}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1542,7 +1560,7 @@ function fitTable(tb){const w=tb&&tb.closest(".tbl-wrap");if(!w||!w.clientWidth)
   const hr=tb.querySelector("thead tr:last-child"),span=tb.querySelector("thead [rowspan]");
   if(!fits||!hr||span){Object.assign(tb.style,{width:"",minWidth:""});return}
   const ths=[...hr.children],nat=ths.map(th=>th.getBoundingClientRect().width),r0=tb.querySelector("tbody tr"),
-    wt=ths.map((_,i)=>{const td=r0&&r0.children.length===ths.length?r0.children[i]:null;return td&&td.classList.contains("wrap")?2:1});
+    wt=ths.map((_,i)=>{const td=r0&&r0.children.length===ths.length?r0.children[i]:null;return td&&td.classList.contains("wrap")?2:td&&td.classList.contains("num")&&!td.querySelector(".pcell")?.6:1});
   // columns whose natural width exceeds their share keep it; the rest split what is left in proportion to their weight
   let fixed=new Set(),share=0;for(let k=0;k<ths.length;k++){const free=W-[...fixed].reduce((a,i)=>a+nat[i],0),wsum=wt.reduce((a,x,i)=>fixed.has(i)?a:a+x,0);share=free/wsum;
     const more=ths.map((_,i)=>i).filter(i=>!fixed.has(i)&&nat[i]>share*wt[i]);if(!more.length)break;more.forEach(i=>fixed.add(i))}
@@ -1894,9 +1912,13 @@ const dot=(st,k)=>`<span class="sdot ${k||ACOL[st]}" title="${st}"></span>`;
 // link to an activity dashboard carrying the filters that dashboard has (Model, Department, PIC); row values take precedence
 function carry(file,row={}){const F=S.F,pick=k=>row[k]!==undefined?[].concat(row[k]):(F[k]||[]);return dashLink(file,{model:pick("model"),dept:pick("dept"),pic:pick("pic")})}
 // Activity Status Summary row (No., Activity link, Status, Progress, Group, U/I, NG, OK, Not Ready)
-function actRow(i,o){const A=ACTS.find(a=>a[0]===o.k);return`<tr><td class="num">${i}</td><td class="wrap act"><a class="alink" href="${carry(A[2])}" title="Open ${A[1]}">${A[1]}</a></td><td>${stCell(o.status,ACOL[o.status])}</td>`+
-  `<td class="num">${o.pc}% <span class="subtle">(${o.actual}/${o.plan})</span></td><td>${o.group}</td><td class="num">${o["U/I"]}</td><td class="num">${o.NG}</td><td class="num">${o.OK}</td><td class="num">${o["Not Ready"]}</td></tr>`}
-const ACT_COLS=[["no","No."],["aname","Activity"],["status","Status"],["pc","Progress (Actual/Plan)"],["group","Group"],["U/I","U/I"],["NG","NG"],["OK","OK"],["Not Ready","Not Ready"]];
+function actRow(i,o){const A=ACTS.find(a=>a[0]===o.k);return`<tr><td class="num">${i}</td><td class="wrap act"><a class="alink" href="${carry(A[2])}" title="Open ${A[1]}">${A[1]}</a></td><td>${hball(o.n?pct(o.actual,o.n):0,`${o.status} · ${o.actual} of ${o.n} parts finished (${o.n?pct(o.actual,o.n):0}%)`)}</td>`+
+  `<td class="num"><span class="pcell"><span class="pbar" aria-hidden="true"><i class="${ACOL[o.status]}" style="width:${o.pc}%"></i></span>${o.pc}% <span class="subtle">(${o.actual}/${o.plan})</span></span></td><td>${o.group}</td><td class="num">${o["U/I"]}</td><td class="num">${o.NG}</td><td class="num">${o.OK}</td><td class="num">${o["Not Ready"]}</td></tr>`}
+// quarter ball: progress rounded to the nearest quarter (0, 25, 50, 75 or 100%)
+function hball(pc,tip){const q=Math.round(pc/25),r=9,c=11,a=q*Math.PI/2,x=c+r*Math.sin(a),y=c-r*Math.cos(a);
+  const fill=q===0?"":q===4?`<circle cx="${c}" cy="${c}" r="${r}" class="hbf"/>`:`<path d="M${c} ${c}V${c-r}A${r} ${r} 0 ${q>2?1:0} 1 ${x.toFixed(2)} ${y.toFixed(2)}Z" class="hbf"/>`;
+  return`<svg class="hball" width="22" height="22" viewBox="0 0 22 22" role="img" aria-label="${tip}"><title>${tip}</title><circle cx="${c}" cy="${c}" r="${r}" class="hbo"/>${fill}<path d="M${c} ${c-r}V${c+r}M${c-r} ${c}H${c+r}" class="hbx"/><circle cx="${c}" cy="${c}" r="${r}" class="hbr"/></svg>`}
+const ACT_COLS=[["no","No."],["aname","Activity"],["status","Overall Status"],["pc","Progress (Actual/Plan)"],["group","Group"],["U/I","U/I"],["NG","NG"],["OK","OK"],["Not Ready","Not Ready"]];
 const actCell=(r,f)=>f==="aname"?ACTS.find(a=>a[0]===r.k)[1]:r[f];
 // ===== Mini table: same markup, search, column filters, chips, sorting and pager/"Show more" as the main table, for extra tables on summary pages =====
 // v() returns the current view: {cols:[[key,label,sortable]], filters:[[key,label,"cat"|"text"|"num"]], rows(), row(r), cell(r,k), sort:{k,dir}, sv(r,k), count(rows), csv:[header,(r)=>[]]}
@@ -1914,7 +1936,7 @@ function MiniT(id,v,o={}){const st={q:"",cf:{},sort:null,page:0,more:false},E=s=
     if(t==="text")return`<label class="fcell" for="${fid}"><span>${l}</span><input id="${fid}" data-mf="${k}" data-t="text" placeholder="Contains…" value="${f.v||""}" class="${f.v?"set":""}"></label>`;
     return`<div class="fcell"><span>${l}</span><div class="range"><input data-mf="${k}" data-t="num" data-b="min" type="number" placeholder="Min" value="${f.min??""}" aria-label="${l} minimum"><input data-mf="${k}" data-t="num" data-b="max" type="number" placeholder="Max" value="${f.max??""}" aria-label="${l} maximum"></div></div>`}).join("")}</div>`}
   function render(){const x=V(),R=rows(),P=o.pageSize||PAGE0,more=!!o.more;
-    E("thead").innerHTML=x.thead?x.thead(thBtn):`<tr>${x.cols.map(([k,l,srt],i)=>`<th class="${i<2?"stk s"+i:""}${st.sort.k===k?" sorted":""}${x.num&&x.num.includes(k)?" num":""}">${thBtn(k,l,srt)}</th>`).join("")}</tr>`;
+    E("thead").innerHTML=x.thead?x.thead(thBtn):`<tr>${x.cols.map(([k,l,srt],i)=>`<th class="${i<2?"stk s"+i:""}${st.sort.k===k?" sorted":""}${x.num&&x.num.includes(k)?" num":""}${x.ctr&&x.ctr.includes(k)?" ctr":""}">${thBtn(k,l,srt)}</th>`).join("")}</tr>`;
     const pages=Math.max(1,Math.ceil(R.length/P));st.page=Math.min(st.page,pages-1);
     const shown=more?(st.more?R:R.slice(0,P)):R.slice(st.page*P,st.page*P+P);
     E("body").innerHTML=shown.map(x.row).join("")||`<tr><td colspan="${x.ncols||x.cols.length}" class="none">${x.empty||"Nothing matches. Clear the search or table filters to see more."}</td></tr>`;
@@ -1951,14 +1973,17 @@ const DST=["Completed","In Progress","Delayed","Not Started"],DSK={Completed:"do
 {const RE=rng(9123);PARTS.forEach(p=>{p.ecnAfter=RE()<.12;p.udev=Object.values(p.act).some(a=>a.st==="NG")&&RE()<.3})}
 const allStats=rows=>ACTS.map(([k],i)=>Object.assign(actStats(rows,k),{no:i+1,id:i+1}));
 function dvals(rows){const A=allStats(rows),o={tot:A.length};DST.forEach(s=>o[DSK[s]]=A.filter(a=>a.status===s).length);
-  o.act=sumBy(A,a=>a.actual);o.plan=sumBy(A,a=>a.plan);o.pva=pct(o.act,o.plan)+"%";o.ecn=rows.filter(p=>p.ecnAfter).length;o.udev=rows.filter(p=>p.udev).length;o.parts=rows.length;return o}
+  o.act=sumBy(A,a=>a.actual);o.plan=sumBy(A,a=>a.plan);o.pva=pct(o.act,o.plan)+"%";o.ecn=rows.filter(p=>p.ecnAfter).length;o.udev=rows.filter(p=>p.udev).length;o.parts=rows.length;o.fin=sumBy(A,a=>a.actual);o.items=sumBy(A,a=>a.n);
+  o.ovs=A.every(a=>a.status==="Completed")?"Completed":!o.act?"Not Started":pct(o.act,o.plan)<75?"Delayed":"In Progress";
+  o.ov=`<span class="ovdot ${ACOL[o.ovs]}" role="img" aria-label="${o.ovs}" title="${o.ovs}"></span>`;return o}
 const share=k=>v=>`${pct(v[k],v.tot)}%`;
-const TILES=[{m:"tot",l:"Total Activities",c:"t-plain",span:4,subCols:4,subs:[{m:"done",l:"Completed",c:"t-ok",sec:share("done")},{m:"prog",l:"In Progress",c:"t-tbc",sec:share("prog")},{m:"del",l:"Delayed",c:"t-bad",sec:share("del")},{m:"ns",l:"Not Started",c:"t-na",sec:share("ns")}]},
-  {m:"pva",l:"Plan vs Actual Overall Progress",c:"t-ini",sec:v=>`${v.act}/${v.plan}`}];
+const TILES=[{m:"tot",l:"Total Activities",c:"t-plain",span:4,subCols:4,subs:[{m:"done",l:"Completed",c:"t-ok"},{m:"prog",l:"In Progress",c:"t-tbc"},{m:"del",l:"Delayed",c:"t-bad"},{m:"ns",l:"Not Started",c:"t-na"}]},
+  {m:"pva",l:"Plan vs Actual Overall Progress",c:"t-ini",sec:v=>`${v.act}/${v.plan}`},
+  {m:"ov",l:"Overall Status",c:"t-na"}];
 // second tile section: part exceptions
 const TILES_P=[{m:"parts",l:"Total Parts",c:"t-total"},
-  {m:"ecn",l:"Parts After ECN Cut-Off",c:"t-tbc",sec:v=>`${pct(v.ecn,v.parts)}%`},
-  {m:"udev",l:"U/Deviation Parts",c:"t-tbc",sec:v=>`${pct(v.udev,v.parts)}%`}];
+  {m:"ecn",l:"Parts After ECN Cut-Off",c:"t-tbc"},
+  {m:"udev",l:"U/Deviation Parts",c:"t-tbc"}];
 const PTF={ecn:p=>p.ecnAfter,udev:p=>p.udev},partTile=m=>PTF[m]||(()=>true);
 const MST=()=>{const t=TILES[0].subs.find(s=>s.m===S.metric);return t?t.l:null};   // selected status tile
 const statsF=rows=>{const st=MST();return allStats(rows).filter(a=>!st||a.status===st)};
@@ -1978,11 +2003,14 @@ const T_GRP={title:"Part Group Wise Summary",tileFilter:partTile,q:r=>[r.grp],
   count:rows=>`${rows.length} part groups · ${sumBy(rows,r=>r.parts)} parts`};
 
 const PAGECFG={
-  defaultTab:"act",fitTables:true,ownAlerts:true,tileHint:c=>c?(c.m==="parts"?"Showing activity status for all parts. Select the tile again to clear it.":PTF[c.m]?`Showing activity status for the ${c.m==="ecn"?"parts after ECN cut-off":"U/Deviation parts"} only. Select the tile again to clear it.`:`Showing ${c.m==="tot"||c.m==="pva"?"all":c.l.toLowerCase()} activities in the table. Select the tile again to clear it.`):S.cat==="prt"?"Select a tile to see activity status for just those parts.":"Select a status tile to show only those activities in the table.",clearMetricOnTab:true,get tileCols(){return S.cat==="prt"?3:5},
+  defaultTab:"act",fitTables:true,ownAlerts:true,tileHint:c=>c?(c.m==="parts"?"Showing activity status for all parts. Select the tile again to clear it.":PTF[c.m]?`Showing activity status for the ${c.m==="ecn"?"parts after ECN cut-off":"U/Deviation parts"} only. Select the tile again to clear it.`:`Showing ${c.m==="tot"||c.m==="pva"||c.m==="ov"?"all":c.l.toLowerCase()} activities in the table. Select the tile again to clear it.`):S.cat==="prt"?"Select a tile to see activity status for just those parts.":"Select a status tile to show only those activities in the table.",clearMetricOnTab:true,get tileCols(){return S.cat==="prt"?3:6},
   tabs:[{k:"act",label:"Activity Status",icon:ic('check-circle')},{k:"prt",label:"ECN & Deviation Parts",icon:ic('file-shield')}],
   filterOptions:F=>({fuel:FUELS[F.model[0]]||[],variant:VARIANTS}),
   tiles:cat=>cat==="prt"?TILES_P:TILES,tileValues:rows=>dvals(rows),
   get table(){return S.tview==="grp"?T_GRP:T_ACT},
+  init(){const sec=document.querySelector('[aria-labelledby="t-h"]'),lg=document.createElement("div");lg.className="legend hbl";lg.id="t-hbl";
+    lg.innerHTML="<b>Overall Status</b>"+[0,25,50,75,100].map(p=>`<span>${hball(p,p+"%")}${p}%</span>`).join("")+"<em>Share of the department's parts finished (OK or NG)</em>";sec.appendChild(lg);
+    document.querySelectorAll("input[name=tview]").forEach(r=>r.addEventListener("change",()=>{lg.hidden=r.value!=="act"||!r.checked&&lg.hidden}))},
   beforeRender(){const d=S.F.dept[0]||"";$("pg-h1").textContent=`Department Head Review${d?" — "+d:""}`;document.title=`Department Head Review${d?" — "+d:""}`},
   renderLeft(){},renderRight(){},
   alerts(rows){const out={crit:[],mgmt:[],ins:[],sum:[],sup:[]};if(!rows.length)return out;const A=allStats(rows),v=dvals(rows),d=S.F.dept[0],m=S.F.model[0],sc=`${m} · ${d}`;
