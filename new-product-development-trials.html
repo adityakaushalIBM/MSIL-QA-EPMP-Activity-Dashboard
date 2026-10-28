@@ -668,7 +668,10 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .gt-tbl .s0{width:64px;min-width:64px}.gt-tbl .s1{width:88px;min-width:88px}
 .gt-tbl th.gy{text-align:center;border-left:1px solid var(--border)}
 .gt-tbl th.gm.now{color:var(--brand);font-weight:600}
-.gt-tbl .gc.now,.gt-tbl th.gm.now{background-color:var(--brand-softer)}
+.gt-tbl .gc.now,.gt-tbl th.gm.now{background-color:var(--brand-softer);box-shadow:inset 1px 0 0 #BFD3FE,inset -1px 0 0 #BFD3FE}
+.gt-tbl th.gm.now{position:relative;z-index:0;background:var(--thead);box-shadow:none}
+.gt-tbl th.gm.now::before{content:"";position:absolute;z-index:-1;left:0;right:0;top:6px;bottom:0;background:var(--brand-softer);border:1px solid #BFD3FE;border-bottom:0;border-radius:8px 8px 0 0;box-shadow:0 -2px 8px rgba(20,71,230,.12)}
+.gt-tbl tbody tr:last-child td.gc.now{box-shadow:inset 1px 0 0 #BFD3FE,inset -1px 0 0 #BFD3FE,inset 0 -1px 0 #BFD3FE}
 .gt-tbl tbody tr:hover td.gc.now{background-color:var(--brand-softer)}
 .gt-tbl tbody td.s1{border-right:1px solid var(--border)}
 .gdot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;box-sizing:border-box}
@@ -679,6 +682,11 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .tbl-wrap.fit .stk{position:static}
 .tbl-wrap.fit .stk.s1,.tbl-wrap.fit thead tr.grp th.stk{box-shadow:none}
 .tbl-wrap.fit td.wrap{max-width:none}
+/* KPI tile shadows (all screens): subtle and static; a selected tile keeps its outline with a slightly deeper shadow, no hover motion */
+.tiles .tile{box-shadow:0 1px 2px rgba(16,24,40,.05),0 2px 6px rgba(16,24,40,.06);transition:none;transform:none}
+.tiles .tile:hover{transform:none}
+.tiles .tile.on{box-shadow:inset 0 0 0 1px var(--fg),0 2px 4px rgba(16,24,40,.08),0 6px 14px rgba(16,24,40,.10)}
+.tiles .tgroup.on{box-shadow:0 2px 4px rgba(16,24,40,.08),0 6px 14px rgba(16,24,40,.10)}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1200,7 +1208,7 @@ html,body{overflow-x:clip}
           <div class="chart-cap" id="cap-right"></div><div class="legend" id="lg-right"></div><div class="note" id="n-right"></div>
         </section>
       </div>
-<section class="card" aria-labelledby="gt-h"><div class="card-head"><div><h2 id="gt-h">Active Models Schedule Overview</h2><p class="sub" id="gt-sub">Trial schedule by model · Mar 2026 to Jun 2027 · follows your filters and tile selection</p></div><div class="xwrap"><button class="xbtn" data-x="gt" aria-haspopup="true" aria-label="Export table"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/></svg>Export</button><div class="menu-pop xmenu" data-xm="gt" hidden></div></div></div><div class="qrow"><div class="fbtn"><button id="gt-fbtn" aria-expanded="false" aria-controls="gt-fpanel"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/></svg><span id="gt-flabel">Filters</span><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button></div><span class="count" id="gt-count"></span></div><div class="chips" id="gt-chips" hidden></div><div class="fpanel" id="gt-fpanel" hidden></div><div class="tbl-wrap"><table class="gt-tbl"><thead id="gt-thead"></thead><tbody id="gt-body"></tbody></table></div><div class="more-row"><button class="showmore" id="gt-more" aria-controls="gt-body"></button></div><div class="legend glg"><span><i class="gdot ok"></i>On Track</span><span><i class="gdot tbc"></i>Delayed</span><span><i class="gdot bad"></i>At Risk</span><span><i class="gdot ns"></i>Not Started</span><span><i class="gdot tbc rev"></i>Revised month</span><span><i class="gnow"></i>Current month</span></div></section>
+<section class="card" aria-labelledby="gt-h"><div class="card-head"><div><h2 id="gt-h">Active Models Schedule Overview</h2><p class="sub" id="gt-sub">Trial schedule by model · Mar 2026 to Jun 2027 · follows your filters and tile selection</p></div><div class="xwrap"><button class="xbtn" data-x="gt" aria-haspopup="true" aria-label="Export table"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/></svg>Export</button><div class="menu-pop xmenu" data-xm="gt" hidden></div></div></div><div class="qrow"><div class="fbtn"><button id="gt-fbtn" aria-expanded="false" aria-controls="gt-fpanel"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/></svg><span id="gt-flabel">Filters</span><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button></div><span class="count" id="gt-count"></span></div><div class="chips" id="gt-chips" hidden></div><div class="fpanel" id="gt-fpanel" hidden></div><div class="tbl-wrap"><table class="gt-tbl"><thead id="gt-thead"></thead><tbody id="gt-body"></tbody></table></div><div class="more-row"><button class="showmore" id="gt-more" aria-controls="gt-body"></button></div><div class="legend glg"><span><i class="gdot ok"></i>On Track</span><span><i class="gdot tbc"></i>Delayed</span><span><i class="gdot bad"></i>At Risk</span><span><i class="gdot ns"></i>Not Started</span><span><i class="gnow"></i>Current month</span></div></section>
 
 
 
@@ -1980,11 +1988,10 @@ const GT=MiniT("gt",()=>({
   thead:th=>`<tr><th rowspan="2" class="stk s0">${th("stage","Trial")}</th><th rowspan="2" class="stk s1">${th("model","Model")}</th>`+
     [2026,2027].map(y=>`<th colspan="${MONTHS.filter(m=>m.y===y).length}" class="gy">${y}</th>`).join("")+`</tr>`+
     `<tr>${MONTHS.map((m,i)=>`<th class="gm${i===NOWI?" now":""}" title="${m.l}${i===NOWI?" · current month":""}">${MSH[i]}</th>`).join("")}</tr>`,
-  row:t=>`<tr><td>${t.stage}</td><td>${t.model}</td>`+MONTHS.map((_,i)=>`<td class="gc${i===NOWI?" now":""}">${i===t.month?`<i class="gdot ${SDOT[t.status]}" title="${t.stage} · ${t.model} · planned ${MONTHS[t.month].l} · ${t.status}"></i>`:
-    i===t.rev?`<i class="gdot ${SDOT[t.status]} rev" title="${t.stage} · ${t.model} · revised to ${MONTHS[t.rev].l}"></i>`:""}</td>`).join("")+"</tr>",
+  row:t=>`<tr><td>${t.stage}</td><td>${t.model}</td>`+MONTHS.map((_,i)=>`<td class="gc${i===NOWI?" now":""}">${i===t.month?`<i class="gdot ${SDOT[t.status]}" title="${t.stage} · ${t.model} · planned ${MONTHS[t.month].l} · ${t.status}"></i>`:""}</td>`).join("")+"</tr>",
   empty:"No trials match the current filters and selection.",
   count:R=>`${R.length} trials`,
-  csv:[["Trial","Model","Lead Department","PIC","Planned Month","Revised Month","Status","Completion"],t=>[t.stage,t.model,t.dept,t.pic,MONTHS[t.month].l,t.rev===null?"-":MONTHS[t.rev].l,t.status,t.comp]]
+  csv:[["Trial","Model","Lead Department","PIC","Planned Month","Status","Completion"],t=>[t.stage,t.model,t.dept,t.pic,MONTHS[t.month].l,t.status,t.comp]]
 }),{more:true,pageSize:8,selChips:()=>S.metric?`<span class="chip sel">Tile: ${tileLabel()}<button data-rm="__tile" aria-label="Clear tile selection">${ic("close",16)}</button></span>`:"",onChip:()=>{S.metric=null;render()}});
 
 const PAGECFG={
@@ -2004,7 +2011,7 @@ const PAGECFG={
   renderRight(){GT.render();const w=$("gt-body").closest(".tbl-wrap"),th=w.querySelector("th.gm.now");   // narrow screens: open the schedule around the current month
     if(th&&!w.$scrolled&&w.scrollWidth>w.clientWidth+4){w.$scrolled=1;const s1=w.querySelector("thead th.s1");w.scrollLeft=Math.max(0,th.offsetLeft-(s1?s1.offsetLeft+s1.offsetWidth:0)-3*th.offsetWidth)}},
   alerts(){const T=trialsF(),out={crit:[],mgmt:[],ins:[],sum:[]};if(!T.length)return out;const v=tvals(T);
-    T.filter(t=>t.status==="At Risk").slice(0,3).forEach(t=>out.crit.push({k:"At risk",s:`${t.model} ${t.stage} trial at risk`,t:`${t.model} ${t.stage} trial is at risk`,d:`Planned ${MONTHS[t.month].l}${t.rev!==null?`, now expected ${MONTHS[t.rev].l}`:""} · lead ${t.dept}.`,o:t.pic}));
+    T.filter(t=>t.status==="At Risk").slice(0,3).forEach(t=>out.crit.push({k:"At risk",s:`${t.model} ${t.stage} trial at risk`,t:`${t.model} ${t.stage} trial is at risk`,d:`Planned ${MONTHS[t.month].l} · lead ${t.dept}.`,o:t.pic}));
     if(v.del)out.crit.push({k:v.del,s:"Trials delayed",t:`${v.del} trials are delayed`,d:`${T.filter(t=>t.status==="Delayed"&&t.comp==="In Progress").length} of them still in progress.`,o:"Programme Head"});
     out.sum.push({k:v.tot,s:"Trials in the plan",t:`${v.tot} trials across ${new Set(T.map(t=>t.model)).size} models`,d:`${v.done} completed, ${v.prog} in progress, ${v.ns} not started.`,o:"Programme Head"},
       {k:`${pct(v.on,v.tot-v.ns)}%`,s:"Of started trials on track",t:`${v.on} of ${v.tot-v.ns} started trials are on track`,d:`${v.del} delayed, ${v.risk} at risk.`,o:"Programme Head"},
@@ -2016,7 +2023,6 @@ const PAGECFG={
     const cur=T.filter(t=>t.month===NOWI);if(cur.length)out.sum.push({k:cur.length,s:`Trials planned this month (${MONTHS[NOWI].l})`,t:`${cur.length} trials planned for ${MONTHS[NOWI].l}`,d:cur.map(t=>`${t.model} ${t.stage}`).join(", ")+".",o:"Programme Head"});
     const bd=Object.entries(T.reduce((a,t)=>{if(t.status==="Delayed"||t.status==="At Risk")a[t.dept]=(a[t.dept]||0)+1;return a},{})).sort((a,b)=>b[1]-a[1])[0];
     if(bd)out.ins.push({k:bd[1],s:`Delayed or at-risk trials led by ${bd[0]}, the most of any department`,t:`${bd[0]} leads the most delayed or at-risk trials`,d:`${bd[1]} trials.`,o:`${bd[0]} Team`});
-    const sl=T.filter(t=>t.rev!==null);if(sl.length)out.ins.push({k:`${(sl.reduce((a,t)=>a+Math.abs(t.rev-t.month),0)/sl.length).toFixed(1)} mo`,s:"Average slip on revised trials",t:"Average slip on trials with a revised month",d:`${sl.length} trials have moved from their planned month.`,o:"Programme Head"});
     out.ins.push({k:FOCUS.filter(f=>T.some(t=>t.id===f.trial)).length,s:"Focus items open",t:"Focus items on active trials",d:"Listed in Things to Focus below.",o:"QA Head"});
     return out}
 };

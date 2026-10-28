@@ -668,7 +668,10 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .gt-tbl .s0{width:64px;min-width:64px}.gt-tbl .s1{width:88px;min-width:88px}
 .gt-tbl th.gy{text-align:center;border-left:1px solid var(--border)}
 .gt-tbl th.gm.now{color:var(--brand);font-weight:600}
-.gt-tbl .gc.now,.gt-tbl th.gm.now{background-color:var(--brand-softer)}
+.gt-tbl .gc.now,.gt-tbl th.gm.now{background-color:var(--brand-softer);box-shadow:inset 1px 0 0 #BFD3FE,inset -1px 0 0 #BFD3FE}
+.gt-tbl th.gm.now{position:relative;z-index:0;background:var(--thead);box-shadow:none}
+.gt-tbl th.gm.now::before{content:"";position:absolute;z-index:-1;left:0;right:0;top:6px;bottom:0;background:var(--brand-softer);border:1px solid #BFD3FE;border-bottom:0;border-radius:8px 8px 0 0;box-shadow:0 -2px 8px rgba(20,71,230,.12)}
+.gt-tbl tbody tr:last-child td.gc.now{box-shadow:inset 1px 0 0 #BFD3FE,inset -1px 0 0 #BFD3FE,inset 0 -1px 0 #BFD3FE}
 .gt-tbl tbody tr:hover td.gc.now{background-color:var(--brand-softer)}
 .gt-tbl tbody td.s1{border-right:1px solid var(--border)}
 .gdot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;box-sizing:border-box}
@@ -676,6 +679,14 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .gdot.rev{background:#fff;border:2px solid}.gdot.rev.ok{border-color:var(--ok-bar-bd)}.gdot.rev.tbc{border-color:var(--tbc-bar-bd)}.gdot.rev.bad{border-color:var(--bad-bar-bd)}
 .legend.glg{margin-top:14px}.legend.glg i.gdot{width:12px;height:12px;border-radius:50%}
 .legend.glg i.gnow{width:14px;height:14px;border-radius:3px;background:var(--brand-softer);border:1px solid #BFD3FE}
+.tbl-wrap.fit .stk{position:static}
+.tbl-wrap.fit .stk.s1,.tbl-wrap.fit thead tr.grp th.stk{box-shadow:none}
+.tbl-wrap.fit td.wrap{max-width:none}
+/* KPI tile shadows (all screens): subtle and static; a selected tile keeps its outline with a slightly deeper shadow, no hover motion */
+.tiles .tile{box-shadow:0 1px 2px rgba(16,24,40,.05),0 2px 6px rgba(16,24,40,.06);transition:none;transform:none}
+.tiles .tile:hover{transform:none}
+.tiles .tile.on{box-shadow:inset 0 0 0 1px var(--fg),0 2px 4px rgba(16,24,40,.08),0 6px 14px rgba(16,24,40,.10)}
+.tiles .tgroup.on{box-shadow:0 2px 4px rgba(16,24,40,.08),0 6px 14px rgba(16,24,40,.10)}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1533,6 +1544,21 @@ function tableRows(){const t=S.t,q=t.q.toLowerCase().trim(),act=activeCF(),sp=se
   const rows=src.filter(p=>(!q||(T0.q?T0.q(p):[p.model,p.id,p.no,p.name,p.vcode,p.vname,p.pic,p.dept,p.trial]).join(" ").toLowerCase().includes(q))&&act.every(([k,f])=>passCol(p,k,f)));
   const sv=p=>{const v=tval(p,t.sort.k);return v==="—"?(t.sort.dir>0?"￿":""):v};
   return rows.sort((a,b)=>{const x=sv(a),y=sv(b);const c=typeof x==="number"&&typeof y==="number"?x-y:String(x).localeCompare(String(y),undefined,{numeric:true});return c*t.sort.dir})}
+// ===== Table fit (Summary Dashboards only, PAGECFG.fitTables): a table that fits its card spreads its columns evenly (text columns get a double share) and drops the frozen-column fold;
+// only tables that scroll sideways keep the first two columns frozen so each row stays identifiable =====
+function fitTable(tb){const w=tb&&tb.closest(".tbl-wrap");if(!w||!w.clientWidth)return;
+  tb.querySelector("colgroup.fitcg")?.remove();Object.assign(tb.style,{tableLayout:"",width:"max-content",minWidth:"0"});
+  const W=w.clientWidth-2,fits=tb.offsetWidth<=W;w.classList.toggle("fit",fits);
+  const hr=tb.querySelector("thead tr:last-child"),span=tb.querySelector("thead [rowspan]");
+  if(!fits||!hr||span){Object.assign(tb.style,{width:"",minWidth:""});return}
+  const ths=[...hr.children],nat=ths.map(th=>th.getBoundingClientRect().width),r0=tb.querySelector("tbody tr"),
+    wt=ths.map((_,i)=>{const td=r0&&r0.children.length===ths.length?r0.children[i]:null;return td&&td.classList.contains("wrap")?2:1});
+  // columns whose natural width exceeds their share keep it; the rest split what is left in proportion to their weight
+  let fixed=new Set(),share=0;for(let k=0;k<ths.length;k++){const free=W-[...fixed].reduce((a,i)=>a+nat[i],0),wsum=wt.reduce((a,x,i)=>fixed.has(i)?a:a+x,0);share=free/wsum;
+    const more=ths.map((_,i)=>i).filter(i=>!fixed.has(i)&&nat[i]>share*wt[i]);if(!more.length)break;more.forEach(i=>fixed.add(i))}
+  const cg=document.createElement("colgroup");cg.className="fitcg";cg.innerHTML=ths.map((_,i)=>`<col style="width:${fixed.has(i)?Math.ceil(nat[i])+1:Math.floor(share*wt[i])}px">`).join("");tb.prepend(cg);
+  Object.assign(tb.style,{tableLayout:"fixed",width:"100%",minWidth:"0"})}
+{let _ft=0;window.addEventListener("resize",()=>{if(!PAGECFG.fitTables)return;clearTimeout(_ft);_ft=setTimeout(()=>document.querySelectorAll(".tbl-wrap table").forEach(t=>{fitTable(t);const c1=t.querySelector("thead tr:last-child th");if(c1)t.style.setProperty("--c1",c1.getBoundingClientRect().width+"px")}),150)})}
 function renderTable(){
   const t=S.t,T=TBL(),rows=tableRows(),PAGE=T.pageSize||PAGE0;
   const pages=Math.max(1,Math.ceil(rows.length/PAGE));t.page=Math.min(t.page,pages-1);
@@ -1547,6 +1573,7 @@ function renderTable(){
   $("t-body").innerHTML=body||`<tr><td colspan="${T.cols.length}" class="none">No parts match. Clear the search or table filters to see more.</td></tr>`;
   if(body)$("t-body").querySelectorAll("tr").forEach(tr=>{tr.children[0]?.classList.add("stk","s0");tr.children[1]?.classList.add("stk","s1")});
   {const tb=$("t-body").closest("table");let tf=tb.querySelector("tfoot");if(T.foot&&rows.length){if(!tf){tf=document.createElement("tfoot");tb.appendChild(tf)}tf.innerHTML=T.foot(rows);tf.querySelectorAll("tr").forEach(tr=>{tr.children[0]?.classList.add("stk","s0");tr.children[1]?.classList.add("stk","s1")})}else if(tf)tf.remove()}
+  if(PAGECFG.fitTables)fitTable($("t-body").closest("table"));
   const tbl=$("t-body").closest("table"),c1=tbl.querySelector("thead tr:last-child th");if(c1)tbl.style.setProperty("--c1",c1.getBoundingClientRect().width+"px");
   PAGECFG.afterTable&&PAGECFG.afterTable();
   {const sc=$("t-scope");if(sc){const g=S.gsel,ms=S.F.model.length?S.F.model:(g&&g.key==="model"?[g.val]:[]);sc.hidden=!T.agg;sc.textContent=ms.length&&ms.length<MODELS.length?`${ms.join(", ")} only`:"Across All Models"}}

@@ -668,7 +668,10 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .gt-tbl .s0{width:64px;min-width:64px}.gt-tbl .s1{width:88px;min-width:88px}
 .gt-tbl th.gy{text-align:center;border-left:1px solid var(--border)}
 .gt-tbl th.gm.now{color:var(--brand);font-weight:600}
-.gt-tbl .gc.now,.gt-tbl th.gm.now{background-color:var(--brand-softer)}
+.gt-tbl .gc.now,.gt-tbl th.gm.now{background-color:var(--brand-softer);box-shadow:inset 1px 0 0 #BFD3FE,inset -1px 0 0 #BFD3FE}
+.gt-tbl th.gm.now{position:relative;z-index:0;background:var(--thead);box-shadow:none}
+.gt-tbl th.gm.now::before{content:"";position:absolute;z-index:-1;left:0;right:0;top:6px;bottom:0;background:var(--brand-softer);border:1px solid #BFD3FE;border-bottom:0;border-radius:8px 8px 0 0;box-shadow:0 -2px 8px rgba(20,71,230,.12)}
+.gt-tbl tbody tr:last-child td.gc.now{box-shadow:inset 1px 0 0 #BFD3FE,inset -1px 0 0 #BFD3FE,inset 0 -1px 0 #BFD3FE}
 .gt-tbl tbody tr:hover td.gc.now{background-color:var(--brand-softer)}
 .gt-tbl tbody td.s1{border-right:1px solid var(--border)}
 .gdot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;box-sizing:border-box}
@@ -679,6 +682,11 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .tbl-wrap.fit .stk{position:static}
 .tbl-wrap.fit .stk.s1,.tbl-wrap.fit thead tr.grp th.stk{box-shadow:none}
 .tbl-wrap.fit td.wrap{max-width:none}
+/* KPI tile shadows (all screens): subtle and static; a selected tile keeps its outline with a slightly deeper shadow, no hover motion */
+.tiles .tile{box-shadow:0 1px 2px rgba(16,24,40,.05),0 2px 6px rgba(16,24,40,.06);transition:none;transform:none}
+.tiles .tile:hover{transform:none}
+.tiles .tile.on{box-shadow:inset 0 0 0 1px var(--fg),0 2px 4px rgba(16,24,40,.08),0 6px 14px rgba(16,24,40,.10)}
+.tiles .tgroup.on{box-shadow:0 2px 4px rgba(16,24,40,.08),0 6px 14px rgba(16,24,40,.10)}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
