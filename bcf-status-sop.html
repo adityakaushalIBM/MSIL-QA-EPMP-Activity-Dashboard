@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>BCF Status</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -648,13 +648,503 @@ tfoot td.stk{background:#EEF0F3}
 /* status cells in wrapping columns may break onto two lines (long readiness statuses) */
 td.wrap .st{white-space:normal;align-items:flex-start;min-width:150px}
 td.wrap .st i{flex:none;margin-top:.45em}
+/* ===== Summary Dashboards ===== */
+.card.off,.charts.off{display:none!important}
+.fbar{grid-template-columns:repeat(var(--fn,8),minmax(0,1fr))}
+.fbar.few{width:calc(100% * var(--fn) / 8)}
+@media (min-width:861px){.charts.w32{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}}
+td.act{min-width:220px}
+a.alink{color:var(--brand);text-decoration:none}a.alink:hover{text-decoration:underline}
+td .subtle,tfoot .subtle{color:var(--body);font-weight:400}
+tfoot tr.tot td{background:var(--thead);font-weight:600}
+.more-row{display:flex;justify-content:center;padding-top:12px}
+.showmore{display:inline-flex;align-items:center;gap:6px;border:0;background:none;color:var(--brand);font:inherit;font-weight:500;padding:8px 10px;cursor:pointer;border-radius:8px}
+.showmore:hover{background:var(--brand-softer)}.showmore[hidden]{display:none}
+/* Gantt: schedule table with status dots */
+.gt-tbl{min-width:860px}
+.gt-tbl th,.gt-tbl td{padding:0 12px;height:40px}
+.gt-tbl thead tr:first-child th{height:36px}
+.gt-tbl th.gm,.gt-tbl td.gc{padding:0;text-align:center;min-width:40px}
+.gt-tbl .s0{width:64px;min-width:64px}.gt-tbl .s1{width:88px;min-width:88px}
+.gt-tbl th.gy{text-align:center;border-left:1px solid var(--border)}
+.gt-tbl th.gm.now{color:var(--brand);font-weight:600}
+.gt-tbl .gc.now,.gt-tbl th.gm.now{background-color:var(--brand-softer)}
+.gt-tbl tbody tr:hover td.gc.now{background-color:var(--brand-softer)}
+.gt-tbl tbody td.s1{border-right:1px solid var(--border)}
+.gdot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;box-sizing:border-box}
+.gdot.ok{background:var(--ok-bar-bd)}.gdot.tbc{background:var(--tbc-bar-bd)}.gdot.bad{background:var(--bad-bar-bd)}.gdot.ns{background:#fff;border:1.5px solid var(--na-bar-bd)}
+.gdot.rev{background:#fff;border:2px solid}.gdot.rev.ok{border-color:var(--ok-bar-bd)}.gdot.rev.tbc{border-color:var(--tbc-bar-bd)}.gdot.rev.bad{border-color:var(--bad-bar-bd)}
+.legend.glg{margin-top:14px}.legend.glg i.gdot{width:12px;height:12px;border-radius:50%}
+.legend.glg i.gnow{width:14px;height:14px;border-radius:3px;background:var(--brand-softer);border:1px solid #BFD3FE}
+/* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
+   Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
+   filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
+   Desktop (wider than 860px) is untouched. Text sizes follow the mobile prototypes (12–13px for secondary text). */
+.m-ham,.m-filter-row,.m-tview-sel,.m-nav-scrim,.m-nav-drawer,.m-fsheet-scrim,.m-fsheet{display:none}
+@media (max-width:860px){
+/* ── 1. App shell ─────────────────────────────────────────────────────── */
+.app{display:block!important;min-height:100vh}   /* single column, no grid */
+.nav{display:none!important}
+.stagebar{display:none!important}
+.main{display:block!important}
+
+/* ── 2. Sticky top header ─────────────────────────────────────────────── */
+.top{
+  position:sticky;top:0;z-index:10;
+  display:flex;align-items:center;
+  background:#fff;border-bottom:1px solid var(--border);
+  padding:10px 16px!important;gap:10px!important;
+  box-shadow:0 1px 4px rgba(0,0,0,.06)
+}
+.search{flex:1!important;max-width:none!important;padding:8px 14px!important;border-radius:12px!important}
+.bell{width:36px!important;height:36px!important;flex:none}
+.user{gap:8px!important}
+.user>div:last-child{display:none}  /* avatar only, hide name */
+.avatar{width:36px!important;height:36px!important;font-size:13px!important}
+.m-ham{
+  flex:none;width:36px;height:36px;border:1px solid var(--border);border-radius:10px;
+  background:#fff;display:grid;place-items:center;color:var(--heading);cursor:pointer
+}
+
+/* ── 3. Content: vertical stack, contained, no overflow ──────────────── */
+.content{
+  display:flex!important;flex-direction:column!important;
+  padding:14px 16px 40px!important;gap:14px!important;
+  overflow:visible!important;          /* NO horizontal overflow on the column */
+  box-sizing:border-box!important;
+  width:100%!important;max-width:100%!important
+}
+h1{font-size:20px!important;line-height:1.28!important}
+.crumbs{font-size:13px!important;flex-wrap:wrap!important}
+.head{gap:8px!important;flex-wrap:wrap!important}
+.h1wrap{width:100%!important}
+
+/* ── 4. Cards: full width, no overflow clipping ───────────────────────── */
+.card{
+  padding:14px 16px!important;
+  width:100%!important;max-width:100%!important;
+  box-sizing:border-box!important;
+  overflow:visible!important
+}
+.card h2{font-size:15px!important;line-height:1.3!important}
+.card .sub{font-size:13px!important}
+/* card-head: heading full-width, tools wrap beneath */
+.card-head{
+  display:flex!important;flex-wrap:wrap!important;
+  gap:8px!important;align-items:flex-start!important
+}
+.card-head>div:first-child{flex:1 1 100%!important;min-width:0!important}
+.card-head>.xwrap,.card-head>.head-tools,
+.card-head>.radios{margin-left:0!important;flex-shrink:0!important}
+
+/* ── 5. Filter bar: 2×4 grid (shown in bottom sheet, hidden on page) ─── */
+
+
+/* ── 6. View-switch row ────────────────────────────────────────────────── */
+.viewrow{flex-wrap:wrap!important;gap:8px!important;margin-top:0!important}
+.viewsw{
+  overflow-x:auto!important;white-space:nowrap!important;
+  max-width:100%!important;scrollbar-width:none;
+  padding-inline:14px!important;
+  mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)!important;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)!important
+}
+.viewsw::-webkit-scrollbar{display:none}
+.viewsw button,.viewsw a{padding:5px 13px!important;font-size:13px!important}
+
+/* ── 7. Tabs strip: horizontal scroll, no wrap ────────────────────────── */
+.tabs{
+  display:flex!important;flex-wrap:nowrap!important;
+  overflow-x:auto!important;scrollbar-width:none;
+  width:100%!important;max-width:100%!important;
+  gap:0!important;border-bottom:1px solid var(--border)!important;
+  padding-inline:14px!important;
+  mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)!important;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)!important
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap!important;flex-shrink:0!important}
+
+/* ── 8. KPI tiles: horizontal scroll row, contained within card ─────── */
+.tiles{
+  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  gap:10px!important;
+  overflow-x:auto!important;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  /* no negative margins — stay inside card padding */
+  padding:4px 0 8px!important;
+  margin:0!important;
+  width:100%!important
+}
+.tiles::-webkit-scrollbar{display:none}
+.tile{
+  flex:0 0 auto!important;
+  width:136px!important;min-height:80px!important;
+  padding:12px 13px!important;
+  border-radius:10px!important
+}
+.tile b{font-size:21px!important;line-height:1.15!important}
+.tile span{font-size:13px!important}
+/* tgroup (parent + sub-tiles): wider, sub-tiles share space */
+.tile.tgroup{
+  width:auto!important;min-width:200px!important;
+  padding:10px 11px!important
+}
+.tile.sub{min-height:0!important;padding:8px 10px!important}
+.tile.sub b{font-size:18px!important}
+.tg-main{min-width:90px!important}
+/* hide hint/helper text below tiles */
+.hint{display:none!important}
+.helper{display:none!important}
+/* add space between the tabs/seg row and the tiles */
+.tiles{margin-top:14px!important}
+
+/* ── 9. Charts container: vertical stack, each card full-width ────────── */
+.charts{
+  display:flex!important;flex-direction:column!important;
+  gap:14px!important;width:100%!important;overflow:visible!important
+}
+.charts>.card{width:100%!important;box-sizing:border-box!important}
+/* chart-box: fixed height; chart-scroll/chart-inner already handle bar scroll */
+.chart-box{height:240px!important;position:relative!important}
+/* guarantee chart-inner is never narrower than the card — JS measures
+   clientWidth to decide whether to scroll; if layout hasn't settled yet it
+   reads 0 and squishes everything. A minimum of 300px prevents that. */
+.chart-inner{min-width:300px!important}
+
+/* ── 10. Tabs & seg: sliding pill tab bar ─────────────────────────────── */
+/* .tabs — section tab strip */
+.tabs{
+  display:flex!important;flex-wrap:nowrap!important;
+  overflow-x:auto!important;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  width:100%!important;box-sizing:border-box!important;
+  scroll-behavior:smooth;
+  /* keep the bottom border from causing layout shift */
+  border-bottom:1px solid var(--border)!important;
+  gap:0!important;padding-bottom:0!important
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:0 0 auto!important;white-space:nowrap!important;
+  padding:8px 14px 12px!important;font-size:13px!important
+}
+
+/* .seg — Model/Dept toggle, MRD selector, drawer tabs */
+/* Restyled as a pill tab bar: full-width, items never wrap, active pill slides */
+.seg{
+  display:flex!important;flex-wrap:nowrap!important;
+  width:100%!important;box-sizing:border-box!important;
+  overflow-x:auto!important;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;
+  background:#F3F4F6!important;border-radius:10px!important;
+  /* inner padding so first/last button isn't clipped to the edge */
+  padding:3px 10px!important;gap:2px!important;
+  mask-image:linear-gradient(to right,transparent 0,#000 10px,#000 calc(100% - 10px),transparent 100%)!important;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 10px,#000 calc(100% - 10px),transparent 100%)!important
+}
+.seg::-webkit-scrollbar{display:none}
+.seg button{
+  flex:0 0 auto!important;
+  padding:6px 14px!important;font-size:13px!important;
+  border-radius:7px!important;white-space:nowrap!important
+}
+/* keep the existing .on style — white pill with shadow */
+
+.ctx{
+  display:flex!important;flex-wrap:wrap!important;
+  gap:8px!important;margin-top:16px!important;
+  overflow:visible!important;width:100%!important
+}
+.ctx:has(.radios){flex-direction:column!important;align-items:flex-start!important}
+
+/* ── 11. Alert (AI insights) section ─────────────────────────────────── */
+/* aitabs: same pill-strip treatment as .seg */
+.aitabs{
+  display:flex!important;flex-wrap:nowrap!important;
+  overflow-x:auto!important;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;
+  width:100%!important;box-sizing:border-box!important;
+  gap:6px!important;margin-bottom:12px!important;
+  padding:2px 14px!important;
+  mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)!important;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)!important
+}
+.aitabs::-webkit-scrollbar{display:none}
+.aitabs button{
+  flex:0 0 auto!important;white-space:nowrap!important;
+  padding:7px 12px!important;font-size:13px!important
+}
+/* airow: aitiles scroll, viewmore below */
+.airow{
+  display:flex!important;flex-direction:column!important;
+  gap:10px!important;width:100%!important
+}
+.aitiles{
+  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  gap:10px!important;overflow-x:auto!important;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  padding:2px 0 6px!important;width:100%!important
+}
+.aitiles::-webkit-scrollbar{display:none}
+.aitile{
+  flex:0 0 auto!important;
+  width:clamp(160px, 52vw, 200px)!important;
+  padding:10px 11px 8px 12px!important
+}
+.aitile strong{font-size:18px!important}
+.aitile b{font-size:13px!important}
+/* "View More" sits below the tiles row, full width */
+.viewmore{
+  align-self:stretch!important;justify-content:center!important;
+  width:100%!important;border:1px solid var(--border)!important;
+  border-radius:8px!important;padding:10px!important;
+  font-size:14px!important;font-weight:600!important;
+  background:#fff!important;color:var(--brand)!important;
+  display:flex!important;align-items:center!important;gap:6px!important
+}
+
+/* ── 12. Table card ───────────────────────────────────────────────────── */
+/* table view radio (BCF Details / NG Details) → hidden, replaced by JS <select> */
+.radios.tv{display:none!important}
+.m-tview-sel{
+  border:1px solid var(--border);border-radius:8px;
+  padding:6px 28px 6px 10px;background-color:#F3F4F6;
+  color:var(--heading);font:inherit;font-size:13px;
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2.5 3.8 5 6.2l2.5-2.4' fill='none' stroke='%236A7282' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 8px center
+}
+.qlabel{font-size:13px!important;margin-top:12px!important}
+.qrow{display:flex!important;flex-wrap:wrap!important;gap:8px!important;margin-top:8px!important}
+.qsearch{flex:1 1 auto!important;min-width:0!important}
+.fbtn>button{padding:8px 12px!important;font-size:13px!important}
+table{font-size:12px!important}
+th,td{padding:8px 10px!important;line-height:1.3!important}
+.tbl-wrap{
+  overflow-x:auto!important;-webkit-overflow-scrolling:touch;
+  border-radius:6px!important;margin-top:12px!important
+}
+/* pager */
+.pager{flex-wrap:wrap!important;gap:8px!important}
+.pager>span{font-size:12px!important}
+/* column filter panel: 2 cols */
+.fgrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px 10px!important}
+.fcell>span{font-size:12px!important}
+.chips{gap:6px!important;margin-top:8px!important}
+.chip{font-size:12px!important}
+
+/* ── 13. Misc ─────────────────────────────────────────────────────────── */
+.mockline{font-size:12px!important;margin-top:4px!important}
+.dsel{flex-wrap:wrap!important;gap:8px!important}
+.radios{flex-wrap:wrap!important;gap:12px!important}
+/* legend: up to 2 cols on mobile */
+.legend{
+  grid-template-columns:repeat(2,auto)!important;
+  column-gap:16px!important;row-gap:6px!important;
+  margin-top:10px!important
+}
+.legend span{font-size:12px!important}
+/* note */
+.note{font-size:12px!important;margin-top:8px!important}
+/* export button */
+.xbtn{padding:5px 10px!important;font-size:13px!important}
+
+/* ── Slide-in nav drawer ── */
+.m-nav-scrim{
+  position:fixed;inset:0;background:rgba(16,24,40,.32);z-index:30;
+  opacity:0;pointer-events:none;transition:opacity .2s
+}
+.m-nav-scrim.open{opacity:1;pointer-events:auto}
+.m-nav-drawer{
+  position:fixed;top:0;left:0;bottom:0;
+  width:min(288px,85vw);z-index:31;
+  background:var(--nav);color:#fff;
+  display:flex;flex-direction:column;
+  transform:translateX(-100%);transition:transform .22s ease;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px)
+}
+.m-nav-drawer.open{transform:translateX(0)}
+.m-nd-logo{
+  padding:16px 14px 12px;border-bottom:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:space-between
+}
+.m-nd-logo img{width:120px;max-width:70%;height:auto}
+.m-nav-close{
+  border:0;background:rgba(255,255,255,.12);color:#fff;
+  width:32px;height:32px;border-radius:8px;
+  display:grid;place-items:center;flex:none;cursor:pointer
+}
+.m-nd-menu{
+  flex:1;overflow-y:auto;padding:10px 0;
+  display:flex;flex-direction:column;gap:1px;
+  scrollbar-width:none
+}
+.m-nd-menu::-webkit-scrollbar{display:none}
+.m-nd-head{
+  margin:10px 14px 4px;font-size:11px;font-weight:600;
+  opacity:.55;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap
+}
+.m-nd-menu a{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;color:#fff;text-decoration:none;
+  font-size:14px;font-weight:500;opacity:.85
+}
+.m-nd-menu a:hover,.m-nd-menu a:active{
+  background:rgba(255,255,255,.08);opacity:1
+}
+.m-nd-menu a.cur{
+  background:linear-gradient(135deg,#2F49F0,#2338D6);
+  box-shadow:inset 0 0 0 1.5px rgba(255,214,230,.7);
+  opacity:1;font-weight:600
+}
+.m-nd-logout{
+  border-top:1px solid rgba(255,255,255,.12);
+  padding:14px 16px;display:flex;gap:10px;
+  align-items:center;font-size:14px;cursor:pointer;color:#fff
+}
+
+/* ── Filter bottom sheet ── */
+.m-fsheet-scrim{
+  position:fixed;inset:0;background:rgba(16,24,40,.32);z-index:20;
+  opacity:0;pointer-events:none;transition:opacity .2s
+}
+.m-fsheet-scrim.open{opacity:1;pointer-events:auto}
+.m-fsheet{
+  position:fixed;bottom:0;left:0;right:0;z-index:21;
+  background:#fff;border-radius:20px 20px 0 0;
+  padding:0 0 env(safe-area-inset-bottom,0px);
+  max-height:82vh;display:flex;flex-direction:column;
+  transform:translateY(100%);transition:transform .22s ease
+}
+.m-fsheet.open{transform:translateY(0)}
+.m-fsheet-handle{
+  width:40px;height:4px;background:#D1D5DB;
+  border-radius:2px;margin:12px auto 0;flex:none
+}
+.m-fsheet-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px 8px;flex:none
+}
+.m-fsheet-head h3{margin:0;font-size:16px;font-weight:600;color:var(--heading)}
+.m-fsheet-close{
+  border:0;background:none;color:var(--subtle);
+  font-size:20px;line-height:1;padding:4px;cursor:pointer
+}
+.m-fsheet-body{
+  overflow-y:auto;padding:0 16px 8px;flex:1;
+  -webkit-overflow-scrolling:touch
+}
+.m-fsheet-sel select{
+  display:block;width:100%;margin-bottom:10px;
+  border:1px solid var(--border);border-radius:8px;
+  padding:10px 32px 10px 12px;
+  background-color:#F3F4F6;color:var(--heading);
+  font:inherit;font-size:14px;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2.5 3.8 5 6.2l2.5-2.4' fill='none' stroke='%236A7282' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center
+}
+.m-fsheet-sel select.set{
+  background-color:var(--brand-softer);
+  border-color:#C3D5FB;color:var(--brand)
+}
+.m-fsheet-foot{
+  padding:12px 16px;border-top:1px solid var(--border);
+  display:flex;gap:10px;flex:none
+}
+.m-fsheet-clear{
+  flex:1;padding:12px;border:1px solid var(--border);
+  border-radius:10px;background:#fff;color:var(--heading);
+  font-weight:500;cursor:pointer;font:inherit
+}
+.m-fsheet-apply{
+  flex:2;padding:12px;border:0;border-radius:10px;
+  background:var(--brand);color:#fff;
+  font-weight:600;cursor:pointer;font:inherit
+}
+
+/* ── Mobile filter trigger row ── */
+.m-filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.m-filter-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--border);border-radius:8px;
+  background:#F3F4F6;padding:8px 14px;
+  color:var(--heading);font-weight:500;font-size:14px;
+  cursor:pointer;font:inherit
+}
+.m-filter-btn.active{
+  background:var(--brand-softer);
+  border-color:#C3D5FB;color:var(--brand)
+}
+.m-filter-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:18px;height:18px;border-radius:999px;
+  background:var(--brand);color:#fff;
+  font-size:11px;font-weight:700;padding:0 4px
+}
+
+
+/* ── Current-build additions ── */
+/* filter card lives in the bottom sheet on phones (moved there by script) */
+.m-fsheet .card{border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;background:none!important}
+.m-fsheet .card-head>div:first-child,.m-fsheet #clear{display:none!important}
+.m-fsheet .fhead-r{width:100%}
+.m-fsheet .fbar{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;border:0!important;background:none!important;overflow:visible!important}
+.m-fsheet .msel{border-left:0!important}
+.m-fsheet .msel-btn{border-radius:8px!important;min-height:44px;height:auto!important;padding:0 32px 0 12px;font-size:14px}
+.m-fsheet .msel-pop{position:static!important;width:auto!important;margin-top:6px;box-shadow:none!important}
+.m-fsheet .msel-list{max-height:220px}
+/* nav drawer groups (PP Trial Dashboards / MPP / Pilot-SOP Trial), collapsible */
+.m-nd-grp{display:flex;align-items:center;justify-content:space-between;width:calc(100% - 20px);margin:8px 10px 2px;padding:9px 10px;border:0;border-radius:8px;background:rgba(255,255,255,.08);color:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer;text-align:left}
+.m-nd-grp svg{transition:transform .2s;flex:none}
+.m-nd-grp[aria-expanded="false"] svg{transform:rotate(-90deg)}
+.m-nd-sub[hidden]{display:none!important}
+.m-nd-menu a{padding-left:22px}
+/* page-level view switches, date controls, scope tags and wide cards */
+.dsel{width:100%}
+.dsel .mrd{flex:1 1 auto}
+.callout{white-space:normal!important}
+#wrow .chart-box,#pvarow .chart-box{height:280px!important}
+.tvrow{flex-direction:row!important;align-items:center!important}
+.dgrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+.dwrap{width:120px!important;height:120px!important}
+.drawer{width:100vw!important}
+/* reserved space only when there is something to show: context tags / chips slide in when a tile or column is picked */
+.ctx{min-height:0!important}
+/* helper notes under charts are left out on phones to reduce clutter (still shown on laptops) */
+.card .note{display:none!important}
+.ctx:empty,.note:empty,.chart-cap:empty,.legend:empty,.callout:empty,.chips:empty{display:none!important}
+/* timelines with fixed row labels (SOR Adherence): narrower label column so the scrolling chart keeps most of the width */
+.ylabs{width:104px!important}
+.ylabs span{max-width:100px;white-space:normal}
+.chart-box:has(.ylabs) .chart-scroll{left:108px!important}
+.m-ham{display:grid!important}
+/* top bar keeps the bell and avatar (an older ≤720px rule hid them) */
+.bell{display:grid!important}
+.search{min-width:0!important}
+.search input{min-width:0!important;width:100%}
+.user{flex:none}
+/* no sideways page scroll: only tile rows, strips, charts and tables scroll */
+html,body{overflow-x:clip}
+.user .avatar{display:grid!important}
+.m-filter-row{display:flex!important}
+.m-tview-sel{display:inline-block!important}
+
+.m-nav-scrim,.m-fsheet-scrim{display:block}
+.m-nav-drawer,.m-fsheet{display:flex}
+}
+@media (max-width:420px){.dgrid{grid-template-columns:1fr!important}}
+@media (max-width:860px){.fbar.few{width:auto!important}.gt-tbl{min-width:760px}.gt-tbl th.gm,.gt-tbl td.gc{min-width:36px}}
 </style>
 </head>
 <body style="margin:0">
 <div class="app">
   <nav class="nav" aria-label="Main">
     <div class="logo"><img class="mk-img" alt="Maruti Suzuki" src="data:image/png;base64,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"><img class="de-img" alt="Powered by DE" src="data:image/png;base64,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"></div>
-    <div class="menu" aria-label="Dashboards"><button class="mgrp" aria-expanded="true" aria-controls="msub-pp"><span class="mfull">PP Trial Dashboards</span><span class="mab">PP</span><svg class="ic mchev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button><div class="msub" id="msub-pp" role="group" aria-label="PP Trial Dashboards"><a href="parts-drawing-confirmation_1.html" class="" title="Parts Drawing Confirmation" aria-label="Parts Drawing Confirmation"><em class="ab" aria-hidden="true">PDC</em><span>Parts Drawing Confirmation</span></a><a href="spec-meeting-confirmation_1.html" class="" title="Spec Meeting Confirmation" aria-label="Spec Meeting Confirmation"><em class="ab" aria-hidden="true">SMC</em><span>Spec Meeting Confirmation</span></a><a href="sor-status.html" class="" title="SOR Status" aria-label="SOR Status"><em class="ab" aria-hidden="true">SOR</em><span>SOR Status</span></a><a href="tier-2-compilation.html" class="" title="Tier 2 Compilation" aria-label="Tier 2 Compilation"><em class="ab" aria-hidden="true">T2</em><span>Tier 2 Compilation</span></a><a href="newness-mizenboshi-status.html" class="" title="Newness & Mizenboshi" aria-label="Newness & Mizenboshi"><em class="ab" aria-hidden="true">NMZ</em><span>Newness & Mizenboshi</span></a><a href="newness-benchmarking.html" class="" title="Newness Benchmarking" aria-label="Newness Benchmarking"><em class="ab" aria-hidden="true">NCB</em><span>Newness Benchmarking</span></a><a href="dmu-status.html" class="" title="DMU" aria-label="DMU"><em class="ab" aria-hidden="true">DMU</em><span>DMU</span></a><a href="ses-nr-status.html" class="" title="SES NR" aria-label="SES NR"><em class="ab" aria-hidden="true">SES</em><span>SES NR</span></a><a href="otop-status.html" class="" title="OT Status" aria-label="OT Status"><em class="ab" aria-hidden="true">OT</em><span>OT Status</span></a><a href="sheet-metal-parts-accuracy-status.html" class="" title="Sheet Metal & Parts Accuracy" aria-label="Sheet Metal & Parts Accuracy"><em class="ab" aria-hidden="true">SMA</em><span>Sheet Metal & Parts Accuracy</span></a><a href="part-inspection-deviation-status.html" class="" title="Part Inspection & Deviation" aria-label="Part Inspection & Deviation"><em class="ab" aria-hidden="true">PID</em><span>Part Inspection & Deviation</span></a><a href="mis-p-approval.html" class="" title="MIS-P Approval" aria-label="MIS-P Approval"><em class="ab" aria-hidden="true">MIS</em><span>MIS-P Approval</span></a><a href="lab-testing-status.html" class="" title="Lab Testing Status" aria-label="Lab Testing Status"><em class="ab" aria-hidden="true">LAB</em><span>Lab Testing Status</span></a><a href="bcf-status.html" class="" title="BCF Status" aria-label="BCF Status"><em class="ab" aria-hidden="true">BCF</em><span>BCF Status</span></a><a href="colour-parts-check-status.html" class="" title="Colour Parts Check" aria-label="Colour Parts Check"><em class="ab" aria-hidden="true">CPC</em><span>Colour Parts Check</span></a><a href="part-list-deviation-special-parts.html" class="" title="Part List With Deviation" aria-label="Part List With Deviation"><em class="ab" aria-hidden="true">PLD</em><span>Part List With Deviation</span></a></div><button class="mgrp" aria-expanded="true" aria-controls="msub-mpp"><span class="mfull">MPP</span><span class="mab">MPP</span><svg class="ic mchev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button><div class="msub" id="msub-mpp" role="group" aria-label="MPP"><a href="sheet-metal-parts-accuracy-status-mpp.html" class="" title="Sheet Metal & Parts Accuracy" aria-label="Sheet Metal & Parts Accuracy"><em class="ab" aria-hidden="true">SMA</em><span>Sheet Metal & Parts Accuracy</span></a><a href="part-inspection-deviation-status-mpp.html" class="" title="Part Inspection & Deviation" aria-label="Part Inspection & Deviation"><em class="ab" aria-hidden="true">PID</em><span>Part Inspection & Deviation</span></a><a href="bcf-status-mpp.html" class="" title="BCF Status" aria-label="BCF Status"><em class="ab" aria-hidden="true">BCF</em><span>BCF Status</span></a><a href="hinkai-monitoring-closure-status.html" class="" title="PP Trial Hinkai Monitoring & Closure" aria-label="PP Trial Hinkai Monitoring & Closure"><em class="ab" aria-hidden="true">HNK</em><span>PP Trial Hinkai Monitoring & Closure</span></a><a href="sor-adherence-confirmation.html" class="" title="SOR Adherence Confirmation" aria-label="SOR Adherence Confirmation"><em class="ab" aria-hidden="true">SAC</em><span>SOR Adherence Confirmation</span></a><a href="lab-testing-status-mpp.html" class="" title="Lab Testing Status" aria-label="Lab Testing Status"><em class="ab" aria-hidden="true">LAB</em><span>Lab Testing Status</span></a><a href="process-audit.html" class="" title="Process Audit Status" aria-label="Process Audit Status"><em class="ab" aria-hidden="true">PAU</em><span>Process Audit Status</span></a><a href="process-capability.html" class="" title="Process Capability" aria-label="Process Capability"><em class="ab" aria-hidden="true">PCP</em><span>Process Capability</span></a><a href="homologation-marking-confirmation.html" class="" title="Homologation Marking Confirmation" aria-label="Homologation Marking Confirmation"><em class="ab" aria-hidden="true">HMC</em><span>Homologation Marking Confirmation</span></a><a href="set-parts-semi-finished-status.html" class="" title="Set Part Status" aria-label="Set Part Status"><em class="ab" aria-hidden="true">SET</em><span>Set Part Status</span></a><a href="spare-kit-part-status.html" class="" title="Spare Kit Part Status" aria-label="Spare Kit Part Status"><em class="ab" aria-hidden="true">SPK</em><span>Spare Kit Part Status</span></a><a href="misp-revision.html" class="" title="MISP Revision" aria-label="MISP Revision"><em class="ab" aria-hidden="true">MRV</em><span>MISP Revision</span></a><a href="part-list-deviation-special-parts-mpp.html" class="" title="Part List With Deviation & Special Parts List" aria-label="Part List With Deviation & Special Parts List"><em class="ab" aria-hidden="true">PLD</em><span>Part List With Deviation & Special Parts List</span></a><a href="otop-status-mpp.html" class="" title="OTOP Status" aria-label="OTOP Status"><em class="ab" aria-hidden="true">OTP</em><span>OTOP Status</span></a></div><button class="mgrp" aria-expanded="true" aria-controls="msub-pilot"><span class="mfull">Pilot/SOP Trial</span><span class="mab">SOP</span><svg class="ic mchev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button><div class="msub" id="msub-pilot" role="group" aria-label="Pilot/SOP Trial"><a href="otop-status-ecn-cases.html" class="" title="OTOP Status for ECN Cases" aria-label="OTOP Status for ECN Cases"><em class="ab" aria-hidden="true">ECN</em><span>OTOP Status for ECN Cases</span></a><a href="sheet-metal-parts-accuracy-status-sop.html" class="" title="Sheet Metal & Parts Accuracy" aria-label="Sheet Metal & Parts Accuracy"><em class="ab" aria-hidden="true">SMA</em><span>Sheet Metal & Parts Accuracy</span></a><a href="part-inspection-deviation-status-sop.html" class="" title="Part Inspection & Deviation" aria-label="Part Inspection & Deviation"><em class="ab" aria-hidden="true">PID</em><span>Part Inspection & Deviation</span></a><a href="mpp-trial-hinkai-monitoring-closure.html" class="" title="MPP Trial Hinkai Monitoring & Closure" aria-label="MPP Trial Hinkai Monitoring & Closure"><em class="ab" aria-hidden="true">HNK</em><span>MPP Trial Hinkai Monitoring & Closure</span></a><a href="bcf-status-sop.html" class="cur" title="BCF Status" aria-label="BCF Status" aria-current="page"><em class="ab" aria-hidden="true">BCF</em><span>BCF Status</span></a><a href="ppap-file-approval-status.html" class="" title="PPAP File Approval Status" aria-label="PPAP File Approval Status"><em class="ab" aria-hidden="true">PPAP</em><span>PPAP File Approval Status</span></a><a href="ppvt-confirmation.html" class="" title="PPVT Confirmation" aria-label="PPVT Confirmation"><em class="ab" aria-hidden="true">PPV</em><span>PPVT Confirmation</span></a><a href="lab-testing-status-sop.html" class="" title="Lab Testing Status" aria-label="Lab Testing Status"><em class="ab" aria-hidden="true">LAB</em><span>Lab Testing Status</span></a><a href="homologation-status-sop.html" class="" title="Homologation Status" aria-label="Homologation Status"><em class="ab" aria-hidden="true">HMS</em><span>Homologation Status</span></a><a href="list-of-limit-sample.html" class="" title="List of Limit Sample" aria-label="List of Limit Sample"><em class="ab" aria-hidden="true">LMS</em><span>List of Limit Sample</span></a><a href="ifm-mail-initiation-checklist.html" class="" title="IFM Mail Initiation & Checklist" aria-label="IFM Mail Initiation & Checklist"><em class="ab" aria-hidden="true">IFM</em><span>IFM Mail Initiation & Checklist</span></a><a href="sop-readiness.html" class="" title="Are You Ready Confirmation" aria-label="Are You Ready Confirmation"><em class="ab" aria-hidden="true">SOP</em><span>Are You Ready Confirmation</span></a><a href="part-updation-regulatory-app.html" class="" title="Part Updation in Regulatory App" aria-label="Part Updation in Regulatory App"><em class="ab" aria-hidden="true">REG</em><span>Part Updation in Regulatory App</span></a><a href="part-updation-smir-system.html" class="" title="Part Updation in SMIR System" aria-label="Part Updation in SMIR System"><em class="ab" aria-hidden="true">SMR</em><span>Part Updation in SMIR System</span></a><a href="part-updation-cpm-system.html" class="" title="Part Updation in CPM Portal" aria-label="Part Updation in CPM Portal"><em class="ab" aria-hidden="true">CPM</em><span>Part Updation in CPM Portal</span></a></div></div>
+    <div class="menu" aria-label="Dashboards"><button class="mgrp" aria-expanded="true" aria-controls="msub-sum"><span class="mfull">Summary Dashboards</span><span class="mab">SUM</span><svg class="ic mchev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button><div class="msub" id="msub-sum" role="group" aria-label="Summary Dashboards"><a href="new-product-development-trials.html" class="" title="New Product Development Trials" aria-label="New Product Development Trials"><em class="ab" aria-hidden="true">NPD</em><span>New Product Development Trials</span></a><a href="department-head-review.html" class="" title="Department Head Review" aria-label="Department Head Review"><em class="ab" aria-hidden="true">DHR</em><span>Department Head Review</span></a><a href="divisional-head-review.html" class="" title="Divisional Head Review" aria-label="Divisional Head Review"><em class="ab" aria-hidden="true">DVR</em><span>Divisional Head Review</span></a></div><button class="mgrp" aria-expanded="true" aria-controls="msub-pp"><span class="mfull">PP Trial Dashboards</span><span class="mab">PP</span><svg class="ic mchev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button><div class="msub" id="msub-pp" role="group" aria-label="PP Trial Dashboards"><a href="parts-drawing-confirmation_1.html" class="" title="Parts Drawing Confirmation" aria-label="Parts Drawing Confirmation"><em class="ab" aria-hidden="true">PDC</em><span>Parts Drawing Confirmation</span></a><a href="spec-meeting-confirmation_1.html" class="" title="Spec Meeting Confirmation" aria-label="Spec Meeting Confirmation"><em class="ab" aria-hidden="true">SMC</em><span>Spec Meeting Confirmation</span></a><a href="sor-status.html" class="" title="SOR Status" aria-label="SOR Status"><em class="ab" aria-hidden="true">SOR</em><span>SOR Status</span></a><a href="tier-2-compilation.html" class="" title="Tier 2 Compilation" aria-label="Tier 2 Compilation"><em class="ab" aria-hidden="true">T2</em><span>Tier 2 Compilation</span></a><a href="newness-mizenboshi-status.html" class="" title="Newness & Mizenboshi" aria-label="Newness & Mizenboshi"><em class="ab" aria-hidden="true">NMZ</em><span>Newness & Mizenboshi</span></a><a href="newness-benchmarking.html" class="" title="Newness Benchmarking" aria-label="Newness Benchmarking"><em class="ab" aria-hidden="true">NCB</em><span>Newness Benchmarking</span></a><a href="dmu-status.html" class="" title="DMU" aria-label="DMU"><em class="ab" aria-hidden="true">DMU</em><span>DMU</span></a><a href="ses-nr-status.html" class="" title="SES NR" aria-label="SES NR"><em class="ab" aria-hidden="true">SES</em><span>SES NR</span></a><a href="otop-status.html" class="" title="OT Status" aria-label="OT Status"><em class="ab" aria-hidden="true">OT</em><span>OT Status</span></a><a href="sheet-metal-parts-accuracy-status.html" class="" title="Sheet Metal & Parts Accuracy" aria-label="Sheet Metal & Parts Accuracy"><em class="ab" aria-hidden="true">SMA</em><span>Sheet Metal & Parts Accuracy</span></a><a href="part-inspection-deviation-status.html" class="" title="Part Inspection & Deviation" aria-label="Part Inspection & Deviation"><em class="ab" aria-hidden="true">PID</em><span>Part Inspection & Deviation</span></a><a href="mis-p-approval.html" class="" title="MIS-P Approval" aria-label="MIS-P Approval"><em class="ab" aria-hidden="true">MIS</em><span>MIS-P Approval</span></a><a href="lab-testing-status.html" class="" title="Lab Testing Status" aria-label="Lab Testing Status"><em class="ab" aria-hidden="true">LAB</em><span>Lab Testing Status</span></a><a href="bcf-status.html" class="" title="BCF Status" aria-label="BCF Status"><em class="ab" aria-hidden="true">BCF</em><span>BCF Status</span></a><a href="colour-parts-check-status.html" class="" title="Colour Parts Check" aria-label="Colour Parts Check"><em class="ab" aria-hidden="true">CPC</em><span>Colour Parts Check</span></a><a href="part-list-deviation-special-parts.html" class="" title="Part List With Deviation" aria-label="Part List With Deviation"><em class="ab" aria-hidden="true">PLD</em><span>Part List With Deviation</span></a></div><button class="mgrp" aria-expanded="true" aria-controls="msub-mpp"><span class="mfull">MPP</span><span class="mab">MPP</span><svg class="ic mchev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button><div class="msub" id="msub-mpp" role="group" aria-label="MPP"><a href="sheet-metal-parts-accuracy-status-mpp.html" class="" title="Sheet Metal & Parts Accuracy" aria-label="Sheet Metal & Parts Accuracy"><em class="ab" aria-hidden="true">SMA</em><span>Sheet Metal & Parts Accuracy</span></a><a href="part-inspection-deviation-status-mpp.html" class="" title="Part Inspection & Deviation" aria-label="Part Inspection & Deviation"><em class="ab" aria-hidden="true">PID</em><span>Part Inspection & Deviation</span></a><a href="bcf-status-mpp.html" class="" title="BCF Status" aria-label="BCF Status"><em class="ab" aria-hidden="true">BCF</em><span>BCF Status</span></a><a href="hinkai-monitoring-closure-status.html" class="" title="PP Trial Hinkai Monitoring & Closure" aria-label="PP Trial Hinkai Monitoring & Closure"><em class="ab" aria-hidden="true">HNK</em><span>PP Trial Hinkai Monitoring & Closure</span></a><a href="sor-adherence-confirmation.html" class="" title="SOR Adherence Confirmation" aria-label="SOR Adherence Confirmation"><em class="ab" aria-hidden="true">SAC</em><span>SOR Adherence Confirmation</span></a><a href="lab-testing-status-mpp.html" class="" title="Lab Testing Status" aria-label="Lab Testing Status"><em class="ab" aria-hidden="true">LAB</em><span>Lab Testing Status</span></a><a href="process-audit.html" class="" title="Process Audit Status" aria-label="Process Audit Status"><em class="ab" aria-hidden="true">PAU</em><span>Process Audit Status</span></a><a href="process-capability.html" class="" title="Process Capability" aria-label="Process Capability"><em class="ab" aria-hidden="true">PCP</em><span>Process Capability</span></a><a href="homologation-marking-confirmation.html" class="" title="Homologation Marking Confirmation" aria-label="Homologation Marking Confirmation"><em class="ab" aria-hidden="true">HMC</em><span>Homologation Marking Confirmation</span></a><a href="set-parts-semi-finished-status.html" class="" title="Set Part Status" aria-label="Set Part Status"><em class="ab" aria-hidden="true">SET</em><span>Set Part Status</span></a><a href="spare-kit-part-status.html" class="" title="Spare Kit Part Status" aria-label="Spare Kit Part Status"><em class="ab" aria-hidden="true">SPK</em><span>Spare Kit Part Status</span></a><a href="misp-revision.html" class="" title="MISP Revision" aria-label="MISP Revision"><em class="ab" aria-hidden="true">MRV</em><span>MISP Revision</span></a><a href="part-list-deviation-special-parts-mpp.html" class="" title="Part List With Deviation & Special Parts List" aria-label="Part List With Deviation & Special Parts List"><em class="ab" aria-hidden="true">PLD</em><span>Part List With Deviation & Special Parts List</span></a><a href="otop-status-mpp.html" class="" title="OTOP Status" aria-label="OTOP Status"><em class="ab" aria-hidden="true">OTP</em><span>OTOP Status</span></a></div><button class="mgrp" aria-expanded="true" aria-controls="msub-pilot"><span class="mfull">Pilot/SOP Trial</span><span class="mab">SOP</span><svg class="ic mchev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m8 10 4 4 4-4"/></svg></button><div class="msub" id="msub-pilot" role="group" aria-label="Pilot/SOP Trial"><a href="otop-status-ecn-cases.html" class="" title="OTOP Status for ECN Cases" aria-label="OTOP Status for ECN Cases"><em class="ab" aria-hidden="true">ECN</em><span>OTOP Status for ECN Cases</span></a><a href="sheet-metal-parts-accuracy-status-sop.html" class="" title="Sheet Metal & Parts Accuracy" aria-label="Sheet Metal & Parts Accuracy"><em class="ab" aria-hidden="true">SMA</em><span>Sheet Metal & Parts Accuracy</span></a><a href="part-inspection-deviation-status-sop.html" class="" title="Part Inspection & Deviation" aria-label="Part Inspection & Deviation"><em class="ab" aria-hidden="true">PID</em><span>Part Inspection & Deviation</span></a><a href="mpp-trial-hinkai-monitoring-closure.html" class="" title="MPP Trial Hinkai Monitoring & Closure" aria-label="MPP Trial Hinkai Monitoring & Closure"><em class="ab" aria-hidden="true">HNK</em><span>MPP Trial Hinkai Monitoring & Closure</span></a><a href="bcf-status-sop.html" class="cur" title="BCF Status" aria-label="BCF Status" aria-current="page"><em class="ab" aria-hidden="true">BCF</em><span>BCF Status</span></a><a href="ppap-file-approval-status.html" class="" title="PPAP File Approval Status" aria-label="PPAP File Approval Status"><em class="ab" aria-hidden="true">PPAP</em><span>PPAP File Approval Status</span></a><a href="ppvt-confirmation.html" class="" title="PPVT Confirmation" aria-label="PPVT Confirmation"><em class="ab" aria-hidden="true">PPV</em><span>PPVT Confirmation</span></a><a href="lab-testing-status-sop.html" class="" title="Lab Testing Status" aria-label="Lab Testing Status"><em class="ab" aria-hidden="true">LAB</em><span>Lab Testing Status</span></a><a href="homologation-status-sop.html" class="" title="Homologation Status" aria-label="Homologation Status"><em class="ab" aria-hidden="true">HMS</em><span>Homologation Status</span></a><a href="list-of-limit-sample.html" class="" title="List of Limit Sample" aria-label="List of Limit Sample"><em class="ab" aria-hidden="true">LMS</em><span>List of Limit Sample</span></a><a href="ifm-mail-initiation-checklist.html" class="" title="IFM Mail Initiation & Checklist" aria-label="IFM Mail Initiation & Checklist"><em class="ab" aria-hidden="true">IFM</em><span>IFM Mail Initiation & Checklist</span></a><a href="sop-readiness.html" class="" title="Are You Ready Confirmation" aria-label="Are You Ready Confirmation"><em class="ab" aria-hidden="true">SOP</em><span>Are You Ready Confirmation</span></a><a href="part-updation-regulatory-app.html" class="" title="Part Updation in Regulatory App" aria-label="Part Updation in Regulatory App"><em class="ab" aria-hidden="true">REG</em><span>Part Updation in Regulatory App</span></a><a href="part-updation-smir-system.html" class="" title="Part Updation in SMIR System" aria-label="Part Updation in SMIR System"><em class="ab" aria-hidden="true">SMR</em><span>Part Updation in SMIR System</span></a><a href="part-updation-cpm-system.html" class="" title="Part Updation in CPM Portal" aria-label="Part Updation in CPM Portal"><em class="ab" aria-hidden="true">CPM</em><span>Part Updation in CPM Portal</span></a></div></div>
     <button class="navtog" id="navtog" aria-expanded="true" aria-label="Collapse navigation" title="Collapse navigation"><svg class="ic ncol" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m17 16-4-4 4-4m-6 8-4-4 4-4"/></svg><svg class="ic nexp" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m7 16 4-4-4-4m6 8 4-4-4-4"/></svg><span>Collapse</span></button>
     <div class="logout" title="Log Out"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/></svg><span>Log Out</span></div>
   </nav>
@@ -667,7 +1157,7 @@ td.wrap .st i{flex:none;margin-top:.45em}
     <main class="content">
       <div class="crumbs"><span>Pilot/SOP Trial</span><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m10 16 4-4-4-4"/></svg><span>BCF Status</span></div>
       <div class="head">
-        <div class="h1wrap"><h1>BCF Status Dashboard</h1></div>
+        <div class="h1wrap"><h1 id="pg-h1">BCF Status Dashboard</h1></div>
         <div class="stagebar" id="stagebar" hidden aria-live="polite"></div>
 
       </div>
@@ -675,9 +1165,8 @@ td.wrap .st i{flex:none;margin-top:.45em}
 
       <section class="card" aria-labelledby="f-h">
         <div class="card-head"><div><h2 id="f-h">Filter Dashboard Data</h2><p class="sub">Fine tunes dashboard data by your top level selections</p></div><div class="fhead-r"><button class="link" id="clear" hidden>Clear all filters</button></div></div>
-        <div class="fbar">
-          <select id="f-model" aria-label="Model"></select><select id="f-dept" aria-label="Department"></select><select id="f-trial" aria-label="Trial Stage"></select><select id="f-pic" aria-label="PIC Name"></select>
-          <select id="f-pname" aria-label="Part Name"></select><select id="f-pcode" aria-label="Part Code"></select><select id="f-vcode" aria-label="Vendor Code"></select><select id="f-vname" aria-label="Vendor Name"></select>
+        <div class="fbar" style="--fn:8">
+          <select id="f-model" aria-label="Model"></select><select id="f-dept" aria-label="Department"></select><select id="f-trial" aria-label="Trial Stage"></select><select id="f-pic" aria-label="PIC Name"></select><select id="f-pname" aria-label="Part Name"></select><select id="f-pcode" aria-label="Part Code"></select><select id="f-vcode" aria-label="Vendor Code"></select><select id="f-vname" aria-label="Vendor Name"></select>
         </div>
       </section>
       <section class="card ai" aria-label="Key alerts, management summary and key insights">
@@ -708,6 +1197,7 @@ td.wrap .st i{flex:none;margin-top:.45em}
           <div class="chart-cap" id="cap-right"></div><div class="legend" id="lg-right"></div><div class="note" id="n-right"></div>
         </section>
       </div>
+
 
 <div class="charts" id="xrow">
         <section class="card">
@@ -753,6 +1243,7 @@ td.wrap .st i{flex:none;margin-top:.45em}
   <p class="disclaim">Sample alerts generated by simple rules over the prototype data, not by AI. They follow your top level filters.</p>
 </aside>
 <script>
+
 const FB_ICONS={"users": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M16 19h4a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-2m-2.236-4a3 3 0 1 0 0-4M3 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z\"/>", "clipboard-list": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3z\"/>", "chart-line-up": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207\"/>", "desktop-pc": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1\"/>", "file-lines": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 3v4a1 1 0 0 1-1 1H5m4 8h6m-6-4h6m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1\"/>", "arrow-left-to-bracket": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2\"/>", "bell": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 5.365V3m0 2.365a5.34 5.34 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.34 5.34 0 0 1 12 5.365M8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112z\"/>", "search": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z\"/>", "filter": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z\"/>", "chevron-down": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m8 10 4 4 4-4\"/>", "chevron-right": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m10 16 4-4-4-4\"/>", "close": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18 17.94 6M18 18 6.06 6\"/>", "exclamation-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "building": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 4h12M6 4v16M6 4H5m13 0v16m0-16h1m-1 16H6m12 0h1M6 20H5M9 7h1v1H9zm5 0h1v1h-1zm-5 4h1v1H9zm5 0h1v1h-1zm-3 4h2a1 1 0 0 1 1 1v4h-4v-4a1 1 0 0 1 1-1\"/>", "wand-magic-sparkles": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16.872 9.687 20 6.56 17.44 4 4 17.44 6.56 20 16.873 9.687Zm0 0-2.56-2.56M6 7v2m0 0v2m0-2H4m2 0h2m7 7v2m0 0v2m0-2h-2m2 0h2M8 4h.01v.01H8zm2 2h.01v.01H10zm2-2h.01v.01H12zm8 8h.01v.01H20zm-2 2h.01v.01H18zm2 2h.01v.01H20z\"/>", "download": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01\"/>", "question-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.44 2.44 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "home": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5\"/>", "adjustments-horizontal": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4\"/>", "user-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18m0 0a8.95 8.95 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.95 8.95 0 0 0 12 21m3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0\"/>", "calendar-month": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1m3-7h.01v.01H8zm4 0h.01v.01H12zm4 0h.01v.01H16zm-8 4h.01v.01H8zm4 0h.01v.01H12zm4 0h.01v.01H16z\"/>", "check-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "close-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "star": "<path stroke=\"currentColor\" d=\"M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597z\"/>", "clipboard-check": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 7 2 2 4-4m-5-9v4h4V3z\"/>", "bars-from-left": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M5 7h14M5 12h14M5 17h10\"/>", "chevron-sort": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m8 15 4 4 4-4m0-6-4-4-4 4\"/>", "chevron-up": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m16 14-4-4-4 4\"/>", "file-chart-bar": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 3v4a1 1 0 0 1-1 1H5m4 10v-2m3 2v-6m3 6v-3m4-11v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1\"/>", "eye-slash": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3.933 13.909A4.36 4.36 0 0 1 3 12c0-1 4-6 9-6m7.6 3.8A5.07 5.07 0 0 1 21 12c0 1-3 6-9 6q-.471 0-.918-.04M5 19 19 5m-4 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0\"/>", "layers": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5.005 11.19V12l6.998 4.042L19 12v-.81M5 16.15v.81L11.997 21l6.998-4.042v-.81M12.003 3 5.005 7.042l6.998 4.042L19 7.042z\"/>", "eye": "<path stroke=\"currentColor\" d=\"M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6 4.03-6 9-6 9 4.8 9 6Z\"/><path stroke=\"currentColor\" d=\"M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z\"/>", "palette": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 7h.01m3.486 1.513h.01m-6.978 0h.01M6.99 12H7m9 4h2.706a1.96 1.96 0 0 0 1.883-1.325A9 9 0 1 0 3.043 12.89 9.1 9.1 0 0 0 8.2 20.1a8.6 8.6 0 0 0 3.769.9 2.013 2.013 0 0 0 2.03-2v-.857A2.036 2.036 0 0 1 16 16\"/>", "truck": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0m-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0\"/>", "cog": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1\"/><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6\"/>", "scale-balanced": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5.5 21h13M12 21V7m0 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4m2-1.8c3.073.661 2.467 2.8 5 2.8M5 8c3.359 0 2.192-2.115 5.012-2.793M7 9.556V7.75m0 1.806-1.95 4.393a.773.773 0 0 0 .37.962.8.8 0 0 0 .362.089h2.436a.79.79 0 0 0 .643-.335.78.78 0 0 0 .09-.716zm10 0V7.313m0 2.243-1.95 4.393a.773.773 0 0 0 .37.962.8.8 0 0 0 .362.089h2.436a.79.79 0 0 0 .643-.335.78.78 0 0 0 .09-.716z\"/>", "bug": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 5 9 4V3m5 2 1-1V3m-3 6v11m0-11a5 5 0 0 1 5 5m-5-5a5 5 0 0 0-5 5m5-5a4.96 4.96 0 0 1 2.973 1H15V8a3 3 0 0 0-6 0v2h.027A4.96 4.96 0 0 1 12 9m-5 5H5m2 0v2a5 5 0 0 0 10 0v-2m2.025 0H17m-9.975 4H6a1 1 0 0 0-1 1v2m12-3h1.025a1 1 0 0 1 1 1v2M16 11h1a1 1 0 0 0 1-1V8m-9.975 3H7a1 1 0 0 1-1-1V8\"/>", "rectangle-list": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M11 9h6m-6 3h6m-6 3h6M6.996 9h.01m-.01 3h.01m-.01 3h.01M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1\"/>", "file-shield": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M18 9V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h6M9 3v4a1 1 0 0 1-1 1H4m11 13a11.4 11.4 0 0 1-3.637-3.99A11.14 11.14 0 0 1 10 11.833L15 10l5 1.833a11.14 11.14 0 0 1-1.363 5.176A11.4 11.4 0 0 1 15.001 21Z\"/>", "badge-check": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.98 1.98 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.98 1.98 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.98 1.98 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.99 1.99 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z\"/>", "atom": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M8.737 8.737a21.5 21.5 0 0 1 3.308-2.724m0 0c3.063-2.026 5.99-2.641 7.331-1.3 1.827 1.828.026 6.591-4.023 10.64s-8.812 5.85-10.64 4.023c-1.33-1.33-.736-4.218 1.249-7.253m6.083-6.11c-3.063-2.026-5.99-2.641-7.331-1.3-1.827 1.828-.026 6.591 4.023 10.64m3.308-9.34a21.5 21.5 0 0 1 3.308 2.724m2.775 3.386c1.985 3.035 2.579 5.923 1.248 7.253-1.336 1.337-4.245.732-7.295-1.275M14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z\"/>", "shield-check": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.5 11.5 11 13l4-3.5M12 20a16.4 16.4 0 0 1-5.092-5.804A16.7 16.7 0 0 1 5 6.666L12 4l7 2.667a16.7 16.7 0 0 1-1.908 7.529A16.4 16.4 0 0 1 12 20\"/>", "hammer": "<path stroke=\"currentColor\" stroke-linejoin=\"round\" d=\"m20.953 11.763-2.052-2.052-2.052 2.052 2.052 2.053zm-1.368-2.736L15.48 4.922l-3.42 3.42 4.105 4.105zm-4.105 2.736-2.736-2.736-8.21 8.21 2.737 2.736z\"/><path stroke=\"currentColor\" stroke-linejoin=\"round\" d=\"m12.93 3.74 1.866 1.867-2.052 2.052-1.555-1.555c-.995-.995-3.234-.497-3.918.187l2.737-2.737c.684-.684 1.99-.746 2.923.187Z\"/>", "lightbulb": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 9a3 3 0 0 1 3-3m-2 15h4m0-3c0-4.1 4-4.9 4-9A6 6 0 1 0 6 9c0 4 4 5 4 9z\"/>", "chart-pie": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 6.025A7.5 7.5 0 1 0 17.975 14H10z\"/><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3\"/>", "chart-mixed": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 15v4m6-6v6m6-4v4m6-6v6M3 11l6-5 6 5 5.5-5.5\"/>", "file-pen": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M18 5V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M9 3v4a1 1 0 0 1-1 1H4m11.383.772 2.745 2.746m1.215-3.906a2.09 2.09 0 0 1 0 2.953l-6.65 6.646L9 17.95l.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0\"/>", "tag": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15.583 8.445h.01M10.86 19.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 12.31 4l5.734.007A1.97 1.97 0 0 1 20 5.983v5.5a1 1 0 0 1-.316.727l-7.44 7.5a.974.974 0 0 1-1.384.001Z\"/>", "chevron-double-left": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m17 16-4-4 4-4m-6 8-4-4 4-4\"/>", "chevron-double-right": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m7 16 4-4-4-4m6 8 4-4-4-4\"/>", "grid": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.143 4H4.857A.857.857 0 0 0 4 4.857v4.286c0 .473.384.857.857.857h4.286A.857.857 0 0 0 10 9.143V4.857A.857.857 0 0 0 9.143 4m10 0h-4.286a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286A.857.857 0 0 0 20 9.143V4.857A.857.857 0 0 0 19.143 4m-10 10H4.857a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286a.857.857 0 0 0 .857-.857v-4.286A.857.857 0 0 0 9.143 14m10 0h-4.286a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286a.857.857 0 0 0 .857-.857v-4.286a.857.857 0 0 0-.857-.857\"/>", "arrow-right": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19 12H5m14 0-4 4m4-4-4-4\"/>", "ruler": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 7H7m2 3H7m2 3H7m4 2v2m3-2v2m3-2v2M4 5v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-9a1 1 0 0 1-1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1\"/>"};
 const ic=(n,sz=20,cls='ic')=>`<svg class="${cls}" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true">${FB_ICONS[n]}</svg>`;
 // ===== Shared sample data (identical on both pages: same seed, same order) =====
@@ -788,30 +1279,36 @@ MODELS.forEach((m,mi)=>DLIST.forEach((d,di)=>{
 // ===== State + shared filter layer =====
 // Top-level filters are multi-select: S.F holds the selected values per filter (empty = all).
 // S.f.<key> gives the single selected value when exactly one is chosen (used where one model is required, e.g. MRD charts), else "".
-const FKEYS=["model","dept","trial","pic","pname","pcode","vcode","vname"],FFIELD={pname:"name",pcode:"no"};
-const S={F:Object.fromEntries(FKEYS.map(k=>[k,[]])),f:{},cat:null,metric:null,leftBy:"model",ckL:TODAY,ckR:TODAY,
+const PF=typeof PAGE_FILTERS!=="undefined"?PAGE_FILTERS:{};
+// PAGE_FILTERS (summary dashboards only): keys = filters shown, single = single-choice filters, defaults = preselected values,
+// inert = placeholder filters whose only option reads "To be Defined by MSIL" (they never filter data)
+const FKEYS=PF.keys||["model","dept","trial","pic","pname","pcode","vcode","vname"],FFIELD={pname:"name",pcode:"no",fuel:"fuels",variant:"variants"};
+const FSINGLE=new Set(PF.single||[]),FINERT=new Set(PF.inert||[]),FDEF=PF.defaults||{};
+const fdefaults=()=>Object.fromEntries(FKEYS.map(k=>[k,[...(FDEF[k]||[])]]));
+const S={F:fdefaults(),f:{},cat:null,metric:null,leftBy:"model",ckL:TODAY,ckR:TODAY,
   t:{q:"",cf:{},sort:{k:"id",dir:1},page:0},drawer:null};
-const PAGE=8;
+const PAGE=8,PAGE0=PAGE;
 const $=id=>document.getElementById(id);
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 FKEYS.forEach(k=>Object.defineProperty(S.f,k,{enumerable:true,get:()=>S.F[k].length===1?S.F[k][0]:"",set:v=>{S.F[k]=v?[v]:[]}}));
-const anyFilter=()=>FKEYS.some(k=>S.F[k].length);
+const anyFilter=()=>FKEYS.some(k=>S.F[k].join("|")!==(FDEF[k]||[]).join("|"));
 const picDept=pic=>DLIST.find(d=>DEPTS[d].includes(pic));
 const pct=(a,b)=>b?Math.round(a/b*100):0;
-function scoped(){const F=S.F,act=FKEYS.filter(k=>F[k].length);return PARTS.filter(p=>act.every(k=>F[k].includes(p[FFIELD[k]||k])))}
+function scoped(){const F=S.F,act=FKEYS.filter(k=>F[k].length&&!FINERT.has(k));return PARTS.filter(p=>act.every(k=>{const v=p[FFIELD[k]||k];return Array.isArray(v)?v.some(x=>F[k].includes(x)):F[k].includes(v)}))}
 function groupCount(rows,key,groups,pred){const m=Object.fromEntries(groups.map(g=>[g,0]));rows.forEach(p=>{if(p[key] in m&&pred(p))m[p[key]]++});return groups.map(g=>m[g])}
 // grouping used by the contextual chart: one PIC or one department collapses to a single bar
 function rightGroups(){const F=S.F;return F.pic.length?{key:"pic",groups:[...F.pic],word:"PIC"}:F.dept.length?{key:"dept",groups:DLIST.filter(d=>F.dept.includes(d)),word:"Department"}:{key:"dept",groups:DLIST,word:"Department"}}
 function filterTags(){return FKEYS.flatMap(k=>S.F[k]).map(v=>`<span class="tag">${v}</span>`)}
 
 // ----- multi-select filter dropdowns (checkbox list; long lists get a search box) -----
-const FPH={model:"Model",dept:"Department",trial:"Trial Stage",pic:"PIC Name",pname:"Part Name",pcode:"Part Code",vcode:"Vendor Code",vname:"Vendor Name"};
+const FPH={model:"Model",dept:"Department",trial:"Trial Stage",pic:"PIC Name",pname:"Part Name",pcode:"Part Code",vcode:"Vendor Code",vname:"Vendor Name",fuel:"Fuel Type",variant:"Variant",category:"Category",monitoring:"Monitoring",...(PF.labels||{})};
 const FUI={open:null,q:""};
 const esc=v=>String(v).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
-function filterOptions(){const F=S.F,uniq=a=>[...new Set(a)].sort((x,y)=>String(x).localeCompare(String(y),undefined,{numeric:true})),inD=p=>!F.dept.length||F.dept.includes(p.dept),inM=p=>!F.model.length||F.model.includes(p.model);
+function filterOptions(){const F={dept:[],model:[],pname:[],vname:[],vcode:[],...S.F},uniq=a=>[...new Set(a)].sort((x,y)=>String(x).localeCompare(String(y),undefined,{numeric:true})),inD=p=>!F.dept.length||F.dept.includes(p.dept),inM=p=>!F.model.length||F.model.includes(p.model);
   return{model:MODELS,dept:DLIST,trial:TRIALS,pic:(F.dept.length?DLIST.filter(d=>F.dept.includes(d)):DLIST).flatMap(d=>DEPTS[d]),pname:uniq(PARTS.filter(inD).map(p=>p.name)),
     pcode:uniq(PARTS.filter(p=>inM(p)&&inD(p)&&(!F.pname.length||F.pname.includes(p.name))).map(p=>p.no)),
-    vcode:VENDORS.filter(v=>!F.vname.length||F.vname.includes(v[1])).map(v=>v[0]),vname:VENDORS.filter(v=>!F.vcode.length||F.vcode.includes(v[0])).map(v=>v[1])}}
+    vcode:VENDORS.filter(v=>!(F.vname||[]).length||F.vname.includes(v[1])).map(v=>v[0]),vname:VENDORS.filter(v=>!(F.vcode||[]).length||F.vcode.includes(v[0])).map(v=>v[1]),
+    ...(typeof PAGECFG!=="undefined"&&PAGECFG.filterOptions?PAGECFG.filterOptions(F):{})}}
 function renderFilters(){const F=S.F,O=filterOptions();
   FKEYS.forEach(k=>{let el=$("f-"+k);if(el.tagName==="SELECT"){const d=document.createElement("div");d.className="msel";d.id="f-"+k;el.replaceWith(d);el=d}
     const sel=F[k],label=!sel.length?FPH[k]:sel.length===1?sel[0]:`${sel[0]} +${sel.length-1}`,open=FUI.open===k,q=open?FUI.q.toLowerCase():"";
@@ -819,12 +1316,15 @@ function renderFilters(){const F=S.F,O=filterOptions();
     el.classList.toggle("open",open);
     el.innerHTML=`<button type="button" class="msel-btn${sel.length?" set":""}" aria-haspopup="listbox" aria-expanded="${open}" aria-label="${FPH[k]} filter" title="${esc(sel.length?sel.join(", "):FPH[k])}"><span>${esc(label)}</span></button>`+
       (open?`<div class="msel-pop" role="listbox" aria-multiselectable="true" aria-label="${FPH[k]}">${long?`<input class="msel-q" type="search" placeholder="Search ${FPH[k].toLowerCase()}…" value="${esc(FUI.q)}" aria-label="Search ${FPH[k]}">`:""}`+
-        `<div class="msel-acts"><button type="button" data-all="1">Select all${q?" shown":""}</button><button type="button" data-none="1"${sel.length?"":" disabled"}>Clear</button></div>`+
-        `<div class="msel-list">${opts.map((v,i)=>`<label><input type="checkbox" data-i="${O[k].indexOf(v)}"${sel.includes(v)?" checked":""}><span>${esc(v)}</span></label>`).join("")||'<p class="msel-none">No matches</p>'}</div></div>`:"")});
+        (FINERT.has(k)?`<div class="msel-list"><p class="msel-none">To be Defined by MSIL</p></div></div>`:
+        (FSINGLE.has(k)?"":`<div class="msel-acts"><button type="button" data-all="1">Select all${q?" shown":""}</button><button type="button" data-none="1"${sel.length?"":" disabled"}>Clear</button></div>`)+
+        `<div class="msel-list">${opts.map((v,i)=>`<label><input type="${FSINGLE.has(k)?"radio":"checkbox"}" name="fr-${k}" data-i="${O[k].indexOf(v)}"${sel.includes(v)?" checked":""}><span>${esc(v)}</span></label>`).join("")||'<p class="msel-none">No matches</p>'}</div></div>`):"")});
   $("clear").hidden=!anyFilter();
 }
 // keep dependent filters consistent after a change (drop selections that are no longer in the narrowed lists)
-function pruneFilters(){const O=filterOptions();["pic","pname","pcode","vcode","vname"].forEach(k=>{S.F[k]=S.F[k].filter(v=>O[k].includes(v))})}
+function pruneFilters(){const O=filterOptions();["pic","pname","pcode","vcode","vname"].forEach(k=>{if(S.F[k])S.F[k]=S.F[k].filter(v=>O[k].includes(v))});
+  // single-choice filters always keep one valid value (e.g. a variant the selected model offers)
+  FSINGLE.forEach(k=>{if(!S.F[k].length||!O[k].includes(S.F[k][0]))S.F[k]=O[k].length?[O[k].includes((FDEF[k]||[])[0])?FDEF[k][0]:O[k][0]]:[]})}
 function filterChanged(){if(S.gsel&&!S.gsel.canvas.includes("left"))S.gsel=null;pruneFilters();S.t.page=0;render()}
 function bindFilters(){const bar=document.querySelector(".fbar");
   bar.addEventListener("click",e=>{const w=e.target.closest(".msel");if(!w)return;const k=w.id.slice(2);
@@ -832,11 +1332,12 @@ function bindFilters(){const bar=document.querySelector(".fbar");
     if(e.target.closest("[data-all]")){const q=FUI.q.toLowerCase(),O=filterOptions()[k].filter(v=>!q||String(v).toLowerCase().includes(q));S.F[k]=[...new Set([...S.F[k],...O])];filterChanged();return}
     if(e.target.closest("[data-none]")){S.F[k]=[];filterChanged()}});
   bar.addEventListener("change",e=>{const c=e.target.closest(".msel-list input");if(!c)return;const k=c.closest(".msel").id.slice(2),val=filterOptions()[k][+c.dataset.i];
+    if(FSINGLE.has(k)){S.F[k]=[val];FUI.open=null;filterChanged();return}
     S.F[k]=c.checked?[...S.F[k],val]:S.F[k].filter(x=>x!==val);filterChanged()});
   bar.addEventListener("input",e=>{const q=e.target.closest(".msel-q");if(!q)return;FUI.q=q.value;const pos=q.selectionStart;renderFilters();const n=$("f-"+FUI.open).querySelector(".msel-q");if(n){n.focus();n.setSelectionRange(pos,pos)}});
   document.addEventListener("click",e=>{if(FUI.open&&!e.composedPath().some(n=>n.classList&&n.classList.contains("msel"))){FUI.open=null;FUI.q="";renderFilters()}});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&FUI.open){FUI.open=null;FUI.q="";renderFilters()}});
-  $("clear").onclick=()=>{FKEYS.forEach(k=>S.F[k]=[]);S.metric=null;S.cat=PAGECFG.defaultTab;S.t.page=0;render()};
+  $("clear").onclick=()=>{S.F=fdefaults();S.metric=null;S.cat=PAGECFG.defaultTab;S.t.page=0;render()};
 }
 
 
@@ -850,11 +1351,11 @@ function renderTiles(){
     const badge="";
     // parent tile with sub-tiles (e.g. Audit Done → Green / Yellow / Red): one card, each part selectable
     if(t.subs)return `<div class="tile tgroup ${t.c}${S.metric===t.m?" on":""}" data-m="${t.m}" style="grid-column:span ${t.span||t.subs.length}"><div class="tg-main" role="button" tabindex="0" aria-pressed="${S.metric===t.m}"><b>${v}</b><span>${t.l}</span></div>`+
-      `<div class="tg-subs"${t.subCols?` style="grid-template-columns:repeat(${t.subCols},minmax(0,1fr))"`:""}>${t.subs.map(s=>`<button class="tile sub ${s.c}${S.metric===s.m?" on":""}" data-m="${s.m}" aria-pressed="${S.metric===s.m}"><b>${vals[s.m]}</b><span>${s.l}</span></button>`).join("")}</div></div>`;
+      `<div class="tg-subs"${t.subCols?` style="grid-template-columns:repeat(${t.subCols},minmax(0,1fr))"`:""}>${t.subs.map(s=>`<button class="tile sub ${s.c}${S.metric===s.m?" on":""}" data-m="${s.m}" aria-pressed="${S.metric===s.m}">${s.sec?`<div class="tval"><b>${vals[s.m]}</b><em class="tbadge">${s.sec(vals)}</em></div>`:`<b>${vals[s.m]}</b>`}<span>${s.l}</span></button>`).join("")}</div></div>`;
     const nt=t.sec?t.sec(vals):"";return `<button class="tile ${t.c}${S.metric===t.m?" on":""}" data-m="${t.m}" aria-pressed="${S.metric===t.m}">${nt?`<div class="tval"><b>${v}</b><em class="tbadge">${nt}</em></div>`:`<b>${v}</b>`}<span>${t.l}</span>${badge}</button>`}).join("");
   const h=$("tab-helper");h.hidden=!!rows.length;h.textContent="No parts match the current filters.";
   const cur=tiles.flatMap(t=>[t,...(t.subs||[])]).find(t=>t.m===S.metric);
-  $("tile-hint").textContent=cur?`Showing ${cur.l} in the Data Breakdown chart and filtering the table. Select the tile again to clear it.`:"Select a tile to filter the table and break it down by department in the Data Breakdown chart. Select a graph column to filter the table by that model or department.";
+  $("tile-hint").textContent=PAGECFG.tileHint?PAGECFG.tileHint(cur):cur?`Showing ${cur.l} in the Data Breakdown chart and filtering the table. Select the tile again to clear it.`:"Select a tile to filter the table and break it down by department in the Data Breakdown chart. Select a graph column to filter the table by that model or department.";
 }
 function bindTiles(){
   $("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b){if(S.cat!==b.dataset.cat)clearGraphSel("R");if(PAGECFG.clearMetricOnTab&&S.cat!==b.dataset.cat)S.metric=null;S.cat=b.dataset.cat;render()}});
@@ -980,8 +1481,9 @@ function chartCsv(slot){const c=CH[slot];if(!c)return null;const lab=c.data.labe
 function chartPng(slot,title){const c=CH[slot];if(!c)return;const src=c.canvas,pad=24,w=src.width,h=src.height,o=document.createElement("canvas");o.width=w+pad*2;o.height=h+pad*2+40;
   const x=o.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,o.width,o.height);x.fillStyle="#101828";x.font='600 28px "Inter",system-ui,sans-serif';x.fillText(title,pad,pad+24);x.drawImage(src,pad,pad+40);
   o.toBlob(b=>download(slug(title)+".png",b))}
-function exportItems(k){if(k==="T2")return[["csv","Table as CSV (all filtered rows)"]];if(k==="T")return[["csv","Table as CSV (all filtered rows)"]];return CH[k]?[["png","Chart as PNG"],["csv","Chart data as CSV"]]:[]}
+function exportItems(k){if(PAGECFG.exports&&PAGECFG.exports[k])return[["csv","Table as CSV (all filtered rows)"]];if(k==="T2")return[["csv","Table as CSV (all filtered rows)"]];if(k==="T")return[["csv","Table as CSV (all filtered rows)"]];return CH[k]?[["png","Chart as PNG"],["csv","Chart data as CSV"]]:[]}
 function doExport(k,fmt){const page=document.querySelector("h1").textContent.trim();
+  if(PAGECFG.exports&&PAGECFG.exports[k]){const [name,rows]=PAGECFG.exports[k]();download(slug(page+" "+name)+".csv",new Blob([toCsv(rows)],{type:"text/csv"}));return}
   if(k==="T2"){PAGECFG.exportT2&&PAGECFG.exportT2();return}
   if(k==="T"){const T=TBL(),rows=tableRows();const cols=T.exportCols||T.cols;
     download(slug(page)+"-table.csv",new Blob([toCsv([cols.map(c=>(c[2]&&c[2].fl)||c[1]),...rows.map(p=>cols.map(([f])=>T.cell?T.cell(p,f):p[f]))])],{type:"text/csv"}));return}
@@ -1032,7 +1534,7 @@ function tableRows(){const t=S.t,q=t.q.toLowerCase().trim(),act=activeCF(),sp=se
   const sv=p=>{const v=tval(p,t.sort.k);return v==="—"?(t.sort.dir>0?"￿":""):v};
   return rows.sort((a,b)=>{const x=sv(a),y=sv(b);const c=typeof x==="number"&&typeof y==="number"?x-y:String(x).localeCompare(String(y),undefined,{numeric:true});return c*t.sort.dir})}
 function renderTable(){
-  const t=S.t,T=TBL(),rows=tableRows();
+  const t=S.t,T=TBL(),rows=tableRows(),PAGE=T.pageSize||PAGE0;
   const pages=Math.max(1,Math.ceil(rows.length/PAGE));t.page=Math.min(t.page,pages-1);
   const meta=colMeta(TBL().agg?TBL().agg(baseRows()):baseRows());
   const hcells=meta.map(({k,l,sort},i)=>{const on=t.sort.k===k,dir=on?(t.sort.dir>0?"ascending":"descending"):"none";
@@ -1091,6 +1593,7 @@ const DR={crit:{l:"Key Alerts",e:"No critical issues in the current selection."}
 // Page rules give the first items; each segment is topped up to 5 with plain facts from the page's own tile metrics
 // (where a metric is highest by department or model in the current selection), so every statement comes from the data shown.
 function topUp(A0,rows){
+  if(PAGECFG.ownAlerts)return{crit:[...A0.crit,...A0.mgmt],mgmt:[...(A0.sum||[])],ins:[...A0.ins]};
   // Key Alerts = page alert rules (incl. former management alerts); Management Summary = progress facts; Key Insights = page insights.
   // Each is topped up to 5 with specific facts (named PICs, vendors, departments, models) computed from the current top-level selection.
   const A={crit:[...A0.crit,...A0.mgmt],mgmt:[],ins:[...A0.ins]};if(!rows.length)return A;
@@ -1204,7 +1707,11 @@ function autoDept(B){if(_autoT.has(B))return _autoT.get(B);
     foot:rows=>`<tr><td>Total</td>`+keys.map(k=>`<td class="num">${rows.reduce((a,r)=>a+r[k],0)}</td>`).join("")+`</tr>`,
     count:rows=>`${rows.length} departments · ${rows.reduce((a,r)=>a+r.parts,0)} parts${ex?` · ${rows.reduce((a,r)=>a+r.recs,0)} records`:""}`};
   _autoT.set(B,T);return T}
-function boot(){{const r0=document.querySelector("input[name=tview]:checked");if(r0)S.tview=r0.value}S.cat=PAGECFG.defaultTab;bindExport();bindFilters();bindTiles();bindLeftToggle();bindTable();bindAlerts();PAGECFG.init&&PAGECFG.init();render();PAGECFG.renderLeft()}
+function urlFilters(){let q;try{q=new URLSearchParams(location.search)}catch(e){return}if(!q||![...q.keys()].length)return;
+  FKEYS.forEach(k=>{if(!q.has(k)||FINERT.has(k))return;const O=filterOptions()[k]||[],v=q.get(k).split("|").filter(x=>O.includes(x));if(v.length)S.F[k]=FSINGLE.has(k)?[v[0]]:v});pruneFilters()}
+// link to another dashboard carrying the given filters (only the ones that dashboard has: its filters read them on open)
+function dashLink(file,carry){const q=Object.entries(carry).filter(([,v])=>v&&v.length).map(([k,v])=>`${k}=${encodeURIComponent([].concat(v).join("|"))}`).join("&");return file+(q?"?"+q:"")}
+function boot(){urlFilters();{const r0=document.querySelector("input[name=tview]:checked");if(r0)S.tview=r0.value}S.cat=PAGECFG.defaultTab;bindExport();bindFilters();bindTiles();bindLeftToggle();bindTable();bindAlerts();PAGECFG.init&&PAGECFG.init();render();PAGECFG.renderLeft()}
 
 // Legend layout: up to 3 items in one row, otherwise two balanced rows (no single hanging item)
 // Legend: one row when it fits, otherwise two balanced rows (never one item hanging on its own)
@@ -1435,6 +1942,73 @@ const PAGECFG={
 };
 
 boot();
+// ===== Mobile layer (≤ 860px): menu drawer, filter bottom sheet, table-view dropdown =====
+// Built once on load and hidden on desktop by CSS; the filter card is moved into the sheet only while the screen is narrow.
+(function(){
+const MQ=window.matchMedia("(max-width:860px)"),top=document.querySelector(".top");if(!top)return;
+const svg=(d,s=20)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="${d}"/></svg>`;
+const lock=on=>{document.body.style.overflow=on?"hidden":""};
+
+// ---- 1. Menu button → slide-in nav drawer, grouped like the desktop nav ----
+const ham=document.createElement("button");ham.className="m-ham";ham.setAttribute("aria-label","Open navigation");ham.setAttribute("aria-haspopup","dialog");
+ham.innerHTML=svg("M4 6h16M4 12h16M4 18h16");top.insertBefore(ham,top.firstChild);
+const scrim=document.createElement("div");scrim.className="m-nav-scrim";document.body.appendChild(scrim);
+const dr=document.createElement("nav");dr.className="m-nav-drawer";dr.setAttribute("role","dialog");dr.setAttribute("aria-modal","true");dr.setAttribute("aria-label","All dashboards");
+const logo=document.querySelector(".nav .mk-img");
+const groups=[...document.querySelectorAll(".nav .mgrp")].map((g,i)=>{const sub=document.getElementById(g.getAttribute("aria-controls")),links=sub?[...sub.querySelectorAll("a")]:[];
+  const cur=links.some(a=>a.classList.contains("cur"));
+  return`<button class="m-nd-grp" aria-expanded="${cur}" aria-controls="m-nd-sub-${i}"><span>${(g.querySelector(".mfull")||g).textContent.trim()}</span>${svg("m6 9 6 6 6-6",16)}</button>`+
+    `<div class="m-nd-sub" id="m-nd-sub-${i}"${cur?"":" hidden"}>`+links.map(a=>`<a href="${a.getAttribute("href")}"${a.classList.contains("cur")?' class="cur" aria-current="page"':""}>${(a.querySelector("span")||a).textContent.trim()}</a>`).join("")+`</div>`}).join("");
+dr.innerHTML=`<div class="m-nd-logo">${logo?`<img alt="Maruti Suzuki" src="${logo.src}">`:'<span style="font-weight:700">MSIL</span>'}<button class="m-nav-close" aria-label="Close menu">${svg("M6 18 18 6M6 6l12 12",18)}</button></div>`+
+  `<div class="m-nd-menu">${groups}</div><div class="m-nd-logout">${svg("M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2",18)}<span>Log Out</span></div>`;
+document.body.appendChild(dr);
+const openNav=()=>{dr.classList.add("open");scrim.classList.add("open");lock(true);const c=dr.querySelector("a.cur");if(c)c.scrollIntoView({block:"center"})};
+const closeNav=()=>{dr.classList.remove("open");scrim.classList.remove("open");lock(false)};
+ham.onclick=openNav;scrim.onclick=closeNav;dr.querySelector(".m-nav-close").onclick=closeNav;
+dr.addEventListener("click",e=>{const g=e.target.closest(".m-nd-grp");if(g){const o=g.getAttribute("aria-expanded")!=="true";g.setAttribute("aria-expanded",o);document.getElementById(g.getAttribute("aria-controls")).hidden=!o;return}if(e.target.closest("a"))closeNav()});
+
+// ---- 2. Filters → bottom sheet (the real filter card moves in while the screen is narrow) ----
+const card=document.querySelector('section.card[aria-labelledby="f-h"]');
+if(card){const home=document.createComment("filter card home");card.parentNode.insertBefore(home,card);
+  const row=document.createElement("div");row.className="m-filter-row";
+  row.innerHTML=`<button class="m-filter-btn" data-mf="open">${svg("M18.8 4H5.2a1 1 0 0 0-.75 1.66l5.3 6.06a1 1 0 0 1 .25.66v4.87a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.12a1 1 0 0 1 .25-.66l5.3-6.06c.57-.65.11-1.66-.75-1.66Z",16)}<span>Filter</span><span class="m-filter-badge" hidden></span></button>`+
+    `<button class="m-filter-btn" data-mf="clear" hidden>${svg("M6 18 18 6M6 6l12 12",14)}<span>Clear filters</span></button>`;
+  card.parentNode.insertBefore(row,card);
+  const fs=document.createElement("div");fs.className="m-fsheet-scrim";document.body.appendChild(fs);
+  const sh=document.createElement("div");sh.className="m-fsheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-modal","true");sh.setAttribute("aria-label","Filter dashboard data");
+  sh.innerHTML=`<div class="m-fsheet-handle"></div><div class="m-fsheet-head"><h3>Filter Data</h3><button class="m-fsheet-close" aria-label="Close">&#x2715;</button></div><div class="m-fsheet-body"></div>`+
+    `<div class="m-fsheet-foot"><button class="m-fsheet-clear">Clear all</button><button class="m-fsheet-apply">Done</button></div>`;
+  document.body.appendChild(sh);const body=sh.querySelector(".m-fsheet-body");
+  const open=()=>{fs.classList.add("open");sh.classList.add("open");lock(true)},close=()=>{fs.classList.remove("open");sh.classList.remove("open");lock(false)};
+  const clearAll=()=>{const c=$("clear");if(c)c.click()};
+  row.addEventListener("click",e=>{const b=e.target.closest("[data-mf]");if(!b)return;b.dataset.mf==="open"?open():clearAll()});
+  fs.onclick=close;sh.querySelector(".m-fsheet-close").onclick=close;sh.querySelector(".m-fsheet-apply").onclick=close;sh.querySelector(".m-fsheet-clear").onclick=()=>{clearAll();close()};
+  // badge = number of filters with at least one value selected
+  const badge=()=>{const n=FKEYS.filter(k=>S.F[k].length).length,bd=row.querySelector(".m-filter-badge");bd.textContent=n;bd.hidden=!n;
+    row.querySelector('[data-mf="open"]').classList.toggle("active",n>0);row.querySelector('[data-mf="clear"]').hidden=!n};
+  new MutationObserver(badge).observe(card.querySelector(".fbar"),{childList:true,subtree:true,attributes:true,attributeFilter:["class"]});badge();
+  const place=()=>{if(MQ.matches){if(card.parentNode!==body)body.appendChild(card)}else if(card.parentNode===body){home.parentNode.insertBefore(card,home.nextSibling);close()}};
+  place();MQ.addEventListener("change",place)}
+
+// ---- 3. Table view radios → dropdown (same choices, same behaviour) ----
+const tv=document.querySelector(".radios.tv");
+if(tv){const sel=document.createElement("select");sel.className="m-tview-sel";sel.setAttribute("aria-label","Table shown");tv.parentNode.insertBefore(sel,tv);
+  const sync=()=>{sel.innerHTML=[...tv.querySelectorAll("label")].filter(l=>!l.hidden).map(l=>{const r=l.querySelector("input");return`<option value="${r.value}"${r.checked?" selected":""}>${l.textContent.trim()}</option>`}).join("")};
+  sel.onchange=()=>{const r=tv.querySelector(`input[value="${sel.value}"]`);if(r){r.checked=true;r.dispatchEvent(new Event("change",{bubbles:true}))}};
+  sync();tv.addEventListener("change",sync);new MutationObserver(sync).observe(tv,{subtree:true,attributes:true,attributeFilter:["hidden"]});
+  document.addEventListener("click",e=>{if(e.target.closest("[data-view]"))setTimeout(sync,0)})}
+
+// ---- 4. Charts: redraw when crossing the breakpoint (chart widths are measured when drawn) ----
+MQ.addEventListener("change",()=>setTimeout(()=>{render();PAGECFG.renderLeft()},60));
+window.addEventListener("orientationchange",()=>setTimeout(()=>{render();PAGECFG.renderLeft()},250));
+
+// ---- 5. Tab strips and toggles: keep the active item in view ----
+const centre=s=>{const a=s.querySelector(".on");if(!a||s.scrollWidth<=s.clientWidth)return;const sr=s.getBoundingClientRect(),ar=a.getBoundingClientRect();s.scrollTo({left:ar.left-sr.left+s.scrollLeft+ar.width/2-sr.width/2,behavior:"smooth"})};
+const watch=s=>{if(s.$mw)return;s.$mw=1;new MutationObserver(()=>setTimeout(()=>centre(s),0)).observe(s,{attributes:true,attributeFilter:["class"],subtree:true,childList:true});centre(s)};
+const scan=()=>document.querySelectorAll(".seg,.tabs,.aitabs,.viewsw").forEach(watch);
+scan();setTimeout(scan,300);new MutationObserver(scan).observe(document.querySelector(".content"),{childList:true,subtree:true});
+})();
+
 </script>
 </body>
 </html>
