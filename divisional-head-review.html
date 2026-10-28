@@ -687,6 +687,11 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .tiles .tile:hover{transform:none}
 .tiles .tile.on{box-shadow:inset 0 0 0 1px var(--fg),0 2px 4px rgba(16,24,40,.08),0 6px 14px rgba(16,24,40,.10)}
 .tiles .tgroup.on{box-shadow:0 2px 4px rgba(16,24,40,.08),0 6px 14px rgba(16,24,40,.10)}
+/* Support Required alerts segment (Department Head Review) */
+.aitabs .sup{color:#6D3BCB}
+.aitabs .sup.on{background:linear-gradient(120deg,#9B6BE8,#6D3BCB)}
+.aitiles.sup{--ac:#6D3BCB;--acb:#F8F5FF}
+.dr-band.sup{background:linear-gradient(120deg,#9B6BE8,#6D3BCB)}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1601,11 +1606,11 @@ function bindTable(){
 }
 
 // ===== Alerts drawer (items come from the page) =====
-const DR={crit:{l:"Key Alerts",e:"No critical issues in the current selection."},mgmt:{l:"Management Summary",e:"Nothing needs management review in the current selection."},ins:{l:"Key Insights",e:"Not enough data in the current selection for insights."}};
+const DR={sup:{l:"Support Required",e:"No support needed in the current selection."},crit:{l:"Key Alerts",e:"No critical issues in the current selection."},mgmt:{l:"Management Summary",e:"Nothing needs management review in the current selection."},ins:{l:"Key Insights",e:"Not enough data in the current selection for insights."}};
 // Page rules give the first items; each segment is topped up to 5 with plain facts from the page's own tile metrics
 // (where a metric is highest by department or model in the current selection), so every statement comes from the data shown.
 function topUp(A0,rows){
-  if(PAGECFG.ownAlerts)return{crit:[...A0.crit,...A0.mgmt],mgmt:[...(A0.sum||[])],ins:[...A0.ins]};
+  if(PAGECFG.ownAlerts)return{crit:[...A0.crit,...A0.mgmt],mgmt:[...(A0.sum||[])],ins:[...A0.ins],sup:[...(A0.sup||[])]};
   // Key Alerts = page alert rules (incl. former management alerts); Management Summary = progress facts; Key Insights = page insights.
   // Each is topped up to 5 with specific facts (named PICs, vendors, departments, models) computed from the current top-level selection.
   const A={crit:[...A0.crit,...A0.mgmt],mgmt:[],ins:[...A0.ins]};if(!rows.length)return A;
@@ -1652,7 +1657,7 @@ function overview(t){const num="\\d[\\d,]*(?:\\.\\d+)?%?";let m=t.match(new RegE
   m=t.match(new RegExp("(?<![\\w-]|Model |Rank |Tier )("+num+")(?![\\w-])"));return{k:m?m[1]:"",s:t}}
 function renderAlerts(){
   const A=topUp(PAGECFG.alerts(scoped()),scoped());
-  ["crit","mgmt","ins"].forEach(k=>$("n-"+k).textContent=A[k].length);
+  ["crit","mgmt","ins","sup"].forEach(k=>{if($("n-"+k))$("n-"+k).textContent=(A[k]||[]).length});
   // segmented alert tiles: up to 5 items of the selected segment; View More opens the drawer with the full list
   const seg=S.aseg||"mgmt",ov=i=>i.k?{k:i.k,s:i.s}:overview(i.t),ord=A[seg].map((i,x)=>({i,x,o:ov(i)})).sort((a,b)=>(!a.o.k)-(!b.o.k)||a.x-b.x),it5=ord.slice(0,5);
   document.querySelectorAll("[data-a]").forEach(b=>{const on=b.dataset.a===seg;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
@@ -2007,8 +2012,8 @@ const PAGECFG={
     o.onClick=()=>{};o.onHover=()=>{};o.scales.y.max=100;o.scales.y.ticks.callback=v=>v+"%";o.scales.y.title={display:true,text:"Parts ready (%)",color:"#4A5565",font:{size:14}};
     o.scales.x.ticks={...o.scales.x.ticks,autoSkip:false,maxRotation:0};
     drawChart("L",{noTotal:true,minPer:78,data:{labels:RACT.map(([,l])=>l.split(" ")),datasets:[ds("Parts ready",vals,"ini",{suffix:"%",maxBarThickness:36})]},options:o});
-    $("cap-left").textContent=`Readiness % of applicable parts · ${sel().m} · ${sel().f} · ${sel().v}`;$("lg-left").innerHTML=legendHtml([["Parts ready (%)","ini"]]);
-    $("n-left").textContent="Ready parts ÷ applicable parts for each activity · Lab Testing excludes sheet metal parts, Camera Installation applies to electrical and plastic parts"},
+    $("cap-left").textContent="Readiness % of applicable parts";$("c-left").closest(".card").querySelector(".ctx").innerHTML=filterTags().join("");$("lg-left").innerHTML=legendHtml([["Parts ready (%)","ini"]]);
+    $("n-left").textContent=""},
   // right: parts by department with count and share (Total last); a column filters the part table and scrolls to it
   renderRight(){const rows=scoped(),D=DLIST.filter(d=>rows.some(p=>p.dept===d)),v=D.map(d=>rows.filter(p=>p.dept===d).length);
     $("ctx-right").innerHTML=filterTags().join("");
@@ -2018,7 +2023,7 @@ const PAGECFG={
     const ro=chartOpts({callbacks:{label:c=>` ${c.raw} parts (${pct(c.raw,rows.length)}% of ${rows.length})`,footer:it=>it[0].dataIndex<D.length?"Click to show these parts in the table below":""}});ro.layout.padding.top=44;
     drawChart("R",{plugins:[pcl],totFooter:true,data:{labels:D,datasets:[ds("Parts",v,"ini",{f:()=>true,maxBarThickness:40})]},options:ro});
     {const inner=$("c-right").parentElement;inner.style.width="100%";inner.parentElement.parentElement.classList.remove("scrolls");CH.R.resize()}
-    $("cap-right").textContent=`Parts and share of total · ${sel().m} · ${sel().f} · ${sel().v}`;$("lg-right").innerHTML=legendHtml([["Parts (share of total)","ini"]]);
+    $("cap-right").textContent="Parts and share of total";$("lg-right").innerHTML=legendHtml([["Parts (share of total)","ini"]]);
     $("n-right").textContent=`${rows.length} parts in ${sel().m} · ${sel().f} · ${sel().v} · click a department to filter the part table`;DS.render()},
   alerts(rows){const out={crit:[],mgmt:[],ins:[],sum:[]};if(!rows.length)return out;const R=RACT.map(([k,l])=>({k,l,pc:rpc(rows,k)})).filter(x=>x.pc!=null),sc=`${sel().m} ${sel().v} ${sel().f}`;
     R.slice().sort((a,b)=>a.pc-b.pc).slice(0,2).forEach(x=>out.crit.push({k:x.pc+"%",s:`${x.l} readiness is among the lowest`,t:`${x.l} is only ${x.pc}% ready`,d:`For ${sc}.`,o:"Divisional Head"}));
