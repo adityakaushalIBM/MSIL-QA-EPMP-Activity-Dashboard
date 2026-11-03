@@ -1937,7 +1937,7 @@ function xsetup(){document.querySelectorAll(".xbtn").forEach(b=>{if(b.dataset.xs
     if(e.target.closest("#xclr"))[...XSEL.keys()].forEach(k=>{const i=document.querySelector(`input[data-xid="${k}"]`);if(i){i.checked=false;i.dispatchEvent(new Event("change"))}})})}
 function xbar(){const x=$("xbar");x.hidden=!XSEL.size;document.body.classList.toggle("x-on",XSEL.size>0);if(!XSEL.size)return;
   const fl=FKEYS.filter(k=>S.F[k]&&S.F[k].length).map(k=>`<b>${esc(FPH[k]||k)}:</b> ${esc(S.F[k].join(", "))}`);
-  x.innerHTML=`<div class="xb-l"><h2>Selected for Export</h2><p class="xscope"><b>Screen:</b> ${esc(($("pg-h1")||{}).textContent||document.title)}<span class="xsep">·</span>${fl.length?fl.join('<span class="xsep">·</span>'):"<b>Filters:</b> None applied (all data)"}</p><div class="xb-tags">${[...XSEL].map(([k,n])=>`<span class="xtag">${n}<button type="button" data-xr="${k}" aria-label="Remove ${n}">×</button></span>`).join("")}</div><p class="xnote" id="xnote" aria-live="polite"></p></div>`+
+  x.innerHTML=`<div class="xb-l"><h2>Selected for Export</h2><p class="xscope"><b>Activity:</b> ${esc(($("pg-h1")||{}).textContent||document.title)}<span class="xsep">·</span>${fl.length?fl.join('<span class="xsep">·</span>'):"<b>Filters:</b> None applied (all data)"}</p><div class="xb-tags">${[...XSEL].map(([k,n])=>`<span class="xtag">${n}<button type="button" data-xr="${k}" aria-label="Remove ${n}">×</button></span>`).join("")}</div><p class="xnote" id="xnote" aria-live="polite"></p></div>`+
     `<div class="xb-r"><div class="radios xfmt" role="radiogroup" aria-label="Export format">${["xlsx","csv","pdf"].map(f=>`<label><input type="radio" name="xfmt" data-fmt="${f}"${f===XFMT?" checked":""}>.${f}</label>`).join("")}</div>`+
     `<button type="button" class="xgo" id="xgo">Export ${XSEL.size} section${XSEL.size>1?"s":""}</button></div>`}
 function bindExport(){
@@ -2451,14 +2451,14 @@ const RNA=(()=>{
 // ---------- View B: New Tier 2 Assessment ----------
 const NT2=(()=>{
   const TILES={ov:[{m:"New",l:"New Tier 2 Total",c:"t-ini",bar:"ini"},
-    {m:"aDone",l:"Audit Done",c:"t-plain",bar:"ok",span:3,subs:[{m:"aG",l:"Audit Done - Green",c:"t-ok"},{m:"aY",l:"Audit Done - Yellow",c:"t-tbc"},{m:"aR",l:"Audit Done - Red",c:"t-bad"}]}]};
-  const FLAT=[TILES.ov[0],TILES.ov[1],{m:"aG",l:"Audit Done - Green",bar:"ok"},{m:"aY",l:"Audit Done - Yellow",bar:"tbc"},{m:"aR",l:"Audit Done - Red",bar:"bad"}];
+    {m:"aDone",l:"Audit Done",c:"t-plain",bar:"ok",span:3,subs:[{m:"aG",l:"Audit Done - Green",c:"t-ok"},{m:"aY",l:"Audit Done - Yellow",c:"t-tbc"},{m:"aR",l:"Audit Done - Red",c:"t-bad"}]},{m:"aPend",l:"Audit Pending",c:"t-tbc",bar:"tbc"}]};
+  const FLAT=[TILES.ov[0],TILES.ov[1],TILES.ov[2],{m:"aG",l:"Audit Done - Green",bar:"ok"},{m:"aY",l:"Audit Done - Yellow",bar:"tbc"},{m:"aR",l:"Audit Done - Red",bar:"bad"}];
   const RES=[["aG","Audit Done · Green","ok"],["aY","Audit Done · Yellow","tbc"],["aR","Audit Done · Red","bad"]];
   // New Tier 2 as one column; Audit Done beside it, stacked by audit result (Audit Done is a subset of New Tier 2)
   const sets=G=>{const o={maxBarThickness:36,categoryPercentage:.55,barPercentage:.88};return[ds("New Tier 2",G.map(r=>tvals(r).New),"ini",{stack:"n",...o}),...RES.map(([m,l,k])=>ds(l,G.map(r=>tvals(r)[m]),k,{stack:"a",...o}))]};
   const LEG=()=>legendHtml([["New Tier 2","ini"],...RES.map(([,l,k])=>[l,k])]);
   return{
-    defaultTab:"ov",clearMetricOnTab:true,leftT:"New Tier 2 vs Audit Done",leftS:"New Tier 2 parts and their audits across all models and departments",tileCols:4,
+    defaultTab:"ov",clearMetricOnTab:true,leftT:"New Tier 2 vs Audit Done",leftS:"New Tier 2 parts and their audits across all models and departments",tileCols:5,
     tabs:[{k:"ov",label:"New Tier 2 Assessment",icon:ic('users')}],
     tiles:cat=>TILES[cat],tileValues:rows=>tvals(rows),
     renderLeft(){const key=S.leftBy==="model"?"model":"dept",groups=key==="model"?MODELS:DLIST,G=grp(PARTS,key,groups);

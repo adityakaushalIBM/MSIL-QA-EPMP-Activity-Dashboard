@@ -1937,7 +1937,7 @@ function xsetup(){document.querySelectorAll(".xbtn").forEach(b=>{if(b.dataset.xs
     if(e.target.closest("#xclr"))[...XSEL.keys()].forEach(k=>{const i=document.querySelector(`input[data-xid="${k}"]`);if(i){i.checked=false;i.dispatchEvent(new Event("change"))}})})}
 function xbar(){const x=$("xbar");x.hidden=!XSEL.size;document.body.classList.toggle("x-on",XSEL.size>0);if(!XSEL.size)return;
   const fl=FKEYS.filter(k=>S.F[k]&&S.F[k].length).map(k=>`<b>${esc(FPH[k]||k)}:</b> ${esc(S.F[k].join(", "))}`);
-  x.innerHTML=`<div class="xb-l"><h2>Selected for Export</h2><p class="xscope"><b>Screen:</b> ${esc(($("pg-h1")||{}).textContent||document.title)}<span class="xsep">·</span>${fl.length?fl.join('<span class="xsep">·</span>'):"<b>Filters:</b> None applied (all data)"}</p><div class="xb-tags">${[...XSEL].map(([k,n])=>`<span class="xtag">${n}<button type="button" data-xr="${k}" aria-label="Remove ${n}">×</button></span>`).join("")}</div><p class="xnote" id="xnote" aria-live="polite"></p></div>`+
+  x.innerHTML=`<div class="xb-l"><h2>Selected for Export</h2><p class="xscope"><b>Activity:</b> ${esc(($("pg-h1")||{}).textContent||document.title)}<span class="xsep">·</span>${fl.length?fl.join('<span class="xsep">·</span>'):"<b>Filters:</b> None applied (all data)"}</p><div class="xb-tags">${[...XSEL].map(([k,n])=>`<span class="xtag">${n}<button type="button" data-xr="${k}" aria-label="Remove ${n}">×</button></span>`).join("")}</div><p class="xnote" id="xnote" aria-live="polite"></p></div>`+
     `<div class="xb-r"><div class="radios xfmt" role="radiogroup" aria-label="Export format">${["xlsx","csv","pdf"].map(f=>`<label><input type="radio" name="xfmt" data-fmt="${f}"${f===XFMT?" checked":""}>.${f}</label>`).join("")}</div>`+
     `<button type="button" class="xgo" id="xgo">Export ${XSEL.size} section${XSEL.size>1?"s":""}</button></div>`}
 function bindExport(){
@@ -2359,15 +2359,17 @@ document.querySelectorAll(".mgrp").forEach(g=>{const sub=$(g.getAttribute("aria-
 // ===== Spec Meeting Confirmation =====
 // One record per part; Process + Tech and Process Only parts each carry exactly one meeting, so Total Meetings = P+T + Process Only.
 const SPEC=["Process + Tech","Process Only","Not Applicable","Data Update Pending"];
-const MEET=["Initiated","Pending","Approved"];
-const MK={"Initiated":"ini","Pending":"tbc","Approved":"ok"};
+// Meetings = Initiated + Not Initiated; Initiated = Pending + Approved (3 Nov). The sample data's third status is read as Not Initiated.
+PARTS.forEach(p=>{if(p.meeting==="Initiated")p.meeting="Not Initiated"});
+const MEET=["Pending","Approved","Not Initiated"];
+const MK={"Initiated":"ini","Pending":"tbc","Approved":"ok","Not Initiated":"na"};
 const TILES={
   parts:[{m:"total",l:"Total Parts",c:"t-total",bar:"tot",note:v=>`${v.meetings} need a meeting`},{m:"Process + Tech",l:"Process + Tech Parts",c:"t-pt",bar:"pt",of:"total",bl:"of parts"},{m:"Process Only",l:"Process Only Parts",c:"t-po",bar:"po",of:"total",bl:"of parts"},
          {m:"Not Applicable",l:"Not Applicable Parts",c:"t-na",bar:"na",of:"total",bl:"of parts"},{m:"Data Update Pending",l:"Data Update Pending",c:"t-dup",bar:"dup",of:"total",bl:"of parts"}],
-  meet:[{m:"meetings",l:"Total Meetings",c:"t-mt",bar:"mt",note:"P+T and Process Only"},{m:"Initiated",l:"Initiated",c:"t-ini",bar:"ini",of:"meetings",bl:"initiated"},{m:"Pending",l:"Pending",c:"t-tbc",bar:"tbc",of:"meetings",bl:"pending"},{m:"Approved",l:"Approved",c:"t-ok",bar:"ok",of:"meetings",bl:"approved"}]};
+  meet:[{m:"meetings",l:"Total Meetings",c:"t-mt",bar:"mt",note:"P+T and Process Only"},{m:"Initiated",l:"Initiated",c:"t-ini",bar:"ini",of:"meetings",bl:"initiated"},{m:"Pending",l:"Pending",c:"t-tbc",bar:"tbc",of:"meetings",bl:"pending"},{m:"Approved",l:"Approved",c:"t-ok",bar:"ok",of:"meetings",bl:"approved"},{m:"Not Initiated",l:"Not Initiated",c:"t-na",bar:"na",of:"meetings",bl:"not initiated"}]};
 const ALL_TILES=TILES.parts.concat(TILES.meet);
-function specCounts(rows){const o={total:rows.length,meetings:0};SPEC.concat(MEET).forEach(k=>o[k]=0);rows.forEach(p=>{o[p.specCat]++;if(p.meeting){o.meetings++;o[p.meeting]++}});return o}
-function predFor(m){return m==="total"?()=>true:m==="meetings"?p=>!!p.meeting:MEET.includes(m)?p=>p.meeting===m:p=>p.specCat===m}
+function specCounts(rows){const o={total:rows.length,meetings:0};SPEC.concat(MEET).forEach(k=>o[k]=0);rows.forEach(p=>{o[p.specCat]++;if(p.meeting){o.meetings++;o[p.meeting]++}});o.Initiated=o.Pending+o.Approved;return o}
+function predFor(m){return m==="Initiated"?p=>p.meeting==="Pending"||p.meeting==="Approved":m==="total"?()=>true:m==="meetings"?p=>!!p.meeting:MEET.includes(m)?p=>p.meeting===m:p=>p.specCat===m}
 function stackChart(slot,rows,key,groups){
   const sets=MEET.map(s=>ds(s,groupCount(rows,key,groups,p=>p.meeting===s),MK[s],{stack:"m",maxBarThickness:40,categoryPercentage:.5,barPercentage:.9}));
   const tot=groups.map((_,j)=>sets.reduce((a,s)=>a+s.data[j],0));
@@ -2429,8 +2431,8 @@ const PAGECFG={
     Object.entries(pk).filter(([,v])=>v.t>=4&&pct(v.n,v.t)>=45).sort((a,b)=>b[1].n-a[1].n).slice(0,4).forEach(([k,v])=>out.crit.push({t:`${k}: ${v.n} meetings not yet initiated`,d:`${pct(v.n,v.t)}% of ${v.t} meetings are still pending.`,o:`${v.d} Team`}));
     const dup={};rows.filter(p=>p.specCat==="Data Update Pending").forEach(p=>dup[p.pic]=(dup[p.pic]||0)+1);
     Object.entries(dup).sort((a,b)=>b[1]-a[1]).slice(0,2).filter(([,n])=>n>=4).forEach(([pic,n])=>out.mgmt.push({t:`${pic} has ${n} parts with data update pending`,d:`Update spec data for ${picDept(pic)} parts before meetings can be set.`,o:"Section Head"}));
-    const ini={};rows.filter(p=>p.meeting==="Initiated").forEach(p=>ini[p.trial]=(ini[p.trial]||0)+1);
-    Object.entries(ini).sort((a,b)=>b[1]-a[1]).slice(0,1).filter(([,n])=>n>=5).forEach(([tr,n])=>out.mgmt.push({t:`${n} ${tr} meetings awaiting approval`,d:"Initiated but not yet approved.",o:"Spec Committee"}));
+    const ini={};rows.filter(p=>p.meeting==="Pending").forEach(p=>ini[p.trial]=(ini[p.trial]||0)+1);
+    Object.entries(ini).sort((a,b)=>b[1]-a[1]).slice(0,1).filter(([,n])=>n>=5).forEach(([tr,n])=>out.mgmt.push({t:`${n} ${tr} meetings awaiting approval`,d:"Initiated, pending approval.",o:"Spec Committee"}));
     const c=specCounts(rows);
     if(c.meetings)out.ins.push({t:`${pct(c.Approved,c.meetings)}% of meetings approved`,d:`${c.Approved} of ${c.meetings} meetings across Process + Tech and Process Only parts.`,o:"QA Team"});
     out.ins.push({t:`${c["Process + Tech"]} Process + Tech vs ${c["Process Only"]} Process Only parts`,d:`${c["Data Update Pending"]} parts still need a data update before classification.`,o:"QA Head"});
