@@ -891,6 +891,7 @@ body.x-on .content{padding-bottom:220px}
 .xfmt label{font-size:16px}
 @media (max-width:860px){.xbar{flex-direction:column;align-items:stretch;padding:20px 16px}.xb-r{justify-content:space-between;flex-wrap:wrap}}
 .xscope{margin:0 0 12px;font-size:15px;line-height:1.5;color:var(--subtle)}.xscope b{color:var(--heading);font-weight:600}.xsep{margin:0 8px;color:#D1D5DB}
+.tile.tro{cursor:default}.tile.tro:hover{transform:none;box-shadow:none}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1729,14 +1730,14 @@ function renderTiles(){
     // parent tile with sub-tiles (e.g. Audit Done → Green / Yellow / Red): one card, each part selectable
     if(t.subs)return `<div class="tile tgroup ${t.c}${S.metric===t.m?" on":""}" data-m="${t.m}" style="grid-column:span ${t.span||t.subs.length}"><div class="tg-main" role="button" tabindex="0" aria-pressed="${S.metric===t.m}"><b>${v}</b><span>${t.l}</span></div>`+
       `<div class="tg-subs"${t.subCols?` style="grid-template-columns:repeat(${t.subCols},minmax(0,1fr))"`:""}>${t.subs.map(s=>`<button class="tile sub ${s.c}${S.metric===s.m?" on":""}" data-m="${s.m}" aria-pressed="${S.metric===s.m}">${s.sec?`<div class="tval"><b>${vals[s.m]}</b><em class="tbadge">${s.sec(vals)}</em></div>`:`<b>${vals[s.m]}</b>`}<span>${s.l}</span></button>`).join("")}</div></div>`;
-    const nt=t.sec?t.sec(vals):"";return `<button class="tile ${t.c}${S.metric===t.m?" on":""}" data-m="${t.m}" aria-pressed="${S.metric===t.m}">${nt?`<div class="tval"><b>${v}</b><em class="tbadge">${nt}</em></div>`:`<b>${v}</b>`}<span>${t.l}</span>${badge}</button>`}).join("");
+    const nt=t.sec?t.sec(vals):"";if(t.ro)return `<div class="tile tro ${t.c}"><b>${v}</b><span>${t.l}</span></div>`;return `<button class="tile ${t.c}${S.metric===t.m?" on":""}" data-m="${t.m}" aria-pressed="${S.metric===t.m}">${nt?`<div class="tval"><b>${v}</b><em class="tbadge">${nt}</em></div>`:`<b>${v}</b>`}<span>${t.l}</span>${badge}</button>`}).join("");
   const h=$("tab-helper");h.hidden=!!rows.length;h.textContent="No parts match the current filters.";
   const cur=tiles.flatMap(t=>[t,...(t.subs||[])]).find(t=>t.m===S.metric);
-  $("tile-hint").textContent=PAGECFG.tileHint?PAGECFG.tileHint(cur):cur?`Showing ${cur.l} in the Data Breakdown chart and filtering the table. Select the tile again to clear it.`:"Select a tile to filter the table and break it down by department in the Data Breakdown chart. Select a graph column to filter the table by that model or department.";
+  $("tile-hint").textContent=PAGECFG.tileHint&&PAGECFG.tileHint(cur)!=null?PAGECFG.tileHint(cur):cur?`Showing ${cur.l} in the Data Breakdown chart and filtering the table. Select the tile again to clear it.`:"Select a tile to filter the table and break it down by department in the Data Breakdown chart. Select a graph column to filter the table by that model or department.";
 }
 function bindTiles(){
   $("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b){if(S.cat!==b.dataset.cat)clearGraphSel("R");if(PAGECFG.clearMetricOnTab&&S.cat!==b.dataset.cat)S.metric=null;S.cat=b.dataset.cat;render()}});
-  $("tiles").addEventListener("click",e=>{const b=e.target.closest(".tile:not(.tstatus)");if(b){if(S.gsel&&S.gsel.canvas==="c-right")S.gsel=null;S.metric=S.metric===b.dataset.m?null:b.dataset.m;S.t.page=0;render()}});
+  $("tiles").addEventListener("click",e=>{const b=e.target.closest(".tile:not(.tstatus):not(.tro)");if(b){if(S.gsel&&S.gsel.canvas==="c-right")S.gsel=null;S.metric=S.metric===b.dataset.m?null:b.dataset.m;S.t.page=0;render()}});
 }
 
 // Status dot (3 Nov): On Track = green, At Risk = yellow, Delayed = red; empty = no status available. Text only in the tooltip.

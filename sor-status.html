@@ -891,6 +891,7 @@ body.x-on .content{padding-bottom:220px}
 .xfmt label{font-size:16px}
 @media (max-width:860px){.xbar{flex-direction:column;align-items:stretch;padding:20px 16px}.xb-r{justify-content:space-between;flex-wrap:wrap}}
 .xscope{margin:0 0 12px;font-size:15px;line-height:1.5;color:var(--subtle)}.xscope b{color:var(--heading);font-weight:600}.xsep{margin:0 8px;color:#D1D5DB}
+.tile.tro{cursor:default}.tile.tro:hover{transform:none;box-shadow:none}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1729,14 +1730,14 @@ function renderTiles(){
     // parent tile with sub-tiles (e.g. Audit Done → Green / Yellow / Red): one card, each part selectable
     if(t.subs)return `<div class="tile tgroup ${t.c}${S.metric===t.m?" on":""}" data-m="${t.m}" style="grid-column:span ${t.span||t.subs.length}"><div class="tg-main" role="button" tabindex="0" aria-pressed="${S.metric===t.m}"><b>${v}</b><span>${t.l}</span></div>`+
       `<div class="tg-subs"${t.subCols?` style="grid-template-columns:repeat(${t.subCols},minmax(0,1fr))"`:""}>${t.subs.map(s=>`<button class="tile sub ${s.c}${S.metric===s.m?" on":""}" data-m="${s.m}" aria-pressed="${S.metric===s.m}">${s.sec?`<div class="tval"><b>${vals[s.m]}</b><em class="tbadge">${s.sec(vals)}</em></div>`:`<b>${vals[s.m]}</b>`}<span>${s.l}</span></button>`).join("")}</div></div>`;
-    const nt=t.sec?t.sec(vals):"";return `<button class="tile ${t.c}${S.metric===t.m?" on":""}" data-m="${t.m}" aria-pressed="${S.metric===t.m}">${nt?`<div class="tval"><b>${v}</b><em class="tbadge">${nt}</em></div>`:`<b>${v}</b>`}<span>${t.l}</span>${badge}</button>`}).join("");
+    const nt=t.sec?t.sec(vals):"";if(t.ro)return `<div class="tile tro ${t.c}"><b>${v}</b><span>${t.l}</span></div>`;return `<button class="tile ${t.c}${S.metric===t.m?" on":""}" data-m="${t.m}" aria-pressed="${S.metric===t.m}">${nt?`<div class="tval"><b>${v}</b><em class="tbadge">${nt}</em></div>`:`<b>${v}</b>`}<span>${t.l}</span>${badge}</button>`}).join("");
   const h=$("tab-helper");h.hidden=!!rows.length;h.textContent="No parts match the current filters.";
   const cur=tiles.flatMap(t=>[t,...(t.subs||[])]).find(t=>t.m===S.metric);
-  $("tile-hint").textContent=PAGECFG.tileHint?PAGECFG.tileHint(cur):cur?`Showing ${cur.l} in the Data Breakdown chart and filtering the table. Select the tile again to clear it.`:"Select a tile to filter the table and break it down by department in the Data Breakdown chart. Select a graph column to filter the table by that model or department.";
+  $("tile-hint").textContent=PAGECFG.tileHint&&PAGECFG.tileHint(cur)!=null?PAGECFG.tileHint(cur):cur?`Showing ${cur.l} in the Data Breakdown chart and filtering the table. Select the tile again to clear it.`:"Select a tile to filter the table and break it down by department in the Data Breakdown chart. Select a graph column to filter the table by that model or department.";
 }
 function bindTiles(){
   $("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b){if(S.cat!==b.dataset.cat)clearGraphSel("R");if(PAGECFG.clearMetricOnTab&&S.cat!==b.dataset.cat)S.metric=null;S.cat=b.dataset.cat;render()}});
-  $("tiles").addEventListener("click",e=>{const b=e.target.closest(".tile:not(.tstatus)");if(b){if(S.gsel&&S.gsel.canvas==="c-right")S.gsel=null;S.metric=S.metric===b.dataset.m?null:b.dataset.m;S.t.page=0;render()}});
+  $("tiles").addEventListener("click",e=>{const b=e.target.closest(".tile:not(.tstatus):not(.tro)");if(b){if(S.gsel&&S.gsel.canvas==="c-right")S.gsel=null;S.metric=S.metric===b.dataset.m?null:b.dataset.m;S.t.page=0;render()}});
 }
 
 // Status dot (3 Nov): On Track = green, At Risk = yellow, Delayed = red; empty = no status available. Text only in the tooltip.
@@ -2365,6 +2366,7 @@ const RK={"Pending":"tbc","In Progress":"ini","Completed":"ok"};
 const CATS=[{f:"asis",l:"OK As Per SOR",s:"As Is",k:"ok",g:"Agreed"},{f:"alt",l:"Alternate Control",s:"Alt Control",k:"po",g:"Agreed"},
   {f:"cost",l:"Cost Up",s:"Cost Up",k:"bad",g:"Disagreed"},{f:"vden",l:"Vendor Denial",s:"Vendor Denial",k:"dup",g:"Disagreed"},{f:"nfeas",l:"Not Feasible",s:"Not Feasible",k:"tbc",g:"Disagreed"},{f:"spna",l:"Not Applicable",s:"Not Applicable",k:"na",g:"Not Applicable"}];
 const W=[.45,.2,.1,.08,.07,.1];
+const DQ=[0,.03,.045,.08,.14,.22];  // sample disagreed share of resolved applicable points, per department (DLIST order)
 PARTS.forEach((p,i)=>{
   const bias=(MODELS.indexOf(p.model)*7+DLIST.indexOf(p.dept)*3)%10/20;
   p.sorApp=RS()<.86;CATS.forEach(c=>p[c.f]=0);p.raised=0;p.open=0;p.review=null;
@@ -2372,7 +2374,9 @@ PARTS.forEach((p,i)=>{
     const x=RS();p.review=x<.35+bias?"Completed":x<.7+bias/2?"In Progress":"Pending";
     p.raised=3+Math.floor(RS()*12);
     const done=p.review==="Completed"?p.raised:p.review==="In Progress"?Math.floor(p.raised*(.3+RS()*.5)):0;
-    for(let k=0;k<done;k++){let r=RS(),j=0;while(j<5&&r>W[j]){r-=W[j];j++}p[CATS[j].f]++}
+    // sample spread (3 Nov): each department has its own disagreed rate, so compliance ranges from 100% to below 90% across departments
+    const q=DQ[DLIST.indexOf(p.dept)%DQ.length];
+    for(let k=0;k<done;k++){let j;const r=RS();if(r<W[5])j=5;else if(RS()<q){let s=RS()*.25;j=s<.1?2:s<.18?3:4}else j=RS()<.69?0:1;p[CATS[j].f]++}
     p.open=p.raised-done;
   }
   p.agreed=p.asis+p.alt;p.disagreed=p.cost+p.vden+p.nfeas;p.appPts=p.raised-p.spna;  // 3 Nov: Not Applicable points are their own category, not Disagreed
@@ -2390,6 +2394,17 @@ const TILES={
        {m:"points",l:"Total No. of Points",c:"t-total",bar:"tot",u:"points",note:v=>`${v.agreed+v.disagreed+v.spna} resolved`},{m:"appPts",l:"Total Applicable Points",c:"t-pt",bar:"pt",of:"points",bl:"applicable",u:"points"},{m:"spna",l:"Not Applicable",c:"t-na",bar:"na",of:"points",bl:"not applicable",u:"points"},{m:"comp",l:"Agreed Compliance",c:"t-ok",bar:"ok",u:"%",note:"of resolved applicable points"}],
   agr:CATS.slice(0,2).map(c=>({m:c.f,l:c.l,c:"t-"+c.k,bar:c.k,of:"agreed",bl:"of agreed",u:"points"})),
   dis:CATS.slice(2,5).map(c=>({m:c.f,l:c.l,c:"t-"+c.k,bar:c.k,of:"disagreed",bl:"of disagreed",u:"points"}))};
+// Compliance %Age Breakup (3 Nov): departments counted by the same rounded Agreed Compliance % the graph shows. Bands are exclusive:
+// 100 | 95–99 | 90–94 (shown as 90–95%) | below 90. Departments with no resolved applicable points have no % and are not counted.
+TILES.cmp=[{m:"cb100",l:"100% Compliance",c:"t-ok",ro:1},{m:"cb95",l:"95–99% Compliance",c:"t-pt",ro:1},{m:"cb90",l:"90–95% Compliance",c:"t-tbc",ro:1},{m:"cblo",l:"< 90% Compliance",c:"t-bad",ro:1}];
+function compBands(rows){const o={cb100:0,cb95:0,cb90:0,cblo:0},app=rows.filter(p=>p.sorApp);
+  DLIST.forEach(d=>{const r=app.filter(p=>p.dept===d);if(!(sum(r,"agreed")+sum(r,"disagreed")))return;const v=compliance(r);o[v>=100?"cb100":v>=95?"cb95":v>=90?"cb90":"cblo"]++});return o}
+// the Compliance Percentage graph (one definition, used by the left pane's Compliance %Age option and the Compliance %Age Breakup tab)
+function compChart(slot,app,key,groups,word){const side=slot==="L"?"left":"right",G=byGroup(app,key,groups),v=G.map(r=>compliance(r));
+  drawChart(slot,{data:{labels:groups,datasets:[ds("Agreed Compliance",v,"ok",{total:compliance(app)})]},suffix:"%",yMax:100,
+    callbacks:{footer:it=>{const r=G[it[0].dataIndex];return r?`${sum(r,"agreed")} agreed of ${sum(r,"agreed")+sum(r,"disagreed")} resolved applicable points`:""}}});
+  $("cap-"+side).textContent=`${word} Wise Compliance Percentage`;$("lg-"+side).innerHTML=legendHtml([["Agreed Compliance","ok"]]);
+  $("n-"+side).textContent="Agreed points ÷ resolved applicable points"}
 const ALL=TILES.sum.concat(TILES.agr,TILES.dis);
 // value of one metric for a set of rows (used per department)
 function metricOf(m,rows){if(m==="total")return rows.length;if(m==="app")return rows.filter(p=>p.sorApp).length;if(m==="done")return rows.filter(p=>p.review==="Completed").length;
@@ -2398,20 +2413,18 @@ const byGroup=(rows,key,groups)=>groups.map(g=>rows.filter(p=>p[key]===g));
 
 const PAGECFG={
   defaultTab:"sum",clearMetricOnTab:true,
-  get tileCols(){return S.cat==="sum"?7:S.cat==="dis"?3:2},
+  get tileCols(){return S.cat==="sum"?7:S.cat==="dis"?3:S.cat==="cmp"?4:2},
+  tileHint:cur=>S.cat==="cmp"?"Departments grouped by agreed compliance (agreed ÷ resolved applicable points). These tiles are for reference only.":null,
   tabs:[{k:"sum",label:"Summary",icon:ic('home')},
         {k:"agr",label:"Agreed Breakup",icon:ic('check-circle')},
-        {k:"dis",label:"Disagreed Breakup",icon:ic('close-circle')}],
+        {k:"dis",label:"Disagreed Breakup",icon:ic('close-circle')},
+        {k:"cmp",label:"Compliance %Age Breakup",icon:ic('layers')}],
   tiles:cat=>TILES[cat],
-  tileValues:rows=>sorValues(rows),
+  tileValues:rows=>Object.assign(sorValues(rows),compBands(rows)),
   renderLeft(){
     const key=S.leftBy==="model"?"model":"dept",groups=key==="model"?MODELS:DLIST,app=PARTS.filter(p=>p.sorApp),word=key==="model"?"Model":"Department";
     if(S.leftType==="comp"){ // Compliance Percentage (3 Nov): the existing Agreed Compliance calculation, per model or department
-      const v=byGroup(app,key,groups).map(r=>compliance(r));
-      drawChart("L",{data:{labels:groups,datasets:[ds("Agreed Compliance",v,"ok",{total:compliance(app)})]},suffix:"%",yMax:100,
-        callbacks:{footer:it=>{const r=byGroup(app,key,groups)[it[0].dataIndex];return r?`${sum(r,"agreed")} agreed of ${sum(r,"agreed")+sum(r,"disagreed")} resolved applicable points`:""}}});
-      $("cap-left").textContent=`${word} Wise Compliance Percentage`;$("lg-left").innerHTML=legendHtml([["Agreed Compliance","ok"]]);
-      $("n-left").textContent="Agreed points ÷ resolved applicable points";return;
+      compChart("L",app,key,groups,word);return;
     }
     const sets=REVIEW.map(s=>ds(s,groupCount(app,key,groups,p=>p.review===s),RK[s],{stack:"r",maxBarThickness:40,categoryPercentage:.5,barPercentage:.9}));
     const tot=groups.map((_,j)=>sets.reduce((a,s)=>a+s.data[j],0));
@@ -2425,6 +2438,7 @@ const PAGECFG={
     $("ctx-right").innerHTML=[`<span class="tag brand">${seg.label}</span>`].concat(t?[`<span class="tag brand">${t.l}</span>`]:[],filterTags()).join("");
     const rows=scoped(),{key,groups,word}=rightGroups(),G=byGroup(rows,key,groups);
     if(!rows.some(p=>p.sorApp))return showEmpty("No matching parts","No SOR applicable parts match the current filters.");
+    if(S.cat==="cmp"){showRight();compChart("R",rows.filter(p=>p.sorApp),"dept",DLIST,"Department");return}
     if(t){ // one metric by department
       const v=G.map(r=>metricOf(t.m,r));
       if(!v.some(Boolean))return showEmpty("Nothing to show",`No ${t.l} for this selection.`);
