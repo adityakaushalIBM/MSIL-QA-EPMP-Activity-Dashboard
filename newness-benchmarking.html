@@ -892,6 +892,13 @@ body.x-on .content{padding-bottom:220px}
 @media (max-width:860px){.xbar{flex-direction:column;align-items:stretch;padding:20px 16px}.xb-r{justify-content:space-between;flex-wrap:wrap}}
 .xscope{margin:0 0 12px;font-size:15px;line-height:1.5;color:var(--subtle)}.xscope b{color:var(--heading);font-weight:600}.xsep{margin:0 8px;color:#D1D5DB}
 .tile.tro{cursor:default}.tile.tro:hover{transform:none;box-shadow:none}
+/* Benchmarking observations (3 Nov) */
+.plink{border:0;background:none;padding:0;font:inherit;color:var(--brand);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.obs-v{margin-left:10px;border:0;background:none;padding:0;font:inherit;font-size:13px;font-weight:600;color:var(--brand);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+tr.obs-on>td{background:var(--brand-softer)}
+tr.obs-r>td{background:#FAFBFF;font-size:13px;color:var(--heading);padding-top:8px;padding-bottom:8px}
+tr.obs-r>td.obs-n{color:var(--subtle);font-weight:600;white-space:nowrap;padding-left:24px}
+tr.obs-r>td.obs-t{text-align:left;min-width:300px;white-space:normal;line-height:1.4}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -2015,13 +2022,14 @@ function csApply(T){let b=$("t-csbtn");if(!b){const fb=$("t-fbtn");if(!fb)return
     w.innerHTML=`<button type="button" id="t-csbtn" aria-haspopup="dialog" aria-controls="cs-sheet">${ic("layers")}<span>Select Columns</span></button>`;fb.parentElement.before(w);b=$("t-csbtn");b.onclick=csOpen}
   const on=csParts(T);b.parentElement.hidden=!on;const tb=$("t-body").closest("table");if(!on)return;
   const {extra}=csOpts(T),ex=CS.extra.filter(k=>extra.some(([,L])=>L.some(o=>o.k===k))),lab=Object.fromEntries(FMORE.flatMap(([,L])=>L));
-  const hid=new Set(T.cols.map(([k],i)=>CS.hidden.has(k)&&i>=2?i:-1).filter(i=>i>=0)),head=$("t-thead").lastElementChild,rows=[...$("t-body").children];
+  const xh=PAGECFG.tableHide?PAGECFG.tableHide():null,hid=new Set(T.cols.map(([k],i)=>(CS.hidden.has(k)||xh&&xh.has(k))&&i>=2?i:-1).filter(i=>i>=0)),head=$("t-thead").lastElementChild,all=[...$("t-body").children],rows=all.filter(tr=>!tr.classList.contains("subrow"));
+  all.filter(tr=>tr.classList.contains("subrow")).forEach(tr=>{[...tr.children].forEach((td,i)=>{if(hid.has(i))td.style.display="none"});ex.forEach(()=>tr.appendChild(document.createElement("td")))});
   [head,...rows].forEach(tr=>{if(tr.children.length<2)return;[...tr.children].forEach((td,i)=>{if(hid.has(i))td.style.display="none"})});
   const pg=tableRows().slice(S.t.page*(T.pageSize||PAGE0));rows.forEach((tr,r)=>{if(tr.children.length<2)return;const p=pg[r];
     ex.forEach(k=>{const td=document.createElement("td");const v=p&&CSF[k]?p[CSF[k]]:null;td.innerHTML=v!=null?String(v):'<span class="cs-nr">Not recorded</span>';td.className="cs-x";tr.appendChild(td)})});
   const grp=$("t-thead").querySelector("tr.grp");if(grp){let i=0;[...grp.children].forEach(th=>{const n=th.colSpan||1;let v=0;for(let j=i;j<i+n;j++)if(!hid.has(j))v++;i+=n;th.colSpan=Math.max(v,1);th.style.display=v?"":"none"});
     if(ex.length){const th=document.createElement("th");th.colSpan=ex.length;th.textContent="Added Columns";grp.appendChild(th)}}
-  b.classList.toggle("on",ex.length>0||hid.size>0);b.querySelector("span").textContent=ex.length||hid.size?`Select Columns · ${T.cols.length-hid.size+ex.length}`:"Select Columns"}
+  const uh=T.cols.filter(([k],i)=>i>=2&&CS.hidden.has(k)).length;b.classList.toggle("on",ex.length>0||uh>0);b.querySelector("span").textContent=ex.length||uh?`Select Columns · ${T.cols.length-uh+ex.length}`:"Select Columns"}
 function csOpen(){const T=TBL(),{base,extra}=csOpts(T);let sh=$("cs-sheet");
   if(!sh){const sc=document.createElement("div");sc.className="fm-scrim";sc.id="cs-scrim";sh=document.createElement("section");sh.className="fm-sheet cs-sheet";sh.id="cs-sheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-modal","true");sh.setAttribute("aria-labelledby","cs-h");document.body.append(sc,sh);sc.onclick=()=>csClose()}
   const box=(o,on)=>`<label class="cs-o${o.lock?" lock":""}"><input type="checkbox" value="${o.k}"${on?" checked":""}${o.lock?" disabled":""}><span>${o.l}</span>${o.lock?'<em>Always shown</em>':""}</label>`;
@@ -2383,6 +2391,22 @@ PARTS.forEach(p=>{p.ncat=[];p.bmApp=false;p.obs=p.agr=p.imp=0;
   if(!p.newApp)return;const a=pickN();p.ncat.push(NCAT[a][0]);if(RBM()<.25){const b=pickN();if(b!==a)p.ncat.push(NCAT[b][0])}
   p.bmApp=RBM()<.5;if(!p.bmApp)return;p.obs=1+Math.floor(RBM()*6);
   for(let k=0;k<p.obs;k++)if(RBM()<.66){p.agr++;if(RBM()<.55)p.imp++}});
+// Observation text (3 Nov): vendors enter free-text observations per part. Prototype text is SAMPLE only, drawn from a generic list;
+// the first p.agr observations are Agreed and the first p.imp of those Implemented, so the list matches the counts.
+const OBSTXT=["Wall thickness can be reduced at the mounting boss without loss of strength","Competitor uses a single-piece moulding instead of a two-part assembly",
+  "Fastener count can drop from 4 to 3 with a revised bracket layout","Surface finish on the visible face is better on the benchmark part",
+  "Benchmark part uses a lighter grade of material for the same load case","Rib pattern on the benchmark part improves stiffness",
+  "Clip-fit design on the benchmark removes the need for a separate screw","Gate location on the benchmark part reduces visible flow marks",
+  "Sealing lip profile on the benchmark gives better water resistance","Benchmark part integrates the wiring harness guide into the moulding",
+  "Paint process on the benchmark skips one primer layer","Tolerance on the locating hole is tighter on the benchmark part"];
+const ROBS=rng(77);PARTS.forEach((p,i)=>{p._i=i;p.obsList=[];const pool=OBSTXT.slice();for(let k=0;k<p.obs;k++)p.obsList.push({t:pool.splice(Math.floor(ROBS()*pool.length),1)[0],a:k<p.agr,im:k<p.imp})});
+const OBSX=new Set();
+// while any part's observations are open, the table shows only Model, Part Number and the Benchmarking columns
+const OBS_HIDE=new Set(["name","dept","pic","vname","newT","cats"]);
+function obsSub(p){return p.obsList.map((o,k)=>`<tr class="subrow obs-r"><td></td><td class="obs-n">Obs ${k+1}</td>${"<td></td>".repeat(7)}`+
+  `<td class="wrap obs-t">${o.t}</td><td>${o.a?"Yes":yn(false)}</td><td>${o.a?(o.im?"Yes":yn(false)):dash}</td><td></td></tr>`).join("")}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-obs]");if(!b)return;const i=+b.dataset.obs;OBSX.has(i)?OBSX.delete(i):OBSX.add(i);renderTable();const w=document.querySelector(".tbl-wrap");if(w)w.scrollLeft=0;obsFit()});
+function obsFit(){const w=document.querySelector(".tbl-wrap");if(w)w.style.setProperty("--tw",w.clientWidth+"px")}window.addEventListener("resize",obsFit);
 const cnt=(r,f)=>r.filter(f).length,grp=(rows,key,groups)=>groups.map(g=>rows.filter(p=>p[key]===g)),sumF=(r,f)=>r.reduce((a,p)=>a+p[f],0);
 function bvals(r){const o={app:cnt(r,p=>p.newApp),bm:cnt(r,p=>p.bmApp),obs:sumF(r,"obs"),agr:sumF(r,"agr"),imp:sumF(r,"imp")};o.dis=o.obs-o.agr;  // each observation is Agreed or not, so Disagreed = Observations − Agreed
   NCAT.forEach(([k])=>o["c_"+k]=cnt(r,p=>p.ncat.includes(k)));o.accPct=pct(o.agr,o.obs);return o}
@@ -2404,6 +2428,7 @@ const OBSLEG=d=>legendHtml([["Total Observation Points","tot"],["Agreed · Imple
 const yn=b=>b?"Yes":'<span style="color:var(--subtle)">No</span>',dash='<span style="color:var(--subtle)">–</span>',CL=Object.fromEntries(NCAT.map(([k,l])=>[k,l]));
 
 const PAGECFG={
+  tableHide:()=>OBSX.size?OBS_HIDE:null,
   defaultTab:"ov",clearMetricOnTab:true,get tileCols(){return S.cat==="ap"?5:TILES[S.cat].length},
   tabs:[{k:"ov",label:"Overall Summary",icon:ic('home')},{k:"ap",label:"Applicability Breakup",icon:ic('layers')},{k:"bm",label:"Benchmarking Breakup",icon:ic('chart-mixed')}],
   tiles:cat=>TILES[cat],tileValues:rows=>bvals(rows),
@@ -2437,9 +2462,9 @@ const PAGECFG={
     cols:[["model","Model"],["no","Part Number"],["name","Part Name"],["dept","Dept."],["pic","PIC"],["vname","Vendor Name"],
       ["newT","Newness Applicable"],["cats","Applicability Category",{type:"text"}],["bmT","Benchmarking Applicable"],["obs","Observations"],["agr","Agreed"],["imp","Implemented"],["accP","Acceptance %"]],
     cell:(p,f)=>f==="newT"?(p.newApp?"Yes":"No"):f==="bmT"?(p.bmApp?"Yes":"No"):f==="cats"?(p.ncat.map(k=>CL[k]).join(", ")||null):f==="accP"?(p.obs?pct(p.agr,p.obs):null):/^(obs|agr|imp)$/.test(f)?(p.bmApp?p[f]:null):p[f],
-    row:p=>`<tr><td class="id">${p.model}</td><td class="id">${p.no}</td><td class="wrap">${p.name}</td><td>${p.dept}</td><td class="wrap">${p.pic}</td><td class="wrap">${p.vname}</td>`+
+    row:p=>{const ob=p.bmApp&&p.obs,on=OBSX.has(p._i);return `<tr${on?' class="obs-on"':""}><td class="id">${p.model}</td><td class="id">${ob?`<button type="button" class="plink" data-obs="${p._i}" aria-expanded="${on}">${p.no}</button>`:p.no}</td><td class="wrap">${p.name}</td><td>${p.dept}</td><td class="wrap">${p.pic}</td><td class="wrap">${p.vname}</td>`+
       `<td>${yn(p.newApp)}</td><td class="wrap">${p.ncat.map(k=>CL[k]).join(", ")||dash}</td><td>${yn(p.bmApp)}</td>`+
-      `<td class="num">${p.bmApp?p.obs:dash}</td><td class="num">${p.bmApp?p.agr:dash}</td><td class="num">${p.bmApp?p.imp:dash}</td><td class="num">${p.obs?pct(p.agr,p.obs)+"%":dash}</td></tr>`},
+      `<td class="num">${p.bmApp?(ob?`${p.obs}<button type="button" class="obs-v" data-obs="${p._i}" aria-expanded="${on}">${on?"Hide":"View"}</button>`:p.obs):dash}</td><td class="num">${p.bmApp?p.agr:dash}</td><td class="num">${p.bmApp?p.imp:dash}</td><td class="num">${p.obs?pct(p.agr,p.obs)+"%":dash}</td></tr>`+(on?obsSub(p):"")}},
   alerts(rows){const out={crit:[],mgmt:[],ins:[]},v=bvals(rows);if(!rows.length)return out;
     const low=rows.filter(p=>p.obs>=4&&p.agr/p.obs<.4).slice(0,2);low.forEach(p=>out.crit.push({t:`${p.no} ${p.name}: ${p.agr} of ${p.obs} observations agreed`,d:"Low agreement on benchmarking observations.",o:`${p.dept} Team`}));
     if(v.agr-v.imp)out.mgmt.push({t:`${v.agr-v.imp} agreed observations not yet implemented`,d:`${v.imp} of ${v.agr} agreed observations implemented.`,o:"Section Head"});
