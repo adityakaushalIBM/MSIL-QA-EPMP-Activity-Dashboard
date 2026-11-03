@@ -687,6 +687,210 @@ tfoot tr.tot td{background:var(--thead);font-weight:600}
 .tiles .tile:hover{transform:none}
 .tiles .tile.on{box-shadow:inset 0 0 0 1px var(--fg),0 2px 4px rgba(16,24,40,.08),0 6px 14px rgba(16,24,40,.10)}
 .tiles .tgroup.on{box-shadow:0 2px 4px rgba(16,24,40,.08),0 6px 14px rgba(16,24,40,.10)}
+/* Support Required alerts segment (Department Head Review) */
+.aitabs .sup{color:#6D3BCB}
+.aitabs .sup.on{background:linear-gradient(120deg,#9B6BE8,#6D3BCB)}
+.aitiles.sup{--ac:#6D3BCB;--acb:#F8F5FF}
+.dr-band.sup{background:linear-gradient(120deg,#9B6BE8,#6D3BCB)}
+/* quarter balls (Divisional Head Review · Activity Status Summary) */
+.hball{display:inline-block;vertical-align:middle}
+.hball .hbo{fill:#fff}.hball .hbf{fill:#344054}.hball .hbx{stroke:#98A2B3;stroke-width:1}.hball .hbr{fill:none;stroke:#344054;stroke-width:1.5}
+td.hb{text-align:center}
+.legend.hbl{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:8px 18px;margin:16px 0 0;padding:12px 14px;border:1px solid var(--border);border-radius:8px;background:#FAFBFC}
+.legend.hbl b{font-weight:600;color:var(--heading)}.legend.hbl span{display:inline-flex;align-items:center;gap:6px;color:var(--heading)}.legend.hbl em{font-style:normal;color:var(--body)}.legend.hbl[hidden]{display:none}
+th.ctr{text-align:center}th.ctr button{margin:0 auto}
+.hbcell{display:inline-flex;align-items:center;gap:10px}.hbcell .st{min-width:0}
+.hbcell .st{align-items:center}.hbcell .st i{margin-top:0}
+/* Divisional Head Review: single full-width chart; quality risk heat map cells */
+.charts.solo{grid-template-columns:minmax(0,1fr)}.charts.solo>.card:nth-child(2){display:none}
+td.heat{font-weight:600;text-align:center}
+td.heat.ok{background:var(--ok-bg)!important;color:var(--ok)}td.heat.tbc{background:var(--tbc-bg)!important;color:var(--tbc)}td.heat.bad{background:var(--bad-bg)!important;color:var(--bad)}
+.pcell{display:inline-flex;align-items:center;gap:10px}
+.pbar{display:inline-block;width:64px;height:6px;border-radius:3px;background:#EEF0F3;overflow:hidden;flex:none}
+.pbar i{display:block;height:100%;border-radius:3px}.pbar i.ok{background:var(--ok-bar-bd)}.pbar i.tbc{background:var(--tbc-bar-bd)}.pbar i.bad{background:var(--bad-bar-bd)}.pbar i.na{background:var(--na-bar-bd)}
+.ovs{display:inline-flex;align-items:center;gap:10px;font-size:20px}.ovs .hball{width:24px;height:24px}
+.ovdot{display:inline-block;width:22px;height:22px;border-radius:50%;vertical-align:middle;margin:5px 0}.ovdot.ok{background:var(--ok-bar-bd)}.ovdot.tbc{background:var(--tbc-bar-bd)}.ovdot.bad{background:var(--bad-bar-bd)}.ovdot.na{background:var(--na-bar-bd)}
+/* Upcoming Milestones alerts segment (New Product Development Trials) */
+.aitabs .mil{color:#0E7C86}
+.aitabs .mil.on{background:linear-gradient(120deg,#2BB3BD,#0E7C86)}
+.aitiles.mil{--ac:#0E7C86;--acb:#F0FBFC}
+.dr-band.mil{background:linear-gradient(120deg,#2BB3BD,#0E7C86)}
+.aitiles.mil .aitile strong{font-size:22px}
+/* ===== Apply more filters (3 Nov): understated link under the filter bar + bottom drawer for additional filters ===== */
+.fmore{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:14px;color:var(--subtle)}
+.fmore-link{border:0;background:none;padding:0;font:inherit;font-size:14px;font-weight:500;color:var(--brand);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;cursor:pointer}
+.fmore-link:hover{text-decoration-thickness:2px}
+.fmore-link:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:2px}
+.fm-scrim{position:fixed;inset:0;background:rgba(16,24,40,.32);z-index:60}
+.fm-sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;width:100%;max-height:min(80vh,720px);display:flex;flex-direction:column;
+  background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -12px 40px rgba(16,24,40,.18);animation:fmUp .26s ease-out}
+.fm-sheet[hidden],.fm-scrim[hidden]{display:none}
+@keyframes fmUp{from{transform:translateY(48px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.fm-sheet{animation:none}}
+.fm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 32px 14px;border-bottom:1px solid var(--border)}
+.fm-head h2{margin:0;font-size:18px;font-weight:600;color:var(--heading)}
+.fm-head p{margin:4px 0 0;font-size:14px;color:var(--subtle)}
+.fm-x{flex:none;width:36px;height:36px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;color:var(--heading)}
+.fm-x svg{stroke:currentColor}
+.fm-body{flex:1;min-height:0;overflow:auto;padding:4px 32px 20px}
+.fm-g{margin-top:20px;min-width:0}
+.fm-g:first-child{margin-top:16px}
+.fm-gh{margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--subtle)}
+.fm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px 12px}
+.fm-grid{align-items:start}
+.fm-grid .msel{border-left:0}
+.fm-grid .msel-btn{border-radius:8px;min-height:40px;height:auto}
+.fm-foot{display:flex;align-items:center;gap:10px;padding:14px 32px;border-top:1px solid var(--border)}
+.fm-sp{flex:1}
+.fm-clear{border:0;background:none;padding:0;font:inherit;font-size:14px;font-weight:500;color:var(--brand);cursor:pointer}
+.fm-btn{height:40px;padding:0 20px;border-radius:8px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.fm-btn.sec{border:1px solid var(--border);background:#fff;color:var(--heading)}
+.fm-btn.pri{border:0;background:var(--brand);color:#fff}
+.fm-btn:focus-visible,.fm-clear:focus-visible,.fm-x:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+body.fm-on{overflow:hidden}
+@media (max-width:860px){
+  .fm-sheet{max-height:88dvh}
+  .fm-head{padding:16px 16px 12px}.fm-body{padding:4px 16px 16px}.fm-foot{padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+  .fm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fm-grid .msel-btn{min-height:44px}
+  .fm-grid .msel-pop{position:static;width:auto;margin-top:6px;box-shadow:none}
+  .fm-grid .msel.open{grid-column:1/-1}
+}
+@media (max-width:480px){.fm-grid{grid-template-columns:1fr}.fm-foot .fm-btn{padding:0 16px}}
+/* drawer: shorter, compact header/footer, so most of its height is the scrolling field list; scrollbar made easier to see and grab */
+.fm-sheet{max-height:min(450px,85vh)}
+.fm-head{padding:14px 32px 10px}.fm-head h2{font-size:16px}.fm-head p{margin-top:2px;font-size:13px}
+.fm-x{width:32px;height:32px}
+.fm-foot{padding:10px 32px}.fm-btn{height:36px}
+.fm-body{padding:0 24px 16px 32px;scrollbar-gutter:stable;scrollbar-width:auto;scrollbar-color:#9AA3B2 #F1F3F6}
+.fm-body::-webkit-scrollbar{width:12px}
+.fm-body::-webkit-scrollbar-track{background:#F1F3F6;border-radius:6px}
+.fm-body::-webkit-scrollbar-thumb{background:#9AA3B2;border-radius:6px;border:2px solid #F1F3F6}
+.fm-body::-webkit-scrollbar-thumb:hover{background:#6A7282}
+@media (max-width:860px){.fm-sheet{max-height:78dvh}.fm-head{padding:12px 16px 8px}.fm-body{padding:0 12px 12px 16px}.fm-foot{padding:10px 16px calc(10px + env(safe-area-inset-bottom))}}
+.fm-grid .msel-list{max-height:140px}
+/* Graph summary text removed (3 Nov): the one-line notes under charts are hidden on every dashboard and the chart takes their space (6px gap + 20px line) */
+.card .note{display:none!important}
+.chart-box{height:306px}
+.nar-gap{color:var(--subtle)}
+/* ===== MRD timeline (3 Nov): its own card below the filters. A quiet grey track; the stretch already travelled (start → Today) in blue.
+   Milestones are dots on the track with plain labels above; Today is a blue point with the countdown below. ===== */
+.mrdline[hidden]{display:none}
+.mrdline .ml-track{margin-top:10px}
+.ml-track{position:relative;height:92px;margin:0 14px}
+.ml-line{position:absolute;left:0;right:0;top:48px;height:4px;border-radius:999px;background:#EDF0F5}
+.ml-fill{position:absolute;left:0;top:48px;height:4px;border-radius:999px;background:linear-gradient(90deg,#BFD3FB,#1447E6)}
+.ml-flag{--fc:#1447E6;position:absolute;top:0;height:50px;transform:translateX(-50%)}
+.ml-flag em{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;font-style:normal;white-space:nowrap;line-height:16px}
+.ml-flag.rt em{left:auto;right:-6px;transform:none;align-items:flex-end}
+.ml-flag em b{font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--heading)}
+.ml-flag em small{font-size:12px;color:var(--subtle)}
+.ml-dot{position:absolute;left:50%;bottom:-6px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #C9D2E0}
+.ml-flag.past .ml-dot{background:#1447E6;box-shadow:0 0 0 3px #fff,0 0 0 4px #1447E6}
+.ml-flag.past em b{color:var(--subtle)}
+.ml-flag.next .ml-dot{box-shadow:0 0 0 2px #1447E6}
+.ml-flag.next em b{color:#1447E6}
+.ml-today{position:absolute;top:43px;width:0}
+.ml-today::before{content:"";position:absolute;left:-7px;top:0;width:14px;height:14px;border-radius:50%;background:#1447E6;box-shadow:0 0 0 4px rgba(20,71,230,.16)}
+.ml-tflag{position:absolute;top:24px;left:0;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px;line-height:16px;color:var(--subtle)}
+.ml-tflag b{font-weight:600;color:var(--heading)}
+.ml-tflag span{padding:2px 8px;border-radius:999px;background:#EAF1FF;color:#1447E6;font-weight:600}
+.ml-track.has-up{margin-top:46px}
+.mrdline .ml-track.has-up{margin-top:46px}
+.ml-flag.up em{bottom:52px}
+@media (max-width:860px){.ml-track{margin:0 8px}}
+/* ===== Status dots (3 Nov): Overall Status tile and the head dashboards' status columns ===== */
+.dot3{display:inline-block;flex:none;width:14px;height:14px;border-radius:50%;vertical-align:middle;background:#C4CCD8}
+.dot3.ok{background:var(--ok-bar-bd)}.dot3.tbc{background:var(--tbc-bar-bd)}.dot3.bad{background:var(--bad-bar-bd)}
+.dot3.none{background:none;border:2px dashed #B3BBC8;box-sizing:border-box}
+.dot3.lg{width:26px;height:26px;margin:3px 0 5px}
+.tile.tstatus{cursor:default}
+.tile.tstatus:hover{box-shadow:0 1px 2px rgba(16,24,40,.05),0 2px 6px rgba(16,24,40,.06)}
+td .dot3{margin:2px 0}
+/* ===== Timeline Crossed marker on model-wise graphs (3 Nov) ===== */
+.chart-inner{position:relative}
+.tlx{position:absolute;inset:0;pointer-events:none}
+.tlx-m{position:absolute;transform:translateX(-50%);pointer-events:auto;width:18px;height:18px;padding:0;border:0;border-radius:50%;background:#FDE4E6;box-shadow:0 0 0 1px #F1A6AE;cursor:help}
+.tlx-m::before{content:"!";display:block;font-size:12px;line-height:18px;font-weight:700;color:#C7323C;text-align:center}
+.tlx-m:focus-visible .tlx-tip{opacity:1;visibility:visible}
+.tlx-m:focus-visible{outline:2px solid #C7323C;outline-offset:2px}
+.ml-flag.lt em{left:-6px;transform:none;align-items:flex-start}
+.ml-flag.up::before{content:"";position:absolute;left:50%;bottom:6px;width:1px;height:40px;background:#D5DCE7}
+/* Timeline Crossed callout (3 Nov, larger): rounded box with a pointer at the bottom */
+.tlx-pop{position:fixed;z-index:80;transform:translate(-50%,-100%);display:flex;align-items:center;gap:8px;padding:9px 14px 9px 10px;border-radius:10px;background:#fff;border:1px solid #F3C2C7;
+  box-shadow:0 10px 24px rgba(16,24,40,.14),0 2px 6px rgba(16,24,40,.08);font-size:12px;line-height:16px;font-weight:600;color:#B42318;white-space:nowrap;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .12s}
+.tlx-pop.on{opacity:1;visibility:visible}
+.tlx-pop i{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#FDE4E6;color:#C7323C;font-style:normal;font-weight:700}
+.tlx-pop::after{content:"";position:absolute;left:50%;bottom:-6px;width:10px;height:10px;margin-left:-5px;background:#fff;border-right:1px solid #F3C2C7;border-bottom:1px solid #F3C2C7;transform:rotate(45deg)}
+/* Overall Status at the top right of the tiles section (3 Nov) */
+.card.has-ovs{position:relative}
+.ovs-badge{position:absolute;top:20px;right:20px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--heading);line-height:24px}
+.dot3.md{width:20px;height:20px}
+@media (max-width:860px){.ovs-badge{position:static;justify-content:flex-end;margin-bottom:8px}}
+/* ===== 3 Nov preview (UIV2, SOR Status only for now) ===== */
+/* timeline: weekly ticks; Today above its MRD countdown badge */
+.ml-wk{position:absolute;top:36px;width:1px;height:24px;margin-left:-.5px;background:linear-gradient(180deg,rgba(195,205,220,0),#C3CDDC 45%,#C3CDDC 55%,rgba(195,205,220,0))}
+.ml-wk.done{background:linear-gradient(180deg,rgba(20,71,230,0),rgba(20,71,230,.45) 45%,rgba(20,71,230,.45) 55%,rgba(20,71,230,0))}
+.ml-wk.lab{top:32px;height:34px;width:1.5px;background:linear-gradient(180deg,rgba(91,108,217,0),#9AA6E8 40%,#9AA6E8 60%,rgba(91,108,217,0))}
+.ml-wl{position:absolute;top:66px;transform:translateX(-50%);font-size:11px;line-height:14px;font-weight:500;color:#5B6CD9;white-space:nowrap;letter-spacing:.01em}
+.mrdline.v2 .ml-line{box-shadow:0 2px 6px rgba(16,24,40,.10),0 1px 2px rgba(16,24,40,.06)}
+.mrdline.v2 .ml-fill{box-shadow:0 2px 8px rgba(20,71,230,.35)}
+.mrdline.v2 .ml-dot{box-shadow:0 0 0 2px #C9D2E0,0 2px 6px rgba(16,24,40,.16)}
+.mrdline.v2 .ml-flag.past .ml-dot{box-shadow:0 0 0 3px #fff,0 0 0 4px #1447E6,0 3px 8px rgba(20,71,230,.3)}
+.mrdline.v2 .ml-flag.next .ml-dot{box-shadow:0 0 0 2px #1447E6,0 3px 8px rgba(20,71,230,.25)}
+.mrdline.v2 .ml-today::before{box-shadow:0 0 0 4px rgba(20,71,230,.16),0 3px 10px rgba(20,71,230,.35)}
+.mrdline.v2 .ml-track{height:112px}
+.mrdline.v2 .ml-tflag{top:26px;flex-direction:column;align-items:center;gap:4px}
+.mrdline.v2 .ml-tflag b{font-size:12px}
+/* Overall Status as its own tile, grey */
+.tile.tstatus{--bg:#F2F4F7;--bd:#E4E7EC;background:#F2F4F7;border-color:#E4E7EC;color:var(--heading)}
+.tile.tstatus>span:last-child{font-weight:500}
+/* Timeline Crossed: badge under the model's x-axis label (the group gets a soft red band behind its columns) */
+.tlx-b{position:absolute;transform:translateX(-50%);box-sizing:border-box;display:flex;justify-content:center;align-items:center;gap:5px;padding:2px 6px;overflow:hidden;border:1px solid #F3C2C7;border-radius:999px;background:#FEF0F1;color:#B42318;font:inherit;font-size:12px;line-height:16px;font-weight:600;white-space:nowrap;cursor:default}
+.tlx-b i{display:grid;place-items:center;width:16px;height:16px;border-radius:50%;background:#F04438;color:#fff;font-style:normal;font-size:11px;font-weight:700}
+.tlx-b:focus-visible{outline:2px solid #C7323C;outline-offset:2px}
+.tlx-b b{font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.tlx-b i{flex:none}
+/* Timeline Crossed badge on the standard column groups (3 Nov): spans the group; 11px; wraps to two lines in narrow groups */
+.tlx-b{font-size:11px;padding:2px 4px}
+.tlx-b.two{white-space:normal;line-height:13px;padding:3px 4px;border-radius:9px;text-align:center}
+.tlx-b.two b{white-space:normal;overflow:visible}
+.tlx-b{padding:2px 3px;letter-spacing:-.2px}
+.tlx-b b{overflow:visible}
+/* adaptive chart height (3 Nov): cards in a row stay equal height; each chart grows to fill its card instead of leaving blank space */
+.charts>.card{display:flex;flex-direction:column}
+.charts>.card>.chart-box{flex:1 1 auto;height:auto;min-height:306px}
+/* Select Columns (3 Nov): secondary table action left of Filters + bottom drawer (reuses the More Filters drawer styles) */
+.fbtn.cs{margin-right:8px}
+.fbtn.cs button.on{color:var(--brand);border-color:#B9CCF8;background:var(--brand-softer)}
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px 12px}
+.cs-o{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:14px;color:var(--heading);cursor:pointer;background:#fff}
+.cs-o input{accent-color:#1447E6;width:16px;height:16px;flex:none}
+.cs-o.lock{background:#F9FAFB;cursor:default}.cs-o em{margin-left:auto;font-style:normal;font-size:12px;color:var(--subtle)}
+.cs-o:has(input:checked:not(:disabled)){border-color:#B9CCF8;background:#F5F8FF}
+.cs-nr{color:var(--subtle)}
+th.cs-x,td.cs-x{white-space:nowrap}
+.fbar{grid-template-columns:repeat(var(--fn,8),minmax(0,auto))}
+/* Export selection (3 Nov) */
+.xchk{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 4px;font-size:14px;font-weight:500;color:var(--heading);cursor:pointer;white-space:nowrap}
+.xchk input{appearance:none;width:16px;height:16px;margin:0;border:1px solid #D1D5DB;border-radius:4px;background:#F9FAFB;cursor:pointer;flex:none;display:grid;place-items:center}
+.xchk input:checked{background:#1C64F2 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat;border-color:#1C64F2}
+.xchk input:focus-visible{outline:2px solid #A4CAFE;outline-offset:2px}
+section.xon,.card.xon{box-shadow:0 0 0 2px #B9CCF8}
+.xbar{position:fixed;left:0;right:0;bottom:0;z-index:55;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px 50px;background:#fff;border-top:1px solid var(--border);box-shadow:0 -10px 30px rgba(16,24,40,.12);animation:fmUp .22s ease-out}
+.xbar[hidden]{display:none}
+.xb-l{min-width:0}.xb-l h2{margin:0 0 6px;font-size:20px;font-weight:700;color:var(--heading)}
+.xb-tags{display:flex;flex-wrap:wrap;gap:6px}
+.xtag{display:inline-flex;align-items:center;gap:4px;padding:5px 6px 5px 12px;border-radius:999px;background:#EEF2FF;color:#3538CD;font-size:15px;font-weight:500}
+.xtag button{border:0;background:none;color:inherit;font-size:15px;line-height:1;cursor:pointer;padding:0 4px}
+.xnote{margin:8px 0 0;font-size:14px;color:var(--subtle)}.xnote:empty{display:none}
+.xb-r{display:flex;align-items:center;gap:14px;flex:none}
+.xb-r{gap:28px}
+.xgo{height:60px;padding:0 36px;border:0;border-radius:80px;background:linear-gradient(180deg,#2157FC,#9412FA);color:#fff;font:inherit;font-size:17px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(80,60,230,.3)}
+body.x-on .content{padding-bottom:220px}
+.xfmt label{font-size:16px}
+@media (max-width:860px){.xbar{flex-direction:column;align-items:stretch;padding:20px 16px}.xb-r{justify-content:space-between;flex-wrap:wrap}}
+.xscope{margin:0 0 12px;font-size:15px;line-height:1.5;color:var(--subtle)}.xscope b{color:var(--heading);font-weight:600}.xsep{margin:0 8px;color:#D1D5DB}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1149,6 +1353,139 @@ html,body{overflow-x:clip}
 }
 @media (max-width:420px){.dgrid{grid-template-columns:1fr!important}}
 @media (max-width:860px){.fbar.few{width:auto!important}.gt-tbl{min-width:760px}.gt-tbl th.gm,.gt-tbl td.gc{min-width:36px}}
+
+/* ===== Key Insights & Alerts (opt-in pages only) ===== */
+.kia-trig{--kia-a:#0849D0;--kia-b:#4E7FDF;--kia-c:#87A9EA;position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;gap:10px;
+  min-height:44px;padding:0 14px 0 14px;border:0;border-radius:12px;cursor:pointer;color:#fff;font:inherit;text-align:left;
+  background:linear-gradient(115deg,var(--kia-a) 0%,var(--kia-b) 58%,var(--kia-c) 100%);box-shadow:0 1px 2px rgba(16,24,40,.06),0 4px 12px rgba(20,71,230,.18);
+  transition:box-shadow .15s,transform .15s;margin-left:auto}
+.kia-trig::before{content:"";position:absolute;inset:0;z-index:-1;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 360 56%22 preserveAspectRatio=%22xMaxYMid slice%22%3E%3Ccircle cx=%22322%22 cy=%222%22 r=%2246%22 fill=%22%23fff%22 fill-opacity=%22.06%22/%3E%3Ccircle cx=%22344%22 cy=%22-6%22 r=%2226%22 fill=%22%23fff%22 fill-opacity=%22.07%22 stroke=%22%23fff%22 stroke-opacity=%22.12%22/%3E%3Ccircle cx=%2218%22 cy=%2262%22 r=%2230%22 fill=%22%23fff%22 fill-opacity=%22.05%22 stroke=%22%23fff%22 stroke-opacity=%22.08%22/%3E%3Cpath d=%22M0 0 360 56%22 stroke=%22%23fff%22 stroke-opacity=%22.05%22 stroke-width=%2222%22/%3E%3Cpath d=%22M290 56 360 10%22 stroke=%22%23fff%22 stroke-opacity=%22.04%22 stroke-width=%2210%22/%3E%3Ccircle cx=%22262%22 cy=%2244%22 r=%222.5%22 fill=%22%23fff%22 fill-opacity=%22.22%22/%3E%3Ccircle cx=%22236%22 cy=%2212%22 r=%221.8%22 fill=%22%23fff%22 fill-opacity=%22.2%22/%3E%3Ccircle cx=%2274%22 cy=%2210%22 r=%221.8%22 fill=%22%23fff%22 fill-opacity=%22.18%22/%3E%3Cpath d=%22M196 0h22l-11 14z%22 fill=%22%23fff%22 fill-opacity=%22.05%22/%3E%3C/svg%3E") right center/cover no-repeat;pointer-events:none}
+.kia-trig.no-vec::before{display:none}
+.kia-trig:hover{box-shadow:0 1px 2px rgba(16,24,40,.08),0 6px 16px rgba(20,71,230,.26)}
+.kia-trig:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+.kia-trig .kia-spark{flex:none;width:20px;height:20px}
+.kia-trig b{font-size:15px;font-weight:600;letter-spacing:-.1px;white-space:nowrap}
+.kia-trig .kia-n{font-size:14px;color:rgba(255,255,255,.85);white-space:nowrap;padding-left:10px;border-left:1px solid rgba(255,255,255,.3)}
+.kia-trig .kia-go{flex:none;margin-left:2px;width:18px;height:18px;stroke:#fff}
+/* shine: a soft light sweep across the full card, every ~6s */
+.kia-trig .kia-shine{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;border-radius:inherit}
+.kia-trig .kia-shine::after{content:"";position:absolute;top:-20%;bottom:-20%;left:0;width:38%;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.22) 45%,rgba(255,255,255,.34) 50%,rgba(255,255,255,.22) 55%,rgba(255,255,255,0) 100%);
+  transform:translateX(-120%) skewX(-18deg);animation:kiaShine 6s ease-in-out 1.2s infinite}
+@keyframes kiaShine{0%{transform:translateX(-120%) skewX(-18deg)}28%,100%{transform:translateX(320%) skewX(-18deg)}}
+.kia-trig.no-shine .kia-shine,.kia-trig[aria-expanded="true"] .kia-shine{display:none}
+@media (prefers-reduced-motion:reduce){.kia-trig .kia-shine{display:none}.kia-body.swap{animation:none!important}.kia-drawer:not([hidden]){animation:none!important}}
+/* drawer: shared .drawer shell, its own header band, text tabs, scrolling body, query box anchored at the bottom */
+.kia-drawer{width:min(480px,100vw);background:#fff linear-gradient(#fff,#fff)}
+.kia-drawer:not([hidden]){animation:kiaIn .22s ease-out}
+@keyframes kiaIn{from{transform:translateX(24px);opacity:.4}to{transform:none;opacity:1}}
+.kia-band{position:relative;overflow:hidden;isolation:isolate;padding:22px 24px 20px;color:#fff;display:flex;align-items:flex-start;gap:12px;
+  background:linear-gradient(115deg,#0849D0 0%,#3A6FDB 55%,#87A9EA 100%)}
+.kia-band::before{content:"";position:absolute;inset:0;z-index:-1;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 364 208%22 preserveAspectRatio=%22xMaxYMin slice%22%3E%3Cpath d=%22M321.3 121.5a80 80 0 1 0 0-160 80 80 0 0 0 0 160Z%22 fill=%22%23fff%22 fill-opacity=%22.05%22/%3E%3Cpath d=%22M340.2 70.8a50 50 0 1 0 0-100 50 50 0 0 0 0 100Z%22 fill=%22%23fff%22 fill-opacity=%22.07%22 stroke=%22%23fff%22 stroke-opacity=%22.1%22/%3E%3Cpath d=%22M18.9 236.5a60 60 0 1 0 0-120 60 60 0 0 0 0 120Z%22 fill=%22%23fff%22 fill-opacity=%22.05%22 stroke=%22%23fff%22 stroke-opacity=%22.08%22/%3E%3Ccircle cx=%22283.5%22 cy=%22155.7%22 r=%224%22 fill=%22%23fff%22 fill-opacity=%22.1%22/%3E%3Ccircle cx=%22226.8%22 cy=%22186.9%22 r=%223%22 fill=%22%23fff%22 fill-opacity=%22.09%22/%3E%3Ccircle cx=%2275.6%22 cy=%2262.3%22 r=%222.5%22 fill=%22%23fff%22 fill-opacity=%22.12%22/%3E%3Ccircle cx=%22347.8%22 cy=%22114.2%22 r=%222%22 fill=%22%23fff%22 fill-opacity=%22.1%22/%3E%3Cpath d=%22M0 0 378 207.7%22 stroke=%22%23fff%22 stroke-opacity=%22.04%22 stroke-width=%2260%22/%3E%3Cpath d=%22M378 0 0 207.7%22 stroke=%22%23fff%22 stroke-opacity=%22.03%22 stroke-width=%2230%22/%3E%3Cpath d=%22M320 0h50l-25 40z%22 fill=%22%23fff%22 fill-opacity=%22.05%22/%3E%3Cpath d=%22m10 120 30-60 30 60z%22 fill=%22%23fff%22 fill-opacity=%22.04%22/%3E%3C/svg%3E") right top/cover no-repeat}
+.kia-drawer.no-vec .kia-band::before,.kia-drawer.no-vec .kia-main::before{display:none}
+.kia-band .kia-spark{flex:none;width:24px;height:24px;margin-top:2px}
+.kia-band h2{margin:0;font-size:20px;line-height:1.3;font-weight:600;color:#fff}
+.kia-band p{margin:4px 0 0;font-size:14px;color:rgba(255,255,255,.85)}
+.kia-band>div{flex:1;min-width:0}
+.kia-band .dr-x{flex:none}
+.kia-tabs{position:relative;display:flex;gap:28px;padding:0 24px;margin-top:18px;border-bottom:1px solid var(--border)}
+.kia-tabs button{border:0;background:none;padding:10px 0 12px;font:inherit;font-size:15px;font-weight:500;color:var(--subtle);cursor:pointer;display:flex;align-items:center;gap:6px}
+.kia-tabs button .c{font-size:14px;font-weight:500;color:var(--subtle)}
+.kia-tabs button.on{color:var(--heading);font-weight:600}
+.kia-tabs button.on .c{color:var(--brand)}
+.kia-tabs button:hover{color:var(--heading)}
+.kia-bar{position:absolute;left:0;bottom:-1px;height:2px;border-radius:2px;background:var(--heading);transition:transform .25s ease,width .25s ease}
+.kia-main{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;isolation:isolate}
+.kia-main::before{content:"";position:absolute;inset:0;z-index:-1;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 480 900%22 preserveAspectRatio=%22xMaxYMax slice%22%3E%3Ccircle cx=%22470%22 cy=%22840%22 r=%22150%22 fill=%22%23fff%22 fill-opacity=%22.05%22 stroke=%22%23fff%22 stroke-opacity=%22.08%22/%3E%3Ccircle cx=%22470%22 cy=%22840%22 r=%2290%22 fill=%22%23fff%22 fill-opacity=%22.04%22/%3E%3Ccircle cx=%22-10%22 cy=%22520%22 r=%22110%22 fill=%22%23fff%22 fill-opacity=%22.03%22 stroke=%22%23fff%22 stroke-opacity=%22.06%22/%3E%3Ccircle cx=%22380%22 cy=%22640%22 r=%223%22 fill=%22%23fff%22 fill-opacity=%22.16%22/%3E%3Ccircle cx=%2290%22 cy=%22760%22 r=%222.5%22 fill=%22%23fff%22 fill-opacity=%22.14%22/%3E%3Ccircle cx=%22430%22 cy=%22380%22 r=%222%22 fill=%22%23fff%22 fill-opacity=%22.14%22/%3E%3Cpath d=%22M120 900 480 560%22 stroke=%22%23fff%22 stroke-opacity=%22.035%22 stroke-width=%2256%22/%3E%3Cpath d=%22m40 640 26-52 26 52z%22 fill=%22%23fff%22 fill-opacity=%22.04%22/%3E%3C/svg%3E") right bottom/cover no-repeat;pointer-events:none}
+.kia-body{flex:1;min-height:0;overflow:auto;padding:8px 24px 24px}
+.kia-body.swap{animation:kiaSwap .22s ease-out}
+@keyframes kiaSwap{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.kia-list{list-style:none;margin:0;padding:0}
+.kia-item{display:flex;gap:14px;align-items:flex-start;padding:18px 0}
+.kia-item+.kia-item{border-top:1px solid #F0F1F4}
+.kia-mark{flex:none;width:8px;height:8px;border-radius:50%;margin-top:8px;background:var(--brand);box-shadow:0 0 0 4px var(--brand-softer)}
+.kia-item.high .kia-mark{background:#E5484D;box-shadow:0 0 0 4px #FDECEC}
+.kia-item.med .kia-mark{background:#E8A23B;box-shadow:0 0 0 4px #FDF3E2}
+.kia-txt{flex:1;min-width:0}
+.kia-txt p{margin:0;font-size:15px;line-height:1.5;color:var(--heading)}
+.kia-txt p .kia-st{display:inline-block;margin-left:4px;font-size:14px;padding:1px 10px}
+.kia-txt p b{font-weight:600;color:var(--heading)}
+.kia-item.high .kia-txt p b.v{color:#C7323C}
+.kia-txt>span{display:block;margin-top:6px;font-size:14px;line-height:1.5;color:var(--body)}
+.kia-own{flex:none;margin-top:2px;border:1px solid var(--border);border-radius:999px;padding:2px 10px;font-size:14px;font-weight:500;color:var(--body);background:rgba(249,250,251,.9);white-space:nowrap}
+.kia-empty{padding:28px 0;color:var(--subtle)}
+/* activity summary (top of Key Insights) */
+.kia-sum{padding:18px 0 22px;border-bottom:1px solid #F0F1F4}
+.kia-sum-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.kia-sum-h h3{margin:0;font-size:14px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--subtle)}
+.kia-st{font-size:14px;font-weight:600;border-radius:999px;padding:3px 12px;white-space:nowrap}
+.kia-st.ok{background:var(--ok-bg,#E9F7EE);color:#1E8A4C}.kia-st.risk{background:#FDF3E2;color:#B26A00}.kia-st.late{background:#FDECEC;color:#C7323C}.kia-st.track{background:var(--brand-softer);color:var(--brand)}
+.kia-sum-l{margin:12px 0 0;font-size:16px;line-height:1.5;color:var(--heading)}
+.kia-sum-l b{font-weight:600}
+.kia-dl{margin:16px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:14px 20px}
+.kia-dl div.w{grid-column:1/-1}
+.kia-dl dt{font-size:14px;color:var(--subtle)}
+.kia-dl dd{margin:2px 0 0;font-size:14px;line-height:1.45;color:var(--heading);font-weight:500}
+/* query box */
+.kia-q{flex:none;padding:14px 24px 18px;background:linear-gradient(rgba(255,255,255,0),#fff 22%)}
+.kia-q form{display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2);padding:6px 6px 6px 14px;transition:border-color .15s,box-shadow .15s}
+.kia-q form:focus-within{border-color:#93B4F8;box-shadow:0 0 0 3px var(--brand-softer);background:#fff}
+.kia-q .kia-spark{flex:none;width:18px;height:18px;color:var(--brand)}
+.kia-q input{flex:1;min-width:0;border:0;background:transparent;outline:0;font:inherit;font-size:15px;color:var(--heading);padding:10px 0}
+.kia-q input::placeholder{color:var(--subtle)}
+.kia-q button{flex:none;width:38px;height:38px;border:0;border-radius:10px;display:grid;place-items:center;color:#fff;cursor:pointer;background:linear-gradient(115deg,#0849D0,#4E7FDF)}
+.kia-q button svg{width:18px;height:18px;stroke:#fff}
+.kia-qn{margin:8px 2px 0;font-size:14px;color:var(--subtle);min-height:1.4em}
+@media (max-width:400px){.kia-trig .kia-n{display:none}}
+@media (max-width:860px){
+  .kia-trig{width:100%;margin-left:0;min-height:46px}
+  .kia-trig .kia-go{margin-left:auto}
+  .kia-band{padding:18px 16px 16px}.kia-tabs{padding:0 16px;gap:24px}.kia-body{padding:4px 16px 20px}.kia-q{padding:12px 16px 16px}
+  .kia-item{flex-wrap:wrap;gap:10px 12px}.kia-own{margin-left:22px}
+  .kia-trig b{flex:none}.kia-trig .kia-n{min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .kia-txt{flex-basis:calc(100% - 22px)}
+}
+.kia-qn{min-height:0;margin:0}.kia-qn:not(:empty){margin-top:8px}
+.kia-item{padding:22px 0}
+/* blue version (?kia=blue): the gradient and vectors run the full height; text, rules and controls in white */
+.kia-blue{background:linear-gradient(165deg,#0849D0 0%,#2C5FD6 45%,#4F7FDF 80%,#6A92E5 100%);color:#fff}
+.kia-blue .kia-band{background:none}
+.kia-blue .kia-main::before{filter:brightness(0) invert(1);opacity:1.6}
+.kia-blue .kia-tabs{border-bottom-color:rgba(255,255,255,.18)}
+.kia-blue .kia-tabs button,.kia-blue .kia-tabs button .c{color:rgba(255,255,255,.68)}
+.kia-blue .kia-tabs button:hover,.kia-blue .kia-tabs button.on,.kia-blue .kia-tabs button.on .c{color:#fff}
+.kia-blue .kia-bar{background:#fff}
+.kia-blue .kia-item+.kia-item{border-top-color:rgba(255,255,255,.14)}
+.kia-blue .kia-txt p,.kia-blue .kia-txt p b{color:#fff}
+.kia-blue .kia-txt>span{color:rgba(255,255,255,.8)}
+.kia-blue .kia-item.high .kia-txt p b.v{color:#FFD0D0}
+.kia-blue .kia-mark{background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.18)}
+.kia-blue .kia-item.high .kia-mark{background:#FF6B6F;box-shadow:0 0 0 4px rgba(255,107,111,.25)}
+.kia-blue .kia-item.med .kia-mark{background:#FFC061;box-shadow:0 0 0 4px rgba(255,192,97,.25)}
+.kia-blue .kia-empty{color:rgba(255,255,255,.8)}
+.kia-blue .kia-body:focus-visible{outline:2px solid #fff;outline-offset:-2px}
+.kia-blue .kia-q{background:none;border-top:1px solid rgba(255,255,255,.14)}
+.kia-blue .kia-q form{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35)}
+.kia-blue .kia-q form:focus-within{background:rgba(255,255,255,.2);border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+.kia-blue .kia-q .kia-spark{color:#fff}
+.kia-blue .kia-q input{color:#fff}
+.kia-blue .kia-q input::placeholder{color:rgba(255,255,255,.75)}
+.kia-blue .kia-q button{background:#fff}
+.kia-blue .kia-q button svg{stroke:#0849D0}
+.kia-blue .kia-qn{color:rgba(255,255,255,.85)}
+.kia-blue .dr-x:focus-visible,.kia-blue .kia-tabs button:focus-visible,.kia-blue .kia-q button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* floating panel (3 Nov): sits off the edges, sized to its content instead of running the full height */
+.drawer.kia-drawer{top:16px;right:16px;bottom:auto;height:auto;max-height:calc(100vh - 32px);width:min(440px,calc(100vw - 32px));
+  border-radius:20px;overflow:hidden;box-shadow:0 24px 56px rgba(8,73,208,.26),0 4px 14px rgba(16,24,40,.12)}
+.kia-drawer .kia-body{flex:1 1 auto}
+.kia-drawer .kia-item{padding:18px 0}
+.kia-drawer .kia-band{padding:20px 22px 16px}.kia-drawer .kia-tabs{padding:0 22px}.kia-drawer .kia-body{padding:4px 22px 16px}.kia-drawer .kia-q{padding:12px 22px 16px}
+@keyframes kiaIn{from{transform:translateY(-8px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+.kia-drawer:not([hidden]){transform-origin:top right}
+@media (max-width:860px){
+  .drawer.kia-drawer{top:10px;right:10px;width:calc(100vw - 20px)!important;max-height:calc(100dvh - 20px);border-radius:18px}
+  .kia-drawer .kia-band{padding:18px 16px 14px}.kia-drawer .kia-tabs{padding:0 16px}.kia-drawer .kia-body{padding:4px 16px 14px}.kia-drawer .kia-q{padding:10px 16px 14px}
+}
 </style>
 </head>
 <body style="margin:0">
@@ -1169,25 +1506,18 @@ html,body{overflow-x:clip}
       <div class="crumbs"><span>Pilot/SOP Trial</span><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m10 16 4-4-4-4"/></svg><span>OTOP Status for ECN Cases</span></div>
       <div class="head">
         <div class="h1wrap"><h1 id="pg-h1">OTOP Status for ECN Cases</h1></div>
-        <div class="stagebar" id="stagebar" hidden aria-live="polite"></div>
-
+        <button class="kia-trig" id="kia-trig" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="kia-drawer"><span class="kia-shine" aria-hidden="true"></span><svg class="kia-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg><b>Key Insights &amp; Alerts</b><span class="kia-n" id="kia-n"></span><svg class="kia-go" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
 
 
       <section class="card" aria-labelledby="f-h">
         <div class="card-head"><div><h2 id="f-h">Filter Dashboard Data</h2><p class="sub">Fine tunes dashboard data by your top level selections</p></div><div class="fhead-r"><button class="link" id="clear" hidden>Clear all filters</button></div></div>
         <div class="fbar" style="--fn:8">
-          <select id="f-model" aria-label="Model"></select><select id="f-dept" aria-label="Department"></select><select id="f-trial" aria-label="Trial Stage"></select><select id="f-pic" aria-label="PIC Name"></select><select id="f-pname" aria-label="Part Name"></select><select id="f-pcode" aria-label="Part Code"></select><select id="f-vcode" aria-label="Vendor Code"></select><select id="f-vname" aria-label="Vendor Name"></select>
+          <select id="f-model" aria-label="Model"></select><select id="f-dept" aria-label="Department"></select><select id="f-category" aria-label="Part Category"></select><select id="f-variant" aria-label="Model Variant"></select><select id="f-fuel" aria-label="Fuel Type"></select><select id="f-pic" aria-label="PIC"></select><select id="f-trial" aria-label="Trial Status"></select><select id="f-ptime" aria-label="Part Timestamp"></select>
         </div>
       </section>
-      <section class="card ai" aria-label="Key alerts, management summary and key insights">
-        <div class="aitabs" role="tablist" aria-label="Alerts and insights">
-          <button class="mgmt on" data-a="mgmt" role="tab" aria-selected="true"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 4h12M6 4v16M6 4H5m13 0v16m0-16h1m-1 16H6m12 0h1M6 20H5M9 7h1v1H9zm5 0h1v1h-1zm-5 4h1v1H9zm5 0h1v1h-1zm-3 4h2a1 1 0 0 1 1 1v4h-4v-4a1 1 0 0 1 1-1"/></svg>Management Summary<span class="n" id="n-mgmt">0</span></button>
-          <button class="crit" data-a="crit" role="tab" aria-selected="false"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0"/></svg>Key Alerts<span class="n" id="n-crit">0</span></button>
-          <button class="ins" data-a="ins" role="tab" aria-selected="false"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.872 9.687 20 6.56 17.44 4 4 17.44 6.56 20 16.873 9.687Zm0 0-2.56-2.56M6 7v2m0 0v2m0-2H4m2 0h2m7 7v2m0 0v2m0-2h-2m2 0h2M8 4h.01v.01H8zm2 2h.01v.01H10zm2-2h.01v.01H12zm8 8h.01v.01H20zm-2 2h.01v.01H18zm2 2h.01v.01H20z"/></svg>Key Insights<span class="n" id="n-ins">0</span></button>
-        </div>
-        <div class="airow"><div class="aitiles" id="aitiles"></div><button class="viewmore" id="ai-more" aria-haspopup="dialog">View More<svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m14 0-4 4m4-4-4-4"/></svg></button></div>
-      </section>
+      <section class="card mrdline" id="mrdline" hidden aria-labelledby="ml-h" aria-live="polite"></section>
+
       <section class="card" aria-label="Summary">
         <div class="tabs" role="tablist" id="tabs"></div>
         <div class="tiles" id="tiles"></div>
@@ -1237,15 +1567,16 @@ html,body{overflow-x:clip}
     </main>
   </div>
 </div>
-<div class="scrim" id="scrim" hidden></div>
-<aside class="drawer" id="drawer" hidden aria-label="Alerts and insights">
-  <div class="dr-band" id="dr-band"><h2 id="dr-title">Alerts</h2><button class="dr-x" id="dr-x" aria-label="Close"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 18 17.94 6M18 18 6.06 6"/></svg></button></div>
-  <div class="dr-tabs"><div class="seg" role="tablist"><button data-d="mgmt">Management</button><button data-d="crit">Key Alerts</button><button data-d="ins">Insights</button></div></div>
-  <div class="dr-body" id="dr-body"></div>
-  <p class="disclaim">Sample alerts generated by simple rules over the prototype data, not by AI. They follow your top level filters.</p>
+<div class="scrim" id="kia-scrim" hidden></div>
+<aside class="drawer kia-drawer" id="kia-drawer" hidden role="dialog" aria-modal="true" aria-labelledby="kia-h">
+  <div class="kia-band"><svg class="kia-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg><div><h2 id="kia-h">Key Insights &amp; Alerts</h2><p>OTOP Status for ECN Cases · Pilot/SOP Trial</p></div><button class="dr-x" id="kia-x" type="button" aria-label="Close"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 18 17.94 6M18 18 6.06 6"/></svg></button></div>
+  <div class="kia-tabs" id="kia-tabs" role="tablist" aria-label="Insights or alerts"><button type="button" role="tab" data-k="ins" class="on" aria-selected="true">Key Insights<span class="c"></span></button><button type="button" role="tab" data-k="crit" aria-selected="false">Critical Alerts<span class="c"></span></button><span class="kia-bar" id="kia-bar" aria-hidden="true"></span></div>
+  <div class="kia-main"><div class="kia-body" id="kia-body" role="tabpanel" tabindex="0"></div>
+  <div class="kia-q"><form id="kia-q" autocomplete="off"><svg class="kia-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg><input id="kia-qi" type="text" placeholder="Ask anything about this dashboard..." aria-label="Ask about this dashboard"><button type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form><p class="kia-qn" id="kia-qn" aria-live="polite"></p></div></div>
 </aside>
 <script>
 
+const ACT_OVERALL=null;const PAGE_PHASE="sop";const TL_ALERT=null;const UIV2=true;
 const FB_ICONS={"users": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M16 19h4a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-2m-2.236-4a3 3 0 1 0 0-4M3 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z\"/>", "clipboard-list": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3z\"/>", "chart-line-up": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207\"/>", "desktop-pc": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1\"/>", "file-lines": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 3v4a1 1 0 0 1-1 1H5m4 8h6m-6-4h6m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1\"/>", "arrow-left-to-bracket": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2\"/>", "bell": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 5.365V3m0 2.365a5.34 5.34 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.34 5.34 0 0 1 12 5.365M8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112z\"/>", "search": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z\"/>", "filter": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z\"/>", "chevron-down": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m8 10 4 4 4-4\"/>", "chevron-right": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m10 16 4-4-4-4\"/>", "close": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18 17.94 6M18 18 6.06 6\"/>", "exclamation-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "building": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 4h12M6 4v16M6 4H5m13 0v16m0-16h1m-1 16H6m12 0h1M6 20H5M9 7h1v1H9zm5 0h1v1h-1zm-5 4h1v1H9zm5 0h1v1h-1zm-3 4h2a1 1 0 0 1 1 1v4h-4v-4a1 1 0 0 1 1-1\"/>", "wand-magic-sparkles": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16.872 9.687 20 6.56 17.44 4 4 17.44 6.56 20 16.873 9.687Zm0 0-2.56-2.56M6 7v2m0 0v2m0-2H4m2 0h2m7 7v2m0 0v2m0-2h-2m2 0h2M8 4h.01v.01H8zm2 2h.01v.01H10zm2-2h.01v.01H12zm8 8h.01v.01H20zm-2 2h.01v.01H18zm2 2h.01v.01H20z\"/>", "download": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01\"/>", "question-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.44 2.44 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "home": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5\"/>", "adjustments-horizontal": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4\"/>", "user-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18m0 0a8.95 8.95 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.95 8.95 0 0 0 12 21m3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0\"/>", "calendar-month": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1m3-7h.01v.01H8zm4 0h.01v.01H12zm4 0h.01v.01H16zm-8 4h.01v.01H8zm4 0h.01v.01H12zm4 0h.01v.01H16z\"/>", "check-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "close-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "star": "<path stroke=\"currentColor\" d=\"M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597z\"/>", "clipboard-check": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 7 2 2 4-4m-5-9v4h4V3z\"/>", "bars-from-left": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M5 7h14M5 12h14M5 17h10\"/>", "chevron-sort": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m8 15 4 4 4-4m0-6-4-4-4 4\"/>", "chevron-up": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m16 14-4-4-4 4\"/>", "file-chart-bar": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 3v4a1 1 0 0 1-1 1H5m4 10v-2m3 2v-6m3 6v-3m4-11v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1\"/>", "eye-slash": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3.933 13.909A4.36 4.36 0 0 1 3 12c0-1 4-6 9-6m7.6 3.8A5.07 5.07 0 0 1 21 12c0 1-3 6-9 6q-.471 0-.918-.04M5 19 19 5m-4 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0\"/>", "layers": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5.005 11.19V12l6.998 4.042L19 12v-.81M5 16.15v.81L11.997 21l6.998-4.042v-.81M12.003 3 5.005 7.042l6.998 4.042L19 7.042z\"/>", "eye": "<path stroke=\"currentColor\" d=\"M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6 4.03-6 9-6 9 4.8 9 6Z\"/><path stroke=\"currentColor\" d=\"M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z\"/>", "palette": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 7h.01m3.486 1.513h.01m-6.978 0h.01M6.99 12H7m9 4h2.706a1.96 1.96 0 0 0 1.883-1.325A9 9 0 1 0 3.043 12.89 9.1 9.1 0 0 0 8.2 20.1a8.6 8.6 0 0 0 3.769.9 2.013 2.013 0 0 0 2.03-2v-.857A2.036 2.036 0 0 1 16 16\"/>", "truck": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0m-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0\"/>", "cog": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1\"/><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6\"/>", "scale-balanced": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5.5 21h13M12 21V7m0 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4m2-1.8c3.073.661 2.467 2.8 5 2.8M5 8c3.359 0 2.192-2.115 5.012-2.793M7 9.556V7.75m0 1.806-1.95 4.393a.773.773 0 0 0 .37.962.8.8 0 0 0 .362.089h2.436a.79.79 0 0 0 .643-.335.78.78 0 0 0 .09-.716zm10 0V7.313m0 2.243-1.95 4.393a.773.773 0 0 0 .37.962.8.8 0 0 0 .362.089h2.436a.79.79 0 0 0 .643-.335.78.78 0 0 0 .09-.716z\"/>", "bug": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 5 9 4V3m5 2 1-1V3m-3 6v11m0-11a5 5 0 0 1 5 5m-5-5a5 5 0 0 0-5 5m5-5a4.96 4.96 0 0 1 2.973 1H15V8a3 3 0 0 0-6 0v2h.027A4.96 4.96 0 0 1 12 9m-5 5H5m2 0v2a5 5 0 0 0 10 0v-2m2.025 0H17m-9.975 4H6a1 1 0 0 0-1 1v2m12-3h1.025a1 1 0 0 1 1 1v2M16 11h1a1 1 0 0 0 1-1V8m-9.975 3H7a1 1 0 0 1-1-1V8\"/>", "rectangle-list": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M11 9h6m-6 3h6m-6 3h6M6.996 9h.01m-.01 3h.01m-.01 3h.01M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1\"/>", "file-shield": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M18 9V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h6M9 3v4a1 1 0 0 1-1 1H4m11 13a11.4 11.4 0 0 1-3.637-3.99A11.14 11.14 0 0 1 10 11.833L15 10l5 1.833a11.14 11.14 0 0 1-1.363 5.176A11.4 11.4 0 0 1 15.001 21Z\"/>", "badge-check": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.98 1.98 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.98 1.98 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.98 1.98 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.99 1.99 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z\"/>", "atom": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M8.737 8.737a21.5 21.5 0 0 1 3.308-2.724m0 0c3.063-2.026 5.99-2.641 7.331-1.3 1.827 1.828.026 6.591-4.023 10.64s-8.812 5.85-10.64 4.023c-1.33-1.33-.736-4.218 1.249-7.253m6.083-6.11c-3.063-2.026-5.99-2.641-7.331-1.3-1.827 1.828-.026 6.591 4.023 10.64m3.308-9.34a21.5 21.5 0 0 1 3.308 2.724m2.775 3.386c1.985 3.035 2.579 5.923 1.248 7.253-1.336 1.337-4.245.732-7.295-1.275M14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z\"/>", "shield-check": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.5 11.5 11 13l4-3.5M12 20a16.4 16.4 0 0 1-5.092-5.804A16.7 16.7 0 0 1 5 6.666L12 4l7 2.667a16.7 16.7 0 0 1-1.908 7.529A16.4 16.4 0 0 1 12 20\"/>", "hammer": "<path stroke=\"currentColor\" stroke-linejoin=\"round\" d=\"m20.953 11.763-2.052-2.052-2.052 2.052 2.052 2.053zm-1.368-2.736L15.48 4.922l-3.42 3.42 4.105 4.105zm-4.105 2.736-2.736-2.736-8.21 8.21 2.737 2.736z\"/><path stroke=\"currentColor\" stroke-linejoin=\"round\" d=\"m12.93 3.74 1.866 1.867-2.052 2.052-1.555-1.555c-.995-.995-3.234-.497-3.918.187l2.737-2.737c.684-.684 1.99-.746 2.923.187Z\"/>", "lightbulb": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 9a3 3 0 0 1 3-3m-2 15h4m0-3c0-4.1 4-4.9 4-9A6 6 0 1 0 6 9c0 4 4 5 4 9z\"/>", "chart-pie": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 6.025A7.5 7.5 0 1 0 17.975 14H10z\"/><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3\"/>", "chart-mixed": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 15v4m6-6v6m6-4v4m6-6v6M3 11l6-5 6 5 5.5-5.5\"/>", "file-pen": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M18 5V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M9 3v4a1 1 0 0 1-1 1H4m11.383.772 2.745 2.746m1.215-3.906a2.09 2.09 0 0 1 0 2.953l-6.65 6.646L9 17.95l.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0\"/>", "tag": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15.583 8.445h.01M10.86 19.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 12.31 4l5.734.007A1.97 1.97 0 0 1 20 5.983v5.5a1 1 0 0 1-.316.727l-7.44 7.5a.974.974 0 0 1-1.384.001Z\"/>", "chevron-double-left": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m17 16-4-4 4-4m-6 8-4-4 4-4\"/>", "chevron-double-right": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m7 16 4-4-4-4m6 8 4-4-4-4\"/>", "grid": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.143 4H4.857A.857.857 0 0 0 4 4.857v4.286c0 .473.384.857.857.857h4.286A.857.857 0 0 0 10 9.143V4.857A.857.857 0 0 0 9.143 4m10 0h-4.286a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286A.857.857 0 0 0 20 9.143V4.857A.857.857 0 0 0 19.143 4m-10 10H4.857a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286a.857.857 0 0 0 .857-.857v-4.286A.857.857 0 0 0 9.143 14m10 0h-4.286a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286a.857.857 0 0 0 .857-.857v-4.286a.857.857 0 0 0-.857-.857\"/>", "arrow-right": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19 12H5m14 0-4 4m4-4-4-4\"/>", "ruler": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 7H7m2 3H7m2 3H7m4 2v2m3-2v2m3-2v2M4 5v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-9a1 1 0 0 1-1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1\"/>"};
 const ic=(n,sz=20,cls='ic')=>`<svg class="${cls}" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true">${FB_ICONS[n]}</svg>`;
 // ===== Shared sample data (identical on both pages: same seed, same order) =====
@@ -1278,14 +1609,31 @@ MODELS.forEach((m,mi)=>DLIST.forEach((d,di)=>{
   }
 }));
 
+// Part Category (3 Nov): options A, AR, A/AR, F, G. Sample value per part from a hash of its part number, so every other sample value is unchanged.
+const PCATS=["A","AR","A/AR","F","G"];
+// Part Timestamp (3 Nov): PP-, PP+, MPP+. Sample value per part (same hash), logic to be defined by MSIL.
+const PTIMES=["PP-","PP+","MPP+"];
+PARTS.forEach(p=>{let h=0;for(const ch of p.no+p.id)h=(h*31+ch.charCodeAt(0))>>>0;p.pcat=PCATS[h%5];p.ptime=PTIMES[Math.floor(h/5)%3]});
+
 // ===== State + shared filter layer =====
 // Top-level filters are multi-select: S.F holds the selected values per filter (empty = all).
 // S.f.<key> gives the single selected value when exactly one is chosen (used where one model is required, e.g. MRD charts), else "".
 const PF=typeof PAGE_FILTERS!=="undefined"?PAGE_FILTERS:{};
 // PAGE_FILTERS (summary dashboards only): keys = filters shown, single = single-choice filters, defaults = preselected values,
 // inert = placeholder filters whose only option reads "To be Defined by MSIL" (they never filter data)
-const FKEYS=PF.keys||["model","dept","trial","pic","pname","pcode","vcode","vname"],FFIELD={pname:"name",pcode:"no",fuel:"fuels",variant:"variants"};
-const FSINGLE=new Set(PF.single||[]),FINERT=new Set(PF.inert||[]),FDEF=PF.defaults||{};
+// Filters (3 Nov): seven top-level filters on every dashboard, plus an "Apply more filters" bottom drawer (FMORE).
+// Drawer fields that already exist in the sample data (Part Number/Name, Vendor No/Name) filter for real; the rest are
+// placeholders ("To be Defined by MSIL"). Model Variant and Fuel Type show their fixed options but have no data behind them yet.
+const FTOP=["model","dept","category","variant","fuel","pic","trial","ptime"];
+const FMORE=[["Part",[["pcode","Part Number"],["pname","Part Name"],["plant","Plant"],["tech","Technology Category"],["ptype","Type (Common/Uncommon)"],["fitment","Fitment Location (Weld/Engine/Assy)"],["color","Color"],["pstatus","Status"]]],
+  ["Vendor",[["vcode","Vendor No"],["vname","Vendor Name"],["vcrit","Vendor Criteria"]]],
+  ["People & departments",[["qaid","QA PIC Staff ID"],["section","Section Name"],["smgr","Section Manager"],["dpmid","DPM ID"],["dpm","DPM Name"],["engd","Engineering Dept"],["scd","Supply Chain Dept"],["qad","QA Dept"]]],
+  ["Monitoring",[["mreason","Monitoring Required Reason"],["remarks","Remarks"]]],
+  ["Record history",[["cby","Created By"],["con","Created On"],["cat2","Created At"],["chby","Changed By"],["chon","Changed On"],["chat","Changed At"]]]];
+const FTOPK=PF.keys||FTOP,FMK=FMORE.flatMap(g=>g[1].map(x=>x[0])).filter(k=>!FTOPK.includes(k)),FMLIVE=new Set(["pcode","pname","vcode","vname"]);
+const FVIS=new Set(["variant","fuel"]);
+const FKEYS=[...FTOPK,...FMK],FFIELD={pname:"name",pcode:"no",category:"pcat"};  // ptime reads p.ptime directly
+const FSINGLE=new Set(PF.single||[]),FINERT=new Set([...(PF.inert||[]),...FMK.filter(k=>!FMLIVE.has(k))]),FDEF=PF.defaults||{};
 const fdefaults=()=>Object.fromEntries(FKEYS.map(k=>[k,[...(FDEF[k]||[])]]));
 const S={F:fdefaults(),f:{},cat:null,metric:null,leftBy:"model",ckL:TODAY,ckR:TODAY,
   t:{q:"",cf:{},sort:{k:"id",dir:1},page:0},drawer:null};
@@ -1296,22 +1644,22 @@ FKEYS.forEach(k=>Object.defineProperty(S.f,k,{enumerable:true,get:()=>S.F[k].len
 const anyFilter=()=>FKEYS.some(k=>S.F[k].join("|")!==(FDEF[k]||[]).join("|"));
 const picDept=pic=>DLIST.find(d=>DEPTS[d].includes(pic));
 const pct=(a,b)=>b?Math.round(a/b*100):0;
-function scoped(){const F=S.F,act=FKEYS.filter(k=>F[k].length&&!FINERT.has(k));return PARTS.filter(p=>act.every(k=>{const v=p[FFIELD[k]||k];return Array.isArray(v)?v.some(x=>F[k].includes(x)):F[k].includes(v)}))}
+function scoped(){const F=S.F,act=FKEYS.filter(k=>F[k].length&&!FINERT.has(k)&&!FVIS.has(k));return PARTS.filter(p=>act.every(k=>{const v=p[FFIELD[k]||k];return Array.isArray(v)?v.some(x=>F[k].includes(x)):F[k].includes(v)}))}
 function groupCount(rows,key,groups,pred){const m=Object.fromEntries(groups.map(g=>[g,0]));rows.forEach(p=>{if(p[key] in m&&pred(p))m[p[key]]++});return groups.map(g=>m[g])}
 // grouping used by the contextual chart: one PIC or one department collapses to a single bar
 function rightGroups(){const F=S.F;return F.pic.length?{key:"pic",groups:[...F.pic],word:"PIC"}:F.dept.length?{key:"dept",groups:DLIST.filter(d=>F.dept.includes(d)),word:"Department"}:{key:"dept",groups:DLIST,word:"Department"}}
 function filterTags(){return FKEYS.flatMap(k=>S.F[k]).map(v=>`<span class="tag">${v}</span>`)}
 
 // ----- multi-select filter dropdowns (checkbox list; long lists get a search box) -----
-const FPH={model:"Model",dept:"Department",trial:"Trial Stage",pic:"PIC Name",pname:"Part Name",pcode:"Part Code",vcode:"Vendor Code",vname:"Vendor Name",fuel:"Fuel Type",variant:"Variant",category:"Category",monitoring:"Monitoring",...(PF.labels||{})};
+const FPH={model:"Model",dept:"Department",trial:"Trial Status",ptime:"Part Timestamp",pic:"PIC",fuel:"Fuel Type",variant:"Model Variant",category:"Part Category",monitoring:"Monitoring",...Object.fromEntries(FMORE.flatMap(g=>g[1])),...(PF.labels||{})};
 const FUI={open:null,q:""};
 const esc=v=>String(v).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
 function filterOptions(){const F={dept:[],model:[],pname:[],vname:[],vcode:[],...S.F},uniq=a=>[...new Set(a)].sort((x,y)=>String(x).localeCompare(String(y),undefined,{numeric:true})),inD=p=>!F.dept.length||F.dept.includes(p.dept),inM=p=>!F.model.length||F.model.includes(p.model);
-  return{model:MODELS,dept:DLIST,trial:TRIALS,pic:(F.dept.length?DLIST.filter(d=>F.dept.includes(d)):DLIST).flatMap(d=>DEPTS[d]),pname:uniq(PARTS.filter(inD).map(p=>p.name)),
+  return{...Object.fromEntries(FMK.map(k=>[k,[]])),category:PCATS,ptime:PTIMES,variant:["Domestic","Export","Domestic + Export"],fuel:["Petrol","CNG","Petrol + CNG"],model:MODELS,dept:DLIST,trial:TRIALS,pic:(F.dept.length?DLIST.filter(d=>F.dept.includes(d)):DLIST).flatMap(d=>DEPTS[d]),pname:uniq(PARTS.filter(inD).map(p=>p.name)),
     pcode:uniq(PARTS.filter(p=>inM(p)&&inD(p)&&(!F.pname.length||F.pname.includes(p.name))).map(p=>p.no)),
     vcode:VENDORS.filter(v=>!(F.vname||[]).length||F.vname.includes(v[1])).map(v=>v[0]),vname:VENDORS.filter(v=>!(F.vcode||[]).length||F.vcode.includes(v[0])).map(v=>v[1]),
     ...(typeof PAGECFG!=="undefined"&&PAGECFG.filterOptions?PAGECFG.filterOptions(F):{})}}
-function renderFilters(){const F=S.F,O=filterOptions();
+function renderFilters(){fmBuild();const F=S.F,O=filterOptions();
   FKEYS.forEach(k=>{let el=$("f-"+k);if(el.tagName==="SELECT"){const d=document.createElement("div");d.className="msel";d.id="f-"+k;el.replaceWith(d);el=d}
     const sel=F[k],label=!sel.length?FPH[k]:sel.length===1?sel[0]:`${sel[0]} +${sel.length-1}`,open=FUI.open===k,q=open?FUI.q.toLowerCase():"";
     const opts=O[k].filter(v=>!q||String(v).toLowerCase().includes(q)),long=O[k].length>12;
@@ -1321,24 +1669,49 @@ function renderFilters(){const F=S.F,O=filterOptions();
         (FINERT.has(k)?`<div class="msel-list"><p class="msel-none">To be Defined by MSIL</p></div></div>`:
         (FSINGLE.has(k)?"":`<div class="msel-acts"><button type="button" data-all="1">Select all${q?" shown":""}</button><button type="button" data-none="1"${sel.length?"":" disabled"}>Clear</button></div>`)+
         `<div class="msel-list">${opts.map((v,i)=>`<label><input type="${FSINGLE.has(k)?"radio":"checkbox"}" name="fr-${k}" data-i="${O[k].indexOf(v)}"${sel.includes(v)?" checked":""}><span>${esc(v)}</span></label>`).join("")||'<p class="msel-none">No matches</p>'}</div></div>`):"")});
-  $("clear").hidden=!anyFilter();
+  $("clear").hidden=!anyFilter();if(!FM.open)fmCount();
 }
+// ----- "Apply more filters": link under the filter bar + bottom drawer holding the additional filters (same multi-select dropdowns) -----
+// Changes inside the drawer are a draft until Apply; Cancel / Close / Esc restore what was applied before.
+const FM={open:false,snap:null};
+function fmBuild(){if($("fm-sheet")||!FMK.length)return;const bar=document.querySelector(".fbar");if(!bar)return;
+  const ln=document.createElement("div");ln.className="fmore";
+  ln.innerHTML=`<button type="button" class="fmore-link" id="fm-open" aria-haspopup="dialog" aria-controls="fm-sheet">Apply more filters</button><span class="fmore-n" id="fm-n" aria-live="polite"></span>`;bar.after(ln);
+  const sc=document.createElement("div");sc.className="fm-scrim";sc.id="fm-scrim";sc.hidden=true;
+  const sh=document.createElement("section");sh.className="fm-sheet";sh.id="fm-sheet";sh.hidden=true;sh.setAttribute("role","dialog");sh.setAttribute("aria-modal","true");sh.setAttribute("aria-labelledby","fm-h");
+  const groups=FMORE.map(([g,L])=>{const ks=L.filter(([k])=>FMK.includes(k));const id="fmg-"+g.replace(/\W+/g,"").toLowerCase();return ks.length?`<div class="fm-g" role="group" aria-labelledby="${id}"><h3 class="fm-gh" id="${id}">${g}</h3><div class="fm-grid">${ks.map(([k])=>`<div class="msel" id="f-${k}"></div>`).join("")}</div></div>`:""}).join("");
+  sh.innerHTML=`<div class="fm-head"><div><h2 id="fm-h">More Filters</h2><p>Narrow the dashboard beyond the top-level filters. Fields showing “To be Defined by MSIL” are placeholders for now.</p></div><button type="button" class="dr-x fm-x" id="fm-x" aria-label="Close">${ic("close")}</button></div>`+
+    `<div class="fm-body" id="fm-body">${groups}</div>`+
+    `<div class="fm-foot"><button type="button" class="fm-clear" id="fm-clear">Clear additional filters</button><span class="fm-sp"></span><button type="button" class="fm-btn sec" id="fm-cancel">Cancel</button><button type="button" class="fm-btn pri" id="fm-apply">Apply</button></div>`;
+  document.body.append(sc,sh);
+  $("fm-open").onclick=fmOpen;$("fm-x").onclick=$("fm-cancel").onclick=sc.onclick=()=>fmClose(false);$("fm-apply").onclick=()=>fmClose(true);
+  // the drawer is short, so bring an opened dropdown fully into view inside its scrolling area
+  $("fm-body").addEventListener("click",e=>{if(e.target.closest(".msel-btn"))requestAnimationFrame(()=>{const p=$("fm-body").querySelector(".msel.open .msel-pop");if(p)p.scrollIntoView({block:"nearest"})})});
+  $("fm-clear").onclick=()=>{FMK.forEach(k=>{S.F[k]=[]});FUI.open=null;pruneFilters();renderFilters()}}
+function fmCount(){const n=FMK.filter(k=>S.F[k]&&S.F[k].length).length,el=$("fm-n");if(!el)return;
+  el.textContent=n?`· ${n} additional filter${n>1?"s":""} applied`:"";$("fm-open").classList.toggle("on",n>0)}
+function fmOpen(){FM.snap=Object.fromEntries(FMK.map(k=>[k,[...S.F[k]]]));FM.open=true;FUI.open=null;FUI.q="";renderFilters();
+  $("fm-scrim").hidden=$("fm-sheet").hidden=false;document.body.classList.add("fm-on");requestAnimationFrame(()=>$("fm-x").focus())}
+function fmClose(apply){if(!FM.open)return;if(!apply)FMK.forEach(k=>{S.F[k]=FM.snap[k]});FM.open=false;FUI.open=null;FUI.q="";
+  $("fm-scrim").hidden=$("fm-sheet").hidden=true;document.body.classList.remove("fm-on");apply?filterChanged():renderFilters();$("fm-open").focus()}
+// a filter change applies straight away in the top bar, but is only a draft while the drawer is open
+function fchg(){if(FM.open){pruneFilters();renderFilters()}else filterChanged()}
 // keep dependent filters consistent after a change (drop selections that are no longer in the narrowed lists)
 function pruneFilters(){const O=filterOptions();["pic","pname","pcode","vcode","vname"].forEach(k=>{if(S.F[k])S.F[k]=S.F[k].filter(v=>O[k].includes(v))});
   // single-choice filters always keep one valid value (e.g. a variant the selected model offers)
   FSINGLE.forEach(k=>{if(!S.F[k].length||!O[k].includes(S.F[k][0]))S.F[k]=O[k].length?[O[k].includes((FDEF[k]||[])[0])?FDEF[k][0]:O[k][0]]:[]})}
 function filterChanged(){if(S.gsel&&!S.gsel.canvas.includes("left"))S.gsel=null;pruneFilters();S.t.page=0;render()}
-function bindFilters(){const bar=document.querySelector(".fbar");
+function bindFilters(){fmBuild();[document.querySelector(".fbar"),$("fm-body")].filter(Boolean).forEach(bar=>{
   bar.addEventListener("click",e=>{const w=e.target.closest(".msel");if(!w)return;const k=w.id.slice(2);
     if(e.target.closest(".msel-btn")){FUI.open=FUI.open===k?null:k;FUI.q="";renderFilters();const q=$("f-"+k).querySelector(".msel-q");if(q)q.focus();return}
-    if(e.target.closest("[data-all]")){const q=FUI.q.toLowerCase(),O=filterOptions()[k].filter(v=>!q||String(v).toLowerCase().includes(q));S.F[k]=[...new Set([...S.F[k],...O])];filterChanged();return}
-    if(e.target.closest("[data-none]")){S.F[k]=[];filterChanged()}});
+    if(e.target.closest("[data-all]")){const q=FUI.q.toLowerCase(),O=filterOptions()[k].filter(v=>!q||String(v).toLowerCase().includes(q));S.F[k]=[...new Set([...S.F[k],...O])];fchg();return}
+    if(e.target.closest("[data-none]")){S.F[k]=[];fchg()}});
   bar.addEventListener("change",e=>{const c=e.target.closest(".msel-list input");if(!c)return;const k=c.closest(".msel").id.slice(2),val=filterOptions()[k][+c.dataset.i];
-    if(FSINGLE.has(k)){S.F[k]=[val];FUI.open=null;filterChanged();return}
-    S.F[k]=c.checked?[...S.F[k],val]:S.F[k].filter(x=>x!==val);filterChanged()});
-  bar.addEventListener("input",e=>{const q=e.target.closest(".msel-q");if(!q)return;FUI.q=q.value;const pos=q.selectionStart;renderFilters();const n=$("f-"+FUI.open).querySelector(".msel-q");if(n){n.focus();n.setSelectionRange(pos,pos)}});
+    if(FSINGLE.has(k)){S.F[k]=[val];FUI.open=null;fchg();return}
+    S.F[k]=c.checked?[...S.F[k],val]:S.F[k].filter(x=>x!==val);fchg()});
+  bar.addEventListener("input",e=>{const q=e.target.closest(".msel-q");if(!q)return;FUI.q=q.value;const pos=q.selectionStart;renderFilters();const n=$("f-"+FUI.open).querySelector(".msel-q");if(n){n.focus();n.setSelectionRange(pos,pos)}});});
   document.addEventListener("click",e=>{if(FUI.open&&!e.composedPath().some(n=>n.classList&&n.classList.contains("msel"))){FUI.open=null;FUI.q="";renderFilters()}});
-  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&FUI.open){FUI.open=null;FUI.q="";renderFilters()}});
+  document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(FUI.open){FUI.open=null;FUI.q="";renderFilters()}else if(FM.open)fmClose(false)});
   $("clear").onclick=()=>{S.F=fdefaults();S.metric=null;S.cat=PAGECFG.defaultTab;S.t.page=0;render()};
 }
 
@@ -1348,8 +1721,16 @@ function renderTiles(){
   const rows=scoped(),cfg=PAGECFG;
   $("tabs").innerHTML=cfg.tabs.map(c=>`<button class="tab${S.cat===c.k?" on":""}" role="tab" aria-selected="${S.cat===c.k}" data-cat="${c.k}">${c.icon}${c.label}</button>`).join("");
   const tiles=cfg.tiles(S.cat),vals=cfg.tileValues(rows,S.cat);
-  $("tiles").style.setProperty("--cols",cfg.tileCols||tiles.length);
-  $("tiles").innerHTML=tiles.map(t=>{const v=vals[t.m],base=vals[t.of];const p=t.of?(base?Math.round(v/base*100):0)+"%":"";
+  // Overall Status (3 Nov): activity-level status shown at the top right of the tiles section (all tabs). ACT_OVERALL is worked out at
+  // build time from the shared activity data; activities without one show an empty dot and say so on hover (no status is made up).
+  const ovT=UIV2&&typeof ACT_OVERALL!=="undefined"&&PAGE_PHASE!=="sum"&&S.cat===cfg.tabs[0].k;
+  if(!UIV2&&typeof ACT_OVERALL!=="undefined"&&PAGE_PHASE!=="sum"){let bd=$("ovs-badge");if(!bd){bd=document.createElement("div");bd.id="ovs-badge";bd.className="ovs-badge";$("tabs").before(bd);$("tabs").parentNode.classList.add("has-ovs")}
+    bd.innerHTML=`<span>Overall Status</span>${ACT_OVERALL?dot3(ACT_OVERALL.status,"md",ACT_OVERALL.why):`<span class="dot3 none md" role="img" aria-label="Not available yet" title="Overall status is not available yet for this activity"></span>`}`}
+  // preview (UIV2): Overall Status as its own grey tile, first in the row under the first tab
+  const used=tiles.reduce((a,t)=>a+(t.subs?(t.span||t.subs.length):1),0),cb=cfg.tileCols||tiles.length;
+  $("tiles").style.setProperty("--cols",ovT&&used===cb?cb+1:cb);
+  const ovTile=!ovT?"":`<div class="tile tstatus" role="img" aria-label="Overall Status: ${ACT_OVERALL?ACT_OVERALL.status:"not available yet"}">${ACT_OVERALL?dot3(ACT_OVERALL.status,"lg",ACT_OVERALL.why):`<span class="dot3 none lg" title="Overall status is not available yet for this activity"></span>`}<span>Overall Status</span></div>`;
+  $("tiles").innerHTML=ovTile+tiles.map(t=>{const v=vals[t.m],base=vals[t.of];const p=t.of?(base?Math.round(v/base*100):0)+"%":"";
     const badge="";
     // parent tile with sub-tiles (e.g. Audit Done → Green / Yellow / Red): one card, each part selectable
     if(t.subs)return `<div class="tile tgroup ${t.c}${S.metric===t.m?" on":""}" data-m="${t.m}" style="grid-column:span ${t.span||t.subs.length}"><div class="tg-main" role="button" tabindex="0" aria-pressed="${S.metric===t.m}"><b>${v}</b><span>${t.l}</span></div>`+
@@ -1361,8 +1742,12 @@ function renderTiles(){
 }
 function bindTiles(){
   $("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b){if(S.cat!==b.dataset.cat)clearGraphSel("R");if(PAGECFG.clearMetricOnTab&&S.cat!==b.dataset.cat)S.metric=null;S.cat=b.dataset.cat;render()}});
-  $("tiles").addEventListener("click",e=>{const b=e.target.closest(".tile");if(b){if(S.gsel&&S.gsel.canvas==="c-right")S.gsel=null;S.metric=S.metric===b.dataset.m?null:b.dataset.m;S.t.page=0;render()}});
+  $("tiles").addEventListener("click",e=>{const b=e.target.closest(".tile:not(.tstatus)");if(b){if(S.gsel&&S.gsel.canvas==="c-right")S.gsel=null;S.metric=S.metric===b.dataset.m?null:b.dataset.m;S.t.page=0;render()}});
 }
+
+// Status dot (3 Nov): On Track = green, At Risk = yellow, Delayed = red; empty = no status available. Text only in the tooltip.
+const OV3C={"On Track":"ok","At Risk":"tbc","Delayed":"bad"};
+const dot3=(st,sz,why)=>`<span class="dot3 ${OV3C[st]||"none"}${sz?" "+sz:""}" role="img" aria-label="${st||"Not available"}" title="${st||"Not available"}${why?" · "+why:""}"></span>`;
 
 // ===== Charts =====
 Chart.defaults.font.family='"Inter",ui-sans-serif,system-ui,sans-serif';
@@ -1403,7 +1788,16 @@ function seriesPred(ch,d,key,idx){if(!d||d.type==="line")return null;if(d.fIdx&&
       if(G){const pr=G.map(per);if(vals.some(Boolean)&&(pr.every((x,i)=>x[0]===vals[i])||pr.every((x,i)=>x[1]===vals[i])))return{desc:cd.desc,f:cd.f||(cd.fld?(p=>p[cd.fld]===d.label):(p=>cd.v(p)>0))}}
       else if(cd.desc.toLowerCase().includes(String(labs[idx]).toLowerCase())||String(labs[idx]).toLowerCase().includes(cd.desc.toLowerCase())){const[cn,sm]=per(base);if(cn===vals[idx]||sm===vals[idx])return{desc:cd.desc,f:cd.f||(p=>cd.v(p)>0)}}}}
   return null}
-function graphPick(e,ch){if(ch.config.type!=="bar")return;const el=ch.getElementsAtEventForMode(e,"nearest",{intersect:true},true)[0];if(!el)return;
+// Line graph markers (3 Nov): a dataset with pick(i) → {f} maps its point i to the parts behind it; clicking selects them (click again to clear)
+function linePick(e,ch){const el=ch.getElementsAtEventForMode(e,"nearest",{intersect:true},true)[0];if(!el)return;const d=ch.data.datasets[el.datasetIndex];if(!d||!d.pick)return;
+  const id=ch.canvas.id+"|"+el.datasetIndex+"|"+el.index;if(S.gsel&&S.gsel.id===id)S.gsel=null;else{const sp=d.pick(el.index);if(!sp)return;
+    S.gsel={id,canvas:ch.canvas.id,di:el.datasetIndex,ix:el.index,line:true,desc:`${[].concat(ch.data.labels[el.index]).join(" ")} · ${d.label}`,note:"",preds:[sp.f]};
+    const P=new Set(tableRows().map(r=>r.id)).size;S.gsel.note=`table lists the ${P} parts behind this point`}
+  S.t.page=0;renderTable();Object.values(CH).forEach(c=>c&&c.draw());PAGECFG.afterPick&&PAGECFG.afterPick()}
+Chart.register({id:"linesel",afterDatasetsDraw(ch){const g=S.gsel;if(!g||!g.line||g.canvas!==ch.canvas.id)return;const el=ch.getDatasetMeta(g.di).data[g.ix];if(!el)return;
+  const c=ch.ctx,col=ch.data.datasets[g.di].borderColor;c.save();c.strokeStyle=typeof col==="string"?col:"#1447E6";c.lineWidth=2;c.fillStyle="rgba(20,71,230,.14)";c.beginPath();c.arc(el.x,el.y,11,0,Math.PI*2);c.fill();c.stroke();c.restore()},
+  afterEvent(ch,a){if(a.event.type!=="mousemove"||ch.config.type!=="line"&&!ch.data.datasets.some(d=>d.pick))return;const on=ch.getElementsAtEventForMode(a.event.native,"nearest",{intersect:true},true).some(el=>ch.data.datasets[el.datasetIndex].pick);ch.canvas.style.cursor=on?"pointer":""}});
+function graphPick(e,ch){if(ch.data.datasets.some(d=>d.pick))return linePick(e,ch);if(ch.config.type!=="bar")return;const el=ch.getElementsAtEventForMode(e,"nearest",{intersect:true},true)[0];if(!el)return;
   const d=ch.data.datasets[el.datasetIndex];if(!d||d.type==="line"||Array.isArray(d.data[el.index]))return;
   const labs=ch.data.labels,lab=labs[el.index],isT=lab==="Total"&&el.index===labs.length-1,key=pickKey(ch),id=ch.canvas.id+"|"+el.datasetIndex+"|"+el.index;
   if(S.gsel&&S.gsel.id===id){S.gsel=null}else{
@@ -1430,6 +1824,32 @@ const TOPR={topLeft:5,topRight:5,bottomLeft:0,bottomRight:0};
 const topOnly=c=>{const D=c.chart.data.datasets,j=c.dataIndex,sk=D[c.datasetIndex].stack;for(let k=c.datasetIndex+1;k<D.length;k++){if(D[k].stack===sk&&c.chart.isDatasetVisible(k)&&D[k].data[j]>0)return 0}return TOPR};
 const ds=(label,data,k,more={})=>Object.assign({label,data,backgroundColor:css(`--${k}-bar`),borderColor:css(`--${k}-bar-bd`),borderWidth:1,borderRadius:TOPR,borderSkipped:"bottom",maxBarThickness:32,categoryPercentage:.55,barPercentage:.88},more);
 const legendHtml=items=>items.map(([l,k,plan])=>`<span><i class="${plan?"plan":""}" style="background:var(--${k}-bar);border-color:var(--${k}-bar-bd)"></i>${l}</span>`).join("");
+// the callout: one floating rounded box with a pointer at the bottom, placed above the hovered / focused marker
+function tlxPop(m){let p=$("tlx-pop");if(!p){p=document.createElement("div");p.id="tlx-pop";p.className="tlx-pop";p.setAttribute("role","tooltip");p.innerHTML='<i aria-hidden="true">!</i>Timeline Crossed';document.body.appendChild(p)}
+  if(!m){p.classList.remove("on");return}const r=m.getBoundingClientRect();p.classList.add("on");p.style.left=(r.left+r.width/2)+"px";p.style.top=(r.top-10)+"px"}
+document.addEventListener("mouseover",e=>{const m=e.target.closest&&e.target.closest(".tlx-m,.tlx-b");if(m)tlxPop(m)});
+document.addEventListener("mouseout",e=>{if(e.target.closest&&e.target.closest(".tlx-m,.tlx-b"))tlxPop(null)});
+document.addEventListener("focusin",e=>{if(e.target.closest&&e.target.closest(".tlx-m,.tlx-b"))tlxPop(e.target.closest(".tlx-m,.tlx-b"))});
+document.addEventListener("focusout",e=>{if(e.target.closest&&e.target.closest(".tlx-m,.tlx-b"))tlxPop(null)});
+addEventListener("scroll",()=>tlxPop(null),true);
+// ===== Timeline Crossed alerts (3 Nov) on the left model-wise graph of pages that set TL_ALERT =====
+// A model is flagged when its MRD for this page's phase (PP / MPP / Pilot-SOP) is before today and any unresolved series (TL_ALERT.neg)
+// is non-zero for it. tlCrossed() is the single rule to replace with real timeline data later; graph values are not touched.
+const tlCrossed=(model,row)=>model in MODEL_MRD_DAYS&&MODEL_MRD_DAYS[model]+(PHASE_OFF[PAGE_PHASE]||0)<0&&row.some(v=>v>0);
+const tlxIdx=ch=>{if(typeof TL_ALERT==="undefined"||!TL_ALERT||ch.canvas.id!=="c-left")return[];const neg=ch.data.datasets.map((d,i)=>TL_ALERT.neg.includes(d.label)&&ch.isDatasetVisible(i)?i:-1).filter(i=>i>=0);
+  return neg.length?ch.data.labels.map((m,i)=>typeof m==="string"&&tlCrossed(m,neg.map(j=>+ch.data.datasets[j].data[i]||0))?i:-1).filter(i=>i>=0):[]};
+Chart.register({id:"tlx2",beforeInit(ch){if(UIV2&&typeof TL_ALERT!=="undefined"&&TL_ALERT&&ch.canvas.id==="c-left"){const p=ch.options.layout.padding;ch.options.layout.padding=typeof p==="object"?{...p,top:(p.top||0)+38}:{top:(p||0)+38,left:p||0,right:p||0,bottom:p||0}}},
+  beforeDatasetsDraw(ch){if(!UIV2)return;const I=tlxIdx(ch);if(!I.length)return;const x=ch.scales.x,a=ch.chartArea,w=(a.right-a.left)/ch.data.labels.length-8,c=ch.ctx;c.save();c.fillStyle="rgba(240,68,56,.07)";
+    I.forEach(i=>{const cx=x.getPixelForValue(i),r=8,l=cx-w/2,t=a.top-38,h=a.bottom-t;c.beginPath();c.roundRect?c.roundRect(l,t,w,h,r):c.rect(l,t,w,h);c.fill()});c.restore()}});
+Chart.register({id:"tlx",afterDraw(ch){
+  if(typeof TL_ALERT==="undefined"||!TL_ALERT||ch.canvas.id!=="c-left")return;
+  const box=ch.canvas.parentNode;let L=box.querySelector(":scope > .tlx");if(!L){L=document.createElement("div");L.className="tlx";box.appendChild(L)}
+  const neg=ch.data.datasets.map((d,i)=>TL_ALERT.neg.includes(d.label)&&ch.isDatasetVisible(i)?i:-1).filter(i=>i>=0),x=ch.scales.x,out=[];
+  if(neg.length&&x)ch.data.labels.forEach((m,i)=>{if(typeof m!=="string"||!tlCrossed(m,neg.map(j=>+ch.data.datasets[j].data[i]||0)))return;
+    const cx=x.getPixelForValue(i),top=Math.min(...ch.data.datasets.map((d,j)=>{const e=ch.getDatasetMeta(j).data[i];return e&&ch.isDatasetVisible(j)?e.getProps(["y"],true).y:ch.chartArea.bottom}));
+    out.push(UIV2?(bw=>`<span class="tlx-b${bw<98?" two":""}" role="status" style="left:${Math.round(cx)}px;top:${Math.round(ch.chartArea.top-(bw<98?35:28))}px;width:${bw}px" aria-label="${m}: Timeline Crossed" title="${m}: Timeline Crossed">${bw>=124?'<i aria-hidden="true">!</i>':""}<b>Timeline Crossed</b></span>`)(Math.round((ch.chartArea.right-ch.chartArea.left)/ch.data.labels.length-4))
+      :`<button type="button" class="tlx-m" style="left:${Math.round(cx)}px;top:${Math.round(Math.max(0,top-44))}px" aria-label="${m}: Timeline Crossed" aria-describedby="tlx-pop"></button>`)});
+  const h=out.join("");if(L.dataset.h!==h){L.innerHTML=h;L.dataset.h=h}}});
 function drawChart(slot,cfg){if(CH[slot])CH[slot].destroy();
   // Every column chart ends with a "Total" group: each series summed over the groups shown (a series may give its own exact total, e.g. a percentage)
   const tot=(cfg.type||"bar")==="bar"&&!cfg.noTotal&&cfg.data.labels.length&&!cfg.data.labels.includes("Total");
@@ -1440,14 +1860,14 @@ function drawChart(slot,cfg){if(CH[slot])CH[slot].destroy();
   // Any stack with more than 2 segments is drawn as clustered columns instead (each segment gets its own column); stacks of 1–2 stay stacked
   if(cfg.stacked&&cfg.type!=="line"&&!cfg.keepStack){const by={};cfg.data.datasets.forEach(d=>(by[d.stack||"_"]=by[d.stack||"_"]||[]).push(d));
     let conv=false;Object.values(by).forEach(a=>{if(a.length>2){conv=true;a.forEach((d,i)=>d.stack=(d.stack||"_")+"#"+i)}});
-    if(conv){cfg.data.datasets.forEach(d=>d.maxBarThickness=20);const ns=new Set(cfg.data.datasets.map(d=>d.stack||"_")).size;cfg.minPer=Math.max(cfg.minPer||0,ns*26+56)}}
+}
   // axis break: when the Total group is far taller than every other group, it is drawn shortened with a break mark and keeps its true labels
   if(tot){const B=cfg.data.datasets.filter(d=>d.type!=="line"),key=(d,i)=>cfg.stacked?(d.stack||"_"):i,sums=j=>{const m={};B.forEach((d,i)=>{const k=key(d,i);m[k]=(m[k]||0)+(+d.data[j]||0)});return Object.values(m)};
     const maxO=Math.max(0,...cfg.data.labels.slice(0,TI).flatMap((_,j)=>sums(j))),maxT=Math.max(0,...sums(TI));
     if(maxO>0&&maxT>2*maxO){const k=1.25*maxO/maxT;B.forEach(d=>{d._realT=d.data[TI];d.data[TI]=(+d.data[TI]||0)*k})}}
   const cv=$(CV[slot]),inner=cv.parentElement,box=inner.parentElement,n=cfg.data.labels.length;
   const BD=cfg.data.datasets.filter(d=>d.type!=="line"),bars=cfg.stacked?new Set(BD.map(d=>d.stack||"_")).size||1:Math.max(1,BD.filter(d=>d.grouped!==false).length+(BD.some(d=>d.grouped===false)?1:0));
-  const need=n*Math.max(cfg.minPer||0,bars>1?bars*19+40:56)+60;inner.style.width=need>box.clientWidth?need+"px":"100%";box.parentElement.classList.toggle("scrolls",need>box.clientWidth);if(cfg.stacked)cfg.data.datasets.forEach(d=>{d.borderRadius=topOnly;d.borderSkipped=false});const opts=cfg.options||chartOpts(cfg);
+  const need=(cfg.type||"bar")==="bar"?Math.ceil(n*stdGroupW(bars,cfg.minPer)+70):0;inner.style.width=need>box.clientWidth?need+"px":"100%";box.parentElement.classList.toggle("scrolls",need>box.clientWidth);if(cfg.stacked)cfg.data.datasets.forEach(d=>{d.borderRadius=topOnly;d.borderSkipped=false});const opts=cfg.options||chartOpts(cfg);
   if(tot){if(opts.scales&&opts.scales.x){opts.scales.x.ticks=opts.scales.x.ticks||{};opts.scales.x.ticks.font=c=>({weight:c.index===TI?"700":"400"})}
     // the Total group gets no page-specific footer and shows its true (unshortened) values
     const cb=opts.plugins.tooltip.callbacks=opts.plugins.tooltip.callbacks||{};if(!cb.label)cb.label=c=>` ${c.dataset.label}: ${c.formattedValue}${c.dataset.suffix||""}`;Object.keys(cb).forEach(k=>{const f=cb[k];cb[k]=function(x){const arr=Array.isArray(x)?x:[x];if(!arr[0])return f.call(this,x);
@@ -1455,7 +1875,7 @@ function drawChart(slot,cfg){if(CH[slot])CH[slot].destroy();
       return f.call(this,x)}})}
 
   // clustered columns: fixed 6px gap between columns of one label, the rest of the label's width becomes the gap between labels
-  if((cfg.type||"bar")==="bar"&&bars>1&&!BD.some(d=>d.grouped===false))opts.plugins.cfit={ns:bars,bar:Math.max(...BD.map(d=>d.maxBarThickness||32))};
+  if((cfg.type||"bar")==="bar")opts.plugins.colstd={on:true,minPer:cfg.minPer||0};
   CH[slot]=new Chart(cv,{type:cfg.type||"bar",data:cfg.data,options:opts,plugins:cfg.plugins||[labelPlugin]});syncPlots()}
 // Total group look (last group): light grey band and a dashed divider before it
 const isTot=ch=>ch.data.labels.length>1&&ch.data.labels[ch.data.labels.length-1]==="Total";
@@ -1467,10 +1887,30 @@ Chart.register({id:"kink",afterDatasetsDraw(ch){if(!isTot(ch))return;const D=ch.
     const zz=yy=>{c.beginPath();c.moveTo(x0,yy);for(let i=0;i<n;i++){c.lineTo(x0+w*(i+.5),yy-3);c.lineTo(x0+w*(i+1),yy)}c.stroke()};
     c.strokeStyle="#fff";c.lineWidth=6;zz(y+3);c.strokeStyle="#9AA2B1";c.lineWidth=1;zz(y);zz(y+6)});c.restore()}});
 const CGAP=6;
-Chart.register({id:"cfit",afterLayout(ch,_,o){if(!o||!o.ns)return;const x=ch.scales.x,W=(x.right-x.left)/ch.data.labels.length;
-  const bar=Math.max(8,Math.min(o.bar,(W-Math.max(36,W*.28)-o.ns*CGAP)/o.ns)),slot=bar+CGAP,c=Math.min(1,o.ns*slot/W),b=bar/slot;
-  const D=ch.data.datasets.filter(d=>d.type!=="line");if(D.every(d=>Math.abs((d.categoryPercentage||0)-c)<1e-4&&Math.abs((d.barPercentage||0)-b)<1e-4))return;
-  D.forEach(d=>{d.categoryPercentage=c;d.barPercentage=b;d.maxBarThickness=bar+.01});if(!ch.$cfq){ch.$cfq=1;requestAnimationFrame(()=>{ch.$cfq=0;if(ch.canvas)ch.update("none")})}}});
+// ===== Column sizing standard (3 Nov) — every column chart on every dashboard =====
+// Sizes depend only on how many columns a group has (a stack counts as one column; grouped:false overlays count as one):
+//   1 column : 28px column,            32px between groups
+//   2 columns: 22px columns, 5px apart, 36px between groups
+//   3 columns: 18px columns, 5px apart, 45px between groups
+//   4+       : 16px columns, 5px apart, 50px between groups
+// Columns never shrink: when the groups need more room than the pane has, the chart scrolls sideways. When the pane has spare
+// room the chart still spans the full width; only the gap between groups grows. Page-level column widths (maxBarThickness etc.) are overridden here.
+// A page may still pass minPer (minimum group width) where long category labels need room; that only widens the gap between groups.
+const COLSTD={1:{col:28,gi:0,go:32},2:{col:22,gi:5,go:36},3:{col:18,gi:5,go:45},4:{col:16,gi:5,go:50}};
+const stdGroupW=(bars,minPer)=>{const s=COLSTD[Math.min(Math.max(bars,1),4)];return Math.max(minPer||0,bars*(s.col+s.gi)-s.gi+s.go)};
+Chart.register({id:"colstd",afterLayout(ch,_,o){if(!o||!o.on)return;const x=ch.scales.x,n=ch.data.labels.length,D=ch.data.datasets.filter(d=>d.type!=="line");if(!x||!n||!D.length)return;
+  const st=!!(ch.options.scales&&ch.options.scales.x&&ch.options.scales.x.stacked),ov=D.filter(d=>d.grouped===false),gr=D.filter(d=>d.grouped!==false);
+  const bars=st?new Set(D.map(d=>d.stack||"_")).size:Math.max(1,gr.length+(ov.length?1:0)),s=COLSTD[Math.min(bars,4)],chunk=s.col+s.gi,Wc=stdGroupW(bars,o.minPer);
+  const plotW=x.right-x.left,inner=ch.canvas.parentElement,box=inner.parentElement,want=Math.ceil(n*Wc+(ch.width-plotW)),fits=want<=box.clientWidth+1,ws=fits?"100%":want+"px";
+  if(inner.style.width!==ws){inner.style.width=ws;box.parentElement.classList.toggle("scrolls",!fits);if(!ch.$csq){ch.$csq=1;requestAnimationFrame(()=>{ch.$csq=0;if(ch.canvas)ch.resize()})}return}
+  const W=plotW/n;let chg=false;const set=(d,cp,bp)=>{cp=Math.min(1,cp);if(Math.abs((d.categoryPercentage||0)-cp)>1e-4||Math.abs((d.barPercentage||0)-bp)>1e-4||d.maxBarThickness!=null||d.barThickness!=null){d.categoryPercentage=cp;d.barPercentage=bp;delete d.maxBarThickness;delete d.barThickness;chg=true}};
+  // overlays (e.g. Planned behind Actual): the widest is one standard column, the others keep their width relative to it
+  ov.forEach(d=>{if(d.$w0==null)d.$w0=d.maxBarThickness||d.barThickness||(d.categoryPercentage||.8)*(d.barPercentage||.9)*100});const mx=Math.max(1,...ov.map(d=>d.$w0));
+  ov.forEach(d=>set(d,s.col*(d.$w0/mx)/W,1));gr.forEach(d=>set(d,bars*chunk/W,s.col/chunk));if(st)ov.length||D.forEach(d=>set(d,bars*chunk/W,s.col/chunk));
+  if(chg&&!ch.$cfq){ch.$cfq=1;requestAnimationFrame(()=>{ch.$cfq=0;if(ch.canvas)ch.update("none")})}},
+  // keep the decision right when the pane changes size (e.g. a hidden tab is shown, or the window is resized)
+  afterInit(ch,_,o){if(!o||!o.on||typeof ResizeObserver==="undefined")return;const box=ch.canvas.parentElement.parentElement;let w=box.clientWidth;ch.$cro=new ResizeObserver(()=>{if(Math.abs(box.clientWidth-w)>1&&ch.canvas){w=box.clientWidth;ch.resize()}});ch.$cro.observe(box)},
+  afterDestroy(ch){if(ch.$cro)ch.$cro.disconnect()}});
 const CH={L:null,R:null};
 const CV={L:"c-left",R:"c-right",N:"c-ng",P:"c-pva"},CAP={L:"cap-left",R:"cap-right",N:"cap-ng",P:"cap-pva"};
 // ===== Export: chart as PNG or CSV, table as CSV (all filtered rows) =====
@@ -1491,6 +1931,21 @@ function doExport(k,fmt){const page=document.querySelector("h1").textContent.tri
     download(slug(page)+"-table.csv",new Blob([toCsv([cols.map(c=>(c[2]&&c[2].fl)||c[1]),...rows.map(p=>cols.map(([f])=>T.cell?T.cell(p,f):p[f]))])],{type:"text/csv"}));return}
   const cap=$(CAP[k]).textContent||page;
   if(fmt==="png")chartPng(k,cap);else download(slug(cap)+".csv",new Blob([chartCsv(k)],{type:"text/csv"}))}
+// ===== Export selection (3 Nov, visual only): each section's Export button becomes an "Export" checkbox at its top right; checking
+// sections opens a bottom bar listing them, with a format choice and an Export button. No files are produced in this prototype.
+const XSEL=new Map();let XFMT="xlsx";
+function xsetup(){document.querySelectorAll(".xbtn").forEach(b=>{if(b.dataset.xs)return;b.dataset.xs=1;const sec=b.closest("section,.card");const name=(sec&&sec.querySelector("h2")?sec.querySelector("h2").textContent.trim():"Section");
+    const id="x"+Math.random().toString(36).slice(2,7),l=document.createElement("label");l.className="xchk";l.innerHTML=`<input type="checkbox" data-xid="${id}"><span>Export</span>`;b.after(l);b.hidden=true;
+    l.querySelector("input").onchange=e=>{e.target.checked?XSEL.set(id,name):XSEL.delete(id);sec&&sec.classList.toggle("xon",e.target.checked);xbar()}});
+  if($("xbar"))return;const x=document.createElement("section");x.id="xbar";x.className="xbar";x.hidden=true;x.setAttribute("aria-label","Selected for export");document.body.appendChild(x);
+  x.addEventListener("click",e=>{const f=e.target.closest("[data-fmt]");if(f){XFMT=f.dataset.fmt;xbar();return}const r=e.target.closest("[data-xr]");if(r){const i=document.querySelector(`input[data-xid="${r.dataset.xr}"]`);if(i){i.checked=false;i.dispatchEvent(new Event("change"))}return}
+    if(e.target.closest("#xgo")){const n=$("xnote");n.textContent=`Prepared ${XSEL.size} section${XSEL.size>1?"s":""} as .${XFMT} (preview only, no file is created in this prototype).`}
+    if(e.target.closest("#xclr"))[...XSEL.keys()].forEach(k=>{const i=document.querySelector(`input[data-xid="${k}"]`);if(i){i.checked=false;i.dispatchEvent(new Event("change"))}})})}
+function xbar(){const x=$("xbar");x.hidden=!XSEL.size;document.body.classList.toggle("x-on",XSEL.size>0);if(!XSEL.size)return;
+  const fl=FKEYS.filter(k=>S.F[k]&&S.F[k].length).map(k=>`<b>${esc(FPH[k]||k)}:</b> ${esc(S.F[k].join(", "))}`);
+  x.innerHTML=`<div class="xb-l"><h2>Selected for Export</h2><p class="xscope"><b>Screen:</b> ${esc(($("pg-h1")||{}).textContent||document.title)}<span class="xsep">·</span>${fl.length?fl.join('<span class="xsep">·</span>'):"<b>Filters:</b> None applied (all data)"}</p><div class="xb-tags">${[...XSEL].map(([k,n])=>`<span class="xtag">${n}<button type="button" data-xr="${k}" aria-label="Remove ${n}">×</button></span>`).join("")}</div><p class="xnote" id="xnote" aria-live="polite"></p></div>`+
+    `<div class="xb-r"><div class="radios xfmt" role="radiogroup" aria-label="Export format">${["xlsx","csv","pdf"].map(f=>`<label><input type="radio" name="xfmt" data-fmt="${f}"${f===XFMT?" checked":""}>.${f}</label>`).join("")}</div>`+
+    `<button type="button" class="xgo" id="xgo">Export ${XSEL.size} section${XSEL.size>1?"s":""}</button></div>`}
 function bindExport(){
   document.querySelectorAll(".xbtn").forEach(b=>b.addEventListener("click",e=>{e.stopPropagation();const k=b.dataset.x,m=document.querySelector(`[data-xm="${k}"]`),open=m.hidden;
     document.querySelectorAll(".xmenu").forEach(x=>x.hidden=true);if(!open)return;const it=exportItems(k);
@@ -1509,8 +1964,9 @@ const CARET=ic('chevron-sort',16);
 // rows a table works on: top-level filters, then the table view's own row filter (e.g. NG parts only)
 // a table may expand parts into several rows (e.g. one row per part-deviation record)
 const baseRows=()=>{const T=TBL(),src=T.expand?T.expand(scoped()):scoped();return T.filter?src.filter(T.filter):src};
-const tval=(p,k)=>{const T=TBL(),v=T.cell?T.cell(p,k):p[k];return v==null||v===""?"—":v};
-function colMeta(rows){const T=TBL();return T.cols.map(([k,l,o={}])=>{
+// added Select Columns fields read their recorded value (or "Not recorded"), so they can be sorted and filtered like any column
+const tval=(p,k)=>{if(CS.extra.includes(k)&&!TBL().cols.some(c=>c[0]===k)){const v=CSF[k]?p[CSF[k]]:null;return v==null||v===""?"Not recorded":v}const T=TBL(),v=T.cell?T.cell(p,k):p[k];return v==null||v===""?"—":v};
+function colMeta(rows){const T=TBL();return csCols(T).map(([k,l,o={}])=>{
   if(o.filter===false)return{k,l,fl:o.fl||l,type:null,sort:o.sort!==false};
   let type=o.type;const vals=rows.map(p=>tval(p,k)),real=vals.filter(v=>v!=="—");
   if(!type)type=real.length&&real.every(v=>typeof v==="number")?"num":new Set(vals).size<=15?"cat":"text";
@@ -1543,13 +1999,48 @@ function fitTable(tb){const w=tb&&tb.closest(".tbl-wrap");if(!w||!w.clientWidth)
   const hr=tb.querySelector("thead tr:last-child"),span=tb.querySelector("thead [rowspan]");
   if(!fits||!hr||span){Object.assign(tb.style,{width:"",minWidth:""});return}
   const ths=[...hr.children],nat=ths.map(th=>th.getBoundingClientRect().width),r0=tb.querySelector("tbody tr"),
-    wt=ths.map((_,i)=>{const td=r0&&r0.children.length===ths.length?r0.children[i]:null;return td&&td.classList.contains("wrap")?2:1});
+    wt=ths.map((_,i)=>{const td=r0&&r0.children.length===ths.length?r0.children[i]:null;return td&&td.classList.contains("wrap")?2:td&&td.classList.contains("num")&&!td.querySelector(".pcell")?.6:1});
   // columns whose natural width exceeds their share keep it; the rest split what is left in proportion to their weight
   let fixed=new Set(),share=0;for(let k=0;k<ths.length;k++){const free=W-[...fixed].reduce((a,i)=>a+nat[i],0),wsum=wt.reduce((a,x,i)=>fixed.has(i)?a:a+x,0);share=free/wsum;
     const more=ths.map((_,i)=>i).filter(i=>!fixed.has(i)&&nat[i]>share*wt[i]);if(!more.length)break;more.forEach(i=>fixed.add(i))}
   const cg=document.createElement("colgroup");cg.className="fitcg";cg.innerHTML=ths.map((_,i)=>`<col style="width:${fixed.has(i)?Math.ceil(nat[i])+1:Math.floor(share*wt[i])}px">`).join("");tb.prepend(cg);
   Object.assign(tb.style,{tableLayout:"fixed",width:"100%",minWidth:"0"})}
 {let _ft=0;window.addEventListener("resize",()=>{if(!PAGECFG.fitTables)return;clearTimeout(_ft);_ft=setTimeout(()=>document.querySelectorAll(".tbl-wrap table").forEach(t=>{fitTable(t);const c1=t.querySelector("thead tr:last-child th");if(c1)t.style.setProperty("--c1",c1.getBoundingClientRect().width+"px")}),150)})}
+// ===== Select Columns (3 Nov) — By Parts table views only. Options = the table's own columns (checked; the two identifier columns locked)
+// plus the "Apply more filters" fields (FMORE), minus any the table already shows. A field with per-part sample data shows it;
+// the others show "Not recorded" (no values are made up). Selection is a draft until Apply and is kept when the drawer reopens.
+const CSF={pcode:"no",pname:"name",vcode:"vcode",vname:"vname"};const CS={hidden:new Set(),extra:[],open:false};
+const csParts=T=>!T.agg&&!T.expand;
+// the table's columns plus the added Select Columns fields (part-list views only); used for headers, sorting and column filters
+const csCols=T=>{if(!csParts(T)||!CS.extra.length)return T.cols;const have=new Set(T.cols.map(c=>c[0])),lab=Object.fromEntries(FMORE.flatMap(([,L])=>L));
+  return[...T.cols,...CS.extra.filter(k=>!have.has(k)&&!have.has(CSF[k]||"")).map(k=>[k,lab[k]])]};
+function csOpts(T){const base=T.cols.map(([k,l],i)=>({k,l,lock:i<2})),have=new Set(base.map(b=>b.k));
+  const extra=FMORE.map(([g,L])=>[g,L.filter(([k])=>!have.has(k)&&!have.has(CSF[k]||"")).map(([k,l])=>({k,l}))]).filter(([,L])=>L.length);return{base,extra}}
+function csApply(T){let b=$("t-csbtn");if(!b){const fb=$("t-fbtn");if(!fb)return;const w=document.createElement("div");w.className="fbtn cs";
+    w.innerHTML=`<button type="button" id="t-csbtn" aria-haspopup="dialog" aria-controls="cs-sheet">${ic("layers")}<span>Select Columns</span></button>`;fb.parentElement.before(w);b=$("t-csbtn");b.onclick=csOpen}
+  const on=csParts(T);b.parentElement.hidden=!on;const tb=$("t-body").closest("table");if(!on)return;
+  const {extra}=csOpts(T),ex=CS.extra.filter(k=>extra.some(([,L])=>L.some(o=>o.k===k))),lab=Object.fromEntries(FMORE.flatMap(([,L])=>L));
+  const hid=new Set(T.cols.map(([k],i)=>CS.hidden.has(k)&&i>=2?i:-1).filter(i=>i>=0)),head=$("t-thead").lastElementChild,rows=[...$("t-body").children];
+  [head,...rows].forEach(tr=>{if(tr.children.length<2)return;[...tr.children].forEach((td,i)=>{if(hid.has(i))td.style.display="none"})});
+  const pg=tableRows().slice(S.t.page*(T.pageSize||PAGE0));rows.forEach((tr,r)=>{if(tr.children.length<2)return;const p=pg[r];
+    ex.forEach(k=>{const td=document.createElement("td");const v=p&&CSF[k]?p[CSF[k]]:null;td.innerHTML=v!=null?String(v):'<span class="cs-nr">Not recorded</span>';td.className="cs-x";tr.appendChild(td)})});
+  const grp=$("t-thead").querySelector("tr.grp");if(grp){let i=0;[...grp.children].forEach(th=>{const n=th.colSpan||1;let v=0;for(let j=i;j<i+n;j++)if(!hid.has(j))v++;i+=n;th.colSpan=Math.max(v,1);th.style.display=v?"":"none"});
+    if(ex.length){const th=document.createElement("th");th.colSpan=ex.length;th.textContent="Added Columns";grp.appendChild(th)}}
+  b.classList.toggle("on",ex.length>0||hid.size>0);b.querySelector("span").textContent=ex.length||hid.size?`Select Columns · ${T.cols.length-hid.size+ex.length}`:"Select Columns"}
+function csOpen(){const T=TBL(),{base,extra}=csOpts(T);let sh=$("cs-sheet");
+  if(!sh){const sc=document.createElement("div");sc.className="fm-scrim";sc.id="cs-scrim";sh=document.createElement("section");sh.className="fm-sheet cs-sheet";sh.id="cs-sheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-modal","true");sh.setAttribute("aria-labelledby","cs-h");document.body.append(sc,sh);sc.onclick=()=>csClose()}
+  const box=(o,on)=>`<label class="cs-o${o.lock?" lock":""}"><input type="checkbox" value="${o.k}"${on?" checked":""}${o.lock?" disabled":""}><span>${o.l}</span>${o.lock?'<em>Always shown</em>':""}</label>`;
+  sh.innerHTML=`<div class="fm-head"><div><h2 id="cs-h">Select Columns</h2><p>Choose the columns shown in the parts table. Added columns show each part's recorded value; fields not recorded yet read “Not recorded”.</p></div><button type="button" class="dr-x fm-x" id="cs-x" aria-label="Close">${ic("close")}</button></div>`+
+    `<div class="fm-body" id="cs-body"><div class="fm-g"><h3 class="fm-gh">Table columns</h3><div class="cs-grid">${base.map(o=>box(o,!CS.hidden.has(o.k))).join("")}</div></div>`+
+    extra.map(([g,L])=>`<div class="fm-g"><h3 class="fm-gh">${g}</h3><div class="cs-grid">${L.map(o=>box(o,CS.extra.includes(o.k))).join("")}</div></div>`).join("")+`</div>`+
+    `<div class="fm-foot"><button type="button" class="fm-clear" id="cs-reset">Reset to default</button><span class="fm-sp"></span><button type="button" class="fm-btn sec" id="cs-cancel">Cancel</button><button type="button" class="fm-btn pri" id="cs-apply">Apply</button></div>`;
+  $("cs-x").onclick=$("cs-cancel").onclick=()=>csClose();$("cs-reset").onclick=()=>sh.querySelectorAll("input:not(:disabled)").forEach(i=>i.checked=base.some(b=>b.k===i.value));
+  $("cs-apply").onclick=()=>{const ch=[...sh.querySelectorAll("input")];CS.hidden=new Set(ch.filter(i=>!i.checked&&base.some(b=>b.k===i.value)).map(i=>i.value));
+    CS.extra=ch.filter(i=>i.checked&&!base.some(b=>b.k===i.value)).map(i=>i.value);csClose();renderTable()};
+  sh.hidden=$("cs-scrim").hidden=false;document.body.classList.add("fm-on");CS.open=true;requestAnimationFrame(()=>$("cs-x").focus())}
+function csClose(){const sh=$("cs-sheet");if(!sh)return;sh.hidden=$("cs-scrim").hidden=true;document.body.classList.remove("fm-on");CS.open=false;$("t-csbtn")&&$("t-csbtn").focus()}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&CS.open)csClose()});
+
 function renderTable(){
   const t=S.t,T=TBL(),rows=tableRows(),PAGE=T.pageSize||PAGE0;
   const pages=Math.max(1,Math.ceil(rows.length/PAGE));t.page=Math.min(t.page,pages-1);
@@ -1564,6 +2055,7 @@ function renderTable(){
   $("t-body").innerHTML=body||`<tr><td colspan="${T.cols.length}" class="none">No parts match. Clear the search or table filters to see more.</td></tr>`;
   if(body)$("t-body").querySelectorAll("tr").forEach(tr=>{tr.children[0]?.classList.add("stk","s0");tr.children[1]?.classList.add("stk","s1")});
   {const tb=$("t-body").closest("table");let tf=tb.querySelector("tfoot");if(T.foot&&rows.length){if(!tf){tf=document.createElement("tfoot");tb.appendChild(tf)}tf.innerHTML=T.foot(rows);tf.querySelectorAll("tr").forEach(tr=>{tr.children[0]?.classList.add("stk","s0");tr.children[1]?.classList.add("stk","s1")})}else if(tf)tf.remove()}
+  csApply(T);
   if(PAGECFG.fitTables)fitTable($("t-body").closest("table"));
   const tbl=$("t-body").closest("table"),c1=tbl.querySelector("thead tr:last-child th");if(c1)tbl.style.setProperty("--c1",c1.getBoundingClientRect().width+"px");
   PAGECFG.afterTable&&PAGECFG.afterTable();
@@ -1607,11 +2099,11 @@ function bindTable(){
 }
 
 // ===== Alerts drawer (items come from the page) =====
-const DR={crit:{l:"Key Alerts",e:"No critical issues in the current selection."},mgmt:{l:"Management Summary",e:"Nothing needs management review in the current selection."},ins:{l:"Key Insights",e:"Not enough data in the current selection for insights."}};
+const DR={mil:{l:"Upcoming Milestones",e:"No upcoming milestones in the current selection."},sup:{l:"Support Required",e:"No support needed in the current selection."},crit:{l:"Key Alerts",e:"No critical issues in the current selection."},mgmt:{l:"Management Summary",e:"Nothing needs management review in the current selection."},ins:{l:"Key Insights",e:"Not enough data in the current selection for insights."}};
 // Page rules give the first items; each segment is topped up to 5 with plain facts from the page's own tile metrics
 // (where a metric is highest by department or model in the current selection), so every statement comes from the data shown.
 function topUp(A0,rows){
-  if(PAGECFG.ownAlerts)return{crit:[...A0.crit,...A0.mgmt],mgmt:[...(A0.sum||[])],ins:[...A0.ins]};
+  if(PAGECFG.ownAlerts)return{crit:[...A0.crit,...A0.mgmt],mgmt:[...(A0.sum||[])],ins:[...A0.ins],sup:[...(A0.sup||[])],mil:[...(A0.mil||[])]};
   // Key Alerts = page alert rules (incl. former management alerts); Management Summary = progress facts; Key Insights = page insights.
   // Each is topped up to 5 with specific facts (named PICs, vendors, departments, models) computed from the current top-level selection.
   const A={crit:[...A0.crit,...A0.mgmt],mgmt:[],ins:[...A0.ins]};if(!rows.length)return A;
@@ -1658,7 +2150,7 @@ function overview(t){const num="\\d[\\d,]*(?:\\.\\d+)?%?";let m=t.match(new RegE
   m=t.match(new RegExp("(?<![\\w-]|Model |Rank |Tier )("+num+")(?![\\w-])"));return{k:m?m[1]:"",s:t}}
 function renderAlerts(){
   const A=topUp(PAGECFG.alerts(scoped()),scoped());
-  ["crit","mgmt","ins"].forEach(k=>$("n-"+k).textContent=A[k].length);
+  ["crit","mgmt","ins","sup","mil"].forEach(k=>{if($("n-"+k))$("n-"+k).textContent=(A[k]||[]).length});
   // segmented alert tiles: up to 5 items of the selected segment; View More opens the drawer with the full list
   const seg=S.aseg||"mgmt",ov=i=>i.k?{k:i.k,s:i.s}:overview(i.t),ord=A[seg].map((i,x)=>({i,x,o:ov(i)})).sort((a,b)=>(!a.o.k)-(!b.o.k)||a.x-b.x),it5=ord.slice(0,5);
   document.querySelectorAll("[data-a]").forEach(b=>{const on=b.dataset.a===seg;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
@@ -1684,23 +2176,43 @@ function bindAlerts(){
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&S.drawer)close()});
 }
 
-// ===== Development stage bar (page header, only when a model is selected) =====
-// Sample schedule: every model is currently in PP. PP ends 8 weeks after the model's MRD, MPP 11 weeks later, Pilot/SOP 11 weeks after that.
-// The bar fills part-way through the PP third (never to its end, since PP is not finished).
-const STAGES=[["PP",56],["MPP",133],["Pilot/SOP",210]];
-function renderStage(){const el=$("stagebar");if(!el)return;const m=S.f.model;el.hidden=!m;if(!m)return;
-  const mrd=MODEL_MRD_DAYS[m],ends=STAGES.map(([n,o])=>[n,mrd+o]),cur=ends[0],frac=Math.max(.3,Math.min(.7,.5-mrd/100))/3;
-  const md=d=>{const x=dayDate(d);return x.toLocaleDateString("en-GB",{month:"short"})+" ’"+String(x.getFullYear()).slice(2)};
-  const pill=mrd>0?`${mrd} days to MRD`:mrd===0?"MRD today":`${-mrd} days past MRD`;
-  el.innerHTML=`<div class="sb-main"><div class="sb-cols">${ends.map(([n,e])=>`<div class="sb-col${n===cur[0]?" cur":""}">${n===cur[0]?`<span class="sb-pill${mrd<0?" late":""}">${pill}</span>`:""}<b>${n}</b><span>End ${md(e)}</span></div>`).join("")}</div>`+
-    `<div class="sb-track" role="progressbar" aria-label="${m} development stage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(frac*100)}" aria-valuetext="${m} is in ${cur[0]}"><i style="width:${(frac*100).toFixed(1)}%"></i></div></div>`}
+// ===== MRD timeline (3 Nov; replaces the PP / MPP / Pilot/SOP stage bar) — own row under the page title, only when exactly one model is selected =====
+// Data-driven: each milestone is {k, l, off} with off = days after the model's PP MRD (MODEL_MRD_DAYS). Add a row here to add a flag.
+// Sample schedule: MPP MRD and Pilot/SOP MRD follow at the same 11-week spacing the earlier stage plan used.
+const MRD_MILESTONES=[{k:"pp",l:"PP MRD",off:0},{k:"mpp",l:"MPP MRD",off:77},{k:"sop",l:"PILOT/SOP MRD",off:154}];
+const PHASE_OFF={pp:0,mpp:77,sop:154};
+const modelMilestones=m=>MRD_MILESTONES.map(x=>({...x,d:MODEL_MRD_DAYS[m]+x.off}));   // d = days from today
+function renderStage(){const el=$("mrdline");if(!el)return;const m=S.f.model;el.hidden=!m||!(m in MODEL_MRD_DAYS);if(el.hidden){el.innerHTML="";return}
+  const ms=modelMilestones(m),next=ms.find(x=>x.d>=0),lo=Math.min(0,ms[0].d)-14,hi=Math.max(0,ms[ms.length-1].d)+14,X=d=>((d-lo)/(hi-lo)*100).toFixed(2)+"%";
+  const fd=(d,o)=>dayDate(d).toLocaleDateString("en-GB",o||{day:"numeric",month:"short",year:"numeric"});
+  const cd=next?(next.d===0?`${next.l} today`:`${UIV2?next.l:"MRD"} − ${next.d} Day${next.d===1?"":"s"}`):"All MRDs passed";
+  // preview (UIV2): a small tick for every week (Mondays) along the track
+  const wk=[];if(UIV2){const a=(next||ms[ms.length-1]).d;for(let d=a-7*Math.floor((a-lo)/7);d<=hi;d+=7)wk.push(d)}
+  // week callouts: every 4 weeks counting back from each upcoming MRD (after Today and clear of the previous MRD)
+  const wl={};if(UIV2)ms.forEach((x,i)=>{if(x.d<=0)return;const prev=i?ms[i-1].d:lo;for(let k=4;x.d-7*k>Math.max(0,prev)+10;k+=4)wl[x.d-7*k]=`${x.l.replace(" MRD","")} − ${k} wks`});
+  // a simple bar: three MRD flags placed by date, and Today with the days to the next MRD
+  el.classList.toggle("v2",!!UIV2);el.innerHTML=`<div class="card-head"><div><h2 id="ml-h">MRD Timeline</h2><p class="sub">${m} · key MRD milestones</p></div></div><div class="ml-track" role="img" aria-label="${m} MRD timeline: ${ms.map(x=>`${x.l} ${fd(x.d)}`).join(", ")}. Today ${fd(0)}${next?`, ${next.d} days to ${next.l}`:""}."><i class="ml-line"></i><i class="ml-fill" style="width:${X(0)}"></i>${wk.map(d=>`<i class="ml-wk${d<=0?" done":""}${wl[d]?" lab":""}" style="left:${X(d)}"></i>${wl[d]?`<span class="ml-wl" style="left:${X(d)}">${wl[d]}</span>`:""}`).join("")}`+
+    ms.map(x=>`<span class="ml-flag ${x.d<0?"past":x===next?"next":"future"}" style="left:${X(x.d)}" title="${x.l} · ${fd(x.d)}"><em><b>${x.l}</b><small>${fd(x.d,{day:"numeric",month:"short",year:"numeric"})}</small></em><i class="ml-dot"></i></span>`).join("")+
+    `<span class="ml-today" style="left:${X(0)}"><span class="ml-tflag"><b>Today</b><span>${cd}</span></span></span></div>`;
+  requestAnimationFrame(()=>mlLayout(el))}
+// keep labels readable at any width: a flag label that would run into the next one, or off the right edge, flips to the left of its
+// pole; if that still collides it is raised onto a second line. The Today flag is kept inside the track.
+function mlLayout(el){const tr=el.querySelector(".ml-track");if(!tr||el.hidden)return;const T=tr.getBoundingClientRect(),F=[...tr.querySelectorAll(".ml-flag")];
+  tr.classList.remove("has-up");F.forEach(f=>f.classList.remove("rt","up","lt"));const R=f=>f.querySelector("em").getBoundingClientRect(),hit=(a,b)=>a.right+8>b.left&&b.right+8>a.left;
+  F.forEach((f,i)=>{if(R(f).right>T.right)f.classList.add("rt");if(R(f).left<T.left)f.classList.add("lt");if(i&&hit(R(F[i-1]),R(f))){F[i-1].classList.add("rt");
+    if(R(F[i-1]).left<T.left||(i>1&&hit(R(F[i-2]),R(F[i-1]))&&!F[i-2].classList.contains("up"))||hit(R(F[i-1]),R(f))){F[i-1].classList.remove("rt");f.classList.add("up");if(R(f).right>T.right)f.classList.add("rt");tr.classList.add("has-up")}}});
+  const tf=tr.querySelector(".ml-tflag");tf.style.marginLeft="0px";
+  requestAnimationFrame(()=>{const tr2=tf.getBoundingClientRect();let last=null;tr.querySelectorAll(".ml-wl").forEach(w=>{w.style.visibility="";const r=w.getBoundingClientRect();
+    if((r.left<tr2.right+8&&r.right>tr2.left-8)||(last&&r.left<last.right+10)||r.right>T.right||r.left<T.left)w.style.visibility="hidden";else last=r})});const r=tf.getBoundingClientRect();
+  if(r.left<T.left-6)tf.style.marginLeft=(T.left-6-r.left)+"px";else if(r.right>T.right+6)tf.style.marginLeft=(T.right+6-r.right)+"px"}
+addEventListener("resize",()=>{const el=$("mrdline");if(el&&!el.hidden)mlLayout(el)});
 function render(){PAGECFG.beforeRender&&PAGECFG.beforeRender();renderFilters();renderStage();renderTiles();if(!$("t-fpanel").hidden)renderFilterPanel();PAGECFG.renderRight();renderTable();renderAlerts()}
 
 // ===== By Department view for pages whose table is a part list (tview "adept") =====
 // Built from the page's own By Parts table: one row per department; every status column becomes one count column per value
 // (e.g. Status → OK / NG / Pending), count columns are summed; part details, dates, percentages and free text are left out.
 // It uses the same rows, filters and tile / graph selections as the parts table, so its counts reconcile with it.
-const _autoT=new WeakMap(),A_SKIP=new Set(["model","no","name","dept","pic","vname","vcode","trial","id"]),A_DATE=/^\d{4}-\d{2}-\d{2}$|^\d{1,2} [A-Z][a-z]{2,4} \d{4}$/;
+const _autoT=new WeakMap(),A_SKIP=new Set(["model","no","name","dept","pic","vname","vcode","trial","id","nar"]),A_DATE=/^\d{4}-\d{2}-\d{2}$|^\d{1,2} [A-Z][a-z]{2,4} \d{4}$/;
 function TBL(){const T=PAGECFG.table;if(S.tview!=="adept")return T;
   const r=[...document.querySelectorAll("input[name=tview]")].map(x=>x.value).find(v=>v!=="adept"),sv=S.tview;S.tview=r||sv;let B;try{B=PAGECFG.table}finally{S.tview=sv}
   return autoDept(B)}
@@ -1709,17 +2221,18 @@ function autoDept(B){if(_autoT.has(B))return _autoT.get(B);
   let all=B.expand?B.expand(PARTS):PARTS;if(B.filter)all=all.filter(B.filter);
   const dc=B.cols.find(c=>c[0]==="dept"),dl=dc?dc[1]:"Department",gOf={};
   if(B.groups){let i=0;B.groups.forEach(([l,n])=>{for(let j=0;j<n;j++){if(B.cols[i])gOf[B.cols[i][0]]=l;i++}})}
-  const out=[];B.cols.forEach(([k,l])=>{if(A_SKIP.has(k))return;const vs=all.map(p=>val(p,k)).filter(v=>v!==null);if(!vs.length)return;
+  let out=[];B.cols.forEach(([k,l])=>{if(A_SKIP.has(k))return;const vs=all.map(p=>val(p,k)).filter(v=>v!==null);if(!vs.length)return;
     if(vs.every(v=>typeof v==="number")){if(!/%|rank|rate/i.test(l))out.push({key:"s_"+k,label:l,group:gOf[k]||"",sum:true,src:k});return}
     const S2=vs.map(String);if(S2.filter(v=>A_DATE.test(v)).length>S2.length/2)return;
     const c={};S2.forEach(v=>c[v]=(c[v]||0)+1);const u=Object.keys(c);if(u.length>8)return;
     u.sort((a,b)=>(b==="Yes")-(a==="Yes")||c[b]-c[a]);u.forEach((v,i)=>out.push({key:`c_${k}_${i}`,label:v,group:l,src:k,v}))});
+  if(B.adept)out=B.adept(out);
   const ex=!!B.expand,base=[["dept",dl],["parts","Parts"],...(ex?[["recs","Records"]]:[])],keys=["parts",...(ex?["recs"]:[]),...out.map(c=>c.key)];
   const groups=[["Department",base.length]];out.forEach(c=>{const g=groups[groups.length-1];if(groups.length>1&&g[0]===c.group)g[1]++;else groups.push([c.group,1])});
   const T={title:B.title,filter:B.filter,expand:B.expand,tileFilter:B.tileFilter,q:r=>[r.dept],groups,
     cols:[...base,...out.map(c=>[c.key,c.label,{fl:c.sum?c.label:`${c.group} · ${c.label}`}])],
     agg:rows=>DLIST.map(d=>{const r=rows.filter(p=>p.dept===d),o={dept:d,parts:ex?new Set(r.map(p=>p.model+"|"+p.no)).size:r.length,recs:r.length};
-      out.forEach(c=>o[c.key]=c.sum?r.reduce((a,p)=>a+(+val(p,c.src)||0),0):r.filter(p=>String(val(p,c.src))===c.v).length);return o}).filter(o=>o.recs),
+      out.forEach(c=>o[c.key]=c.fn?r.filter(c.fn).length:c.sum?r.reduce((a,p)=>a+(+val(p,c.src)||0),0):r.filter(p=>String(val(p,c.src))===c.v).length);return o}).filter(o=>o.recs),
     cell:(r,f)=>r[f],
     row:r=>`<tr><td class="id">${r.dept}</td>`+keys.map(k=>`<td class="num">${r[k]}</td>`).join("")+`</tr>`,
     foot:rows=>`<tr><td>Total</td>`+keys.map(k=>`<td class="num">${rows.reduce((a,r)=>a+r[k],0)}</td>`).join("")+`</tr>`,
@@ -1729,7 +2242,8 @@ function urlFilters(){let q;try{q=new URLSearchParams(location.search)}catch(e){
   FKEYS.forEach(k=>{if(!q.has(k)||FINERT.has(k))return;const O=filterOptions()[k]||[],v=q.get(k).split("|").filter(x=>O.includes(x));if(v.length)S.F[k]=FSINGLE.has(k)?[v[0]]:v});pruneFilters()}
 // link to another dashboard carrying the given filters (only the ones that dashboard has: its filters read them on open)
 function dashLink(file,carry){const q=Object.entries(carry).filter(([,v])=>v&&v.length).map(([k,v])=>`${k}=${encodeURIComponent([].concat(v).join("|"))}`).join("&");return file+(q?"?"+q:"")}
-function boot(){urlFilters();{const r0=document.querySelector("input[name=tview]:checked");if(r0)S.tview=r0.value}S.cat=PAGECFG.defaultTab;bindExport();bindFilters();bindTiles();bindLeftToggle();bindTable();bindAlerts();PAGECFG.init&&PAGECFG.init();render();PAGECFG.renderLeft()}
+renderFilters=(f=>function(){const r=f.apply(this,arguments);if(XSEL.size)xbar();return r})(renderFilters);
+function boot(){setTimeout(xsetup,0);urlFilters();{const r0=document.querySelector("input[name=tview]:checked");if(r0)S.tview=r0.value}S.cat=PAGECFG.defaultTab;bindExport();bindFilters();bindTiles();bindLeftToggle();bindTable();bindAlerts();PAGECFG.init&&PAGECFG.init();render();PAGECFG.renderLeft()}
 
 // Legend layout: up to 3 items in one row, otherwise two balanced rows (no single hanging item)
 // Legend: one row when it fits, otherwise two balanced rows (never one item hanging on its own)
@@ -1754,17 +2268,13 @@ function syncPlots(){cancelAnimationFrame(_syncT);_syncT=requestAnimationFrame((
   const bx=c=>c.canvas.closest(".chart-box");
   [A,B].forEach(c=>{if(c){c.$base=c.$base||{...c.options.layout.padding};c.options.layout.padding={...c.$base};if(bx(c).style.height){bx(c).style.height="";c.resize()}c.update("none")}});
   if(!A||!B||A.canvas.hidden||B.canvas.hidden)return;
-  const dt=A.chartArea.top-B.chartArea.top,db=(A.height-A.chartArea.bottom)-(B.height-B.chartArea.bottom);
-  if(dt>0)B.options.layout.padding.top+=dt;else A.options.layout.padding.top-=dt;
-  // extra space under one chart's axis (e.g. category brackets) is taken off the other chart's height, so its legend sits right under its axis instead of leaving a gap
-  const shrink=(c,d)=>{const e=bx(c);e.style.height=(e.clientHeight-d)+"px";c.resize()};
-  if(db>0)shrink(B,db);else if(db<0)shrink(A,-db);
+  // 3 Nov: no padding or shrinking to line up the two charts any more; each chart fills its own card (adaptive height)
   A.update("none");B.update("none")}))}
 // Keep headers and control rows of paired cards the same height so the chart boxes start together
-function alignCards(){document.querySelectorAll(".charts").forEach(row=>{const cards=[...row.children];["card-head","ctx"].forEach(cls=>{
+function alignCards(){document.querySelectorAll(".charts").forEach(row=>{const cards=[...row.children];[].forEach(cls=>{
   const els=cards.map(c=>c.querySelector(":scope > ."+cls)).filter(Boolean);els.forEach(e=>e.style.minHeight="");if(els.length<2)return;
   const h=Math.max(...els.map(e=>e.getBoundingClientRect().height));els.forEach(e=>e.style.minHeight=h+"px")})})}
-new MutationObserver(()=>{alignCards();syncPlots()}).observe(document.querySelector(".content"),{childList:true,subtree:true,characterData:true});
+new MutationObserver(ms=>{if(ms.every(m=>m.target.closest&&m.target.closest(".tlx")))return;alignCards();syncPlots()}).observe(document.querySelector(".content"),{childList:true,subtree:true,characterData:true});
 window.addEventListener("resize",()=>{alignCards();syncPlots()});
 
 // ===== Shared timeliness + plan vs actual charts (same look as Part Inspection With Deviation Status) =====
@@ -1807,7 +2317,8 @@ function planActualChart(rows,a,verb){
   const o=chartOpts({callbacks:{title:it=>`${labels[it[0].dataIndex]} · week of ${fmtDay(dayDate(at(ks[it[0].dataIndex])))}`,label:c=>` ${c.dataset.label}: ${c.raw}% ${verb}`}});
   o.scales.y.max=100;o.scales.y.ticks.stepSize=20;o.scales.y.ticks.callback=v=>v+"%";o.scales.x.offset=true;o.scales.x.grid={display:true,color:"#F1F2F5",offset:false};o.scales.x.ticks={...o.scales.x.ticks,callback:wkTick(labels)};o.layout.padding.top=64;o.layout.padding.right=8;
   o.plugins.mk2={lines:[{at:ks.indexOf(0),label:"MRD",color:"#4A5565",bg:"#F3F4F6"},{at:(0-at(ks[0]))/7,label:"Today",color:"#1447E6",bg:"#EEF6FF",dash:[2,3]}]};
-  drawChart("P",{type:"line",data:{labels,datasets:[line("Plan",plan,"#1447E6"),line("Actual",act,"#9AA2B1")]},options:o,plugins:[labelPlugin,PVA_MARKERS],minPer:56});
+  const RS_=new Set(rows),pl=line("Plan",plan,"#1447E6"),ac=line("Actual",act,"#9AA2B1");pl.pick=i=>({f:p=>RS_.has(p)&&a.planned(p)<=at(ks[i])});ac.pick=i=>act[i]==null?null:{f:p=>RS_.has(p)&&a.done(p)&&a.actual(p)<=at(ks[i])};
+  drawChart("P",{type:"line",data:{labels,datasets:[pl,ac]},options:o,plugins:[labelPlugin,PVA_MARKERS],minPer:56});
   $("cap-pva").textContent=`${m} · Completion Percentage by Week`;
   $("lg-pva").innerHTML=`<span><i style="background:#1447E6;border-color:#1447E6"></i>Plan</span><span><i style="background:#9AA2B1;border-color:#9AA2B1"></i>Actual</span><span><i style="background:#EEF6FF;border-color:#1447E6;border-style:dashed"></i>Today</span>`;
   $("n-pva").textContent=`Today: ${pct(rows.filter(a.done).length,N)}% ${verb} vs ${pct(rows.filter(p=>a.planned(p)<=0).length,N)}% planned · MRD ${fmtDay(dayDate(mrd))} · weeks relative to MRD`;
@@ -1900,7 +2411,7 @@ function renderReady(){const m=S.f.model,rows=E(scoped()).filter(p=>p.e.otop);
   const done=rows.filter(p=>p.e.done!==null),by=d=>done.filter(p=>p.e.done<=d).length;
   const val=ks.map(k=>at(k)<=0?by(at(k)):null),pre=ks.map(k=>at(k)<=0?by(Math.min(at(k),mrd)):null);
   const C="#1447E6",A="#D97706",N=rows.length;
-  const line={type:"line",label:"OTOP Readiness",data:val,borderColor:C,backgroundColor:C,borderWidth:2.5,tension:0,spanGaps:false,pointRadius:5,pointHoverRadius:7,pointBorderWidth:2,
+  const RS_=new Set(rows),line={type:"line",label:"OTOP Readiness",pick:i=>val[i]==null?null:{f:p=>RS_.has(p)&&p.e&&p.e.done!==null&&p.e.done<=at(ks[i])},data:val,borderColor:C,backgroundColor:C,borderWidth:2.5,tension:0,spanGaps:false,pointRadius:5,pointHoverRadius:7,pointBorderWidth:2,
     pointStyle:ks.map(k=>k>0?"rectRot":"circle"),pointBackgroundColor:ks.map(k=>k>0?A:"#fff"),pointBorderColor:ks.map(k=>k>0?A:C),
     segment:{borderColor:c=>ks[c.p1DataIndex]>0?A:C,borderDash:c=>ks[c.p1DataIndex]>0?[6,4]:undefined}};
   const o=chartOpts({callbacks:{title:it=>`${labels[it[0].dataIndex]} · week ending ${fmtDay(dayDate(at(ks[it[0].dataIndex])))}`,
@@ -1929,7 +2440,7 @@ const fd=n=>n==null?null:fmtDay(dayDate(n));
 const PCELL={otT:p=>p.e.otop?"OTOP":"Non OTOP",plan:p=>p.e.otop?fd(p.e.plan):null,ready:p=>p.e.otop?(p.e.done!==null?"Ready":"Not Ready"):null,dlyT:p=>p.e.otop?(p.e.dly?"Yes":"No"):null,dr:p=>p.e.dr?RL[p.e.dr]:null,
   nr:p=>p.e.otop?null:RL[p.e.nr],sch:p=>p.e.otop?null:(p.e.sna?"Schedule NA":`Beyond MRD (${fd(p.e.sched)})`),devT:p=>p.e.otop?null:(p.e.devR?"Yes":"No"),devS:p=>p.e.devS||null};
 const PART_T={title:"OTOP Details for ECN Cases",filter:p=>p.ecn,groups:[["Part Details",6],["OTOP",5],["Non OTOP",4]],
-  cols:[["model","Model"],["no","Part Number"],["name","Part Name"],["pic","PIC"],["dept","Department"],["vname","Vendor"],["otT","OTOP / Non OTOP"],["plan","OTOP Plan Date"],["ready","Readiness"],["dlyT","OTOP Delay Case"],["dr","Delay Reason"],
+  cols:[["model","Model"],["no","Part Number"],["name","Part Name"],["pic","PIC"],["dept","Department"],["vname","Vendor Name"],["otT","OTOP / Non OTOP"],["plan","OTOP Plan Date"],["ready","Readiness"],["dlyT","OTOP Delay Case"],["dr","Delay Reason"],
     ["nr","Non OTOP Reason"],["sch","Schedule"],["devT","Deviation Raised"],["devS","Deviation Status"]],
   cell:(p,f)=>PCELL[f]?(PCELL[f](p)??"-"):p[f],
   row:p=>{const c=f=>PCELL[f](p);return`<tr><td class="id">${p.model}</td><td class="id">${p.no}</td><td class="wrap">${p.name}</td><td class="wrap">${p.pic}</td><td>${p.dept}</td><td class="wrap">${p.vname}</td>`+
@@ -1995,6 +2506,56 @@ const PAGECFG={
       {k:`${pct(v.sna,v.non)}%`,s:"Of Non OTOP parts have no schedule",t:`${v.sna} of ${v.non} Non OTOP parts have no schedule (Schedule NA)`,d:`${v.sby} scheduled beyond MRD.`,o:"Section Head"}].filter(Boolean);
     return out}
 };
+
+// ===== Key Insights & Alerts — trigger card beside the page title + drawer (opt-in per page: PAGES[...]['kia']=True) =====
+// Replaces the Management Summary / Key Alerts / Key Insights strip on pages that opt in. Content comes from
+// PAGECFG.kia(rows) → {summary?, ins:[item], crit:[item]}, item = {t: statement (may contain <b>), d: detail, o: owner, sev?: "high"|"med"}.
+// Visual options: PAGECFG.kiaOpts = {shine:true, vectors:true}. These function declarations replace the shared
+// renderAlerts / bindAlerts for this page only (later declarations win), so common.js is untouched.
+const KIA={open:false,tab:"ins",last:null};
+const KIA_TABS=[["ins","Key Insights"],["crit","Critical Alerts"]];
+const kiaEsc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+function kiaItems(list,kind){
+  if(!list.length)return `<p class="kia-empty">${kind==="crit"?"Nothing critical in this selection.":"No insights for this selection."}</p>`;
+  return `<ol class="kia-list">${list.map(i=>`<li class="kia-item${i.sev?" "+i.sev:""}"><span class="kia-mark" aria-hidden="true"></span>`+
+    `<div class="kia-txt">${i.l?`<em class="kia-lbl">${kiaEsc(i.l)}</em>`:""}<p>${i.t}</p>${i.d?`<span>${i.d}</span>`:""}</div>${i.o?`<span class="kia-own">${kiaEsc(i.o)}</span>`:""}</li>`).join("")}</ol>`}
+function kiaSummary(s){
+  if(!s)return"";
+  return `<section class="kia-sum" aria-label="Activity summary"><div class="kia-sum-h"><h3>${kiaEsc(s.title)}</h3><span class="kia-st ${s.k}">${kiaEsc(s.status)}</span></div>`+
+    `<p class="kia-sum-l">${s.line}</p><dl class="kia-dl">${s.rows.map(([a,b,w])=>`<div${w?' class="w"':""}><dt>${kiaEsc(a)}</dt><dd>${b}</dd></div>`).join("")}</dl></section>`}
+function kiaIndicator(){const on=document.querySelector("#kia-tabs button.on"),bar=$("kia-bar");if(!on||!bar)return;
+  bar.style.width=on.offsetWidth+"px";bar.style.transform=`translateX(${on.offsetLeft}px)`}
+// pages without their own PAGECFG.kia: Key Insights = the page's management summary + insights, Critical Alerts = its key alerts,
+// taken from the existing PAGECFG.alerts rules (topped up as before) and capped at five each. Owner badges are not shown.
+function kiaFromAlerts(rows){const A=topUp(PAGECFG.alerts(rows),rows),m=(l,sev)=>(l||[]).map(i=>({t:i.t,d:i.d||"",sev}));
+  return{ins:[...m(A.mgmt),...m(A.ins)].slice(0,5),crit:m(A.crit,"high").slice(0,5)}}
+function renderAlerts(){
+  const d=PAGECFG.kia?PAGECFG.kia(scoped()):kiaFromAlerts(scoped());KIA.last=d;
+  const pl=(n,w)=>`${n} ${w}${n===1?"":"s"}`;$("kia-n").textContent=`${pl(d.ins.length,"insight")} · ${pl(d.crit.length,"alert")}`;
+  const open=KIA.open;$("kia-drawer").hidden=!open;$("kia-scrim").hidden=!open;$("kia-trig").setAttribute("aria-expanded",open);
+  if(!open)return;
+  document.querySelectorAll("#kia-tabs button").forEach(b=>{const on=b.dataset.k===KIA.tab;b.classList.toggle("on",on);b.setAttribute("aria-selected",on);
+    b.querySelector(".c").textContent=(d[b.dataset.k]||[]).length});
+  kiaIndicator();
+  const body=$("kia-body");
+  body.innerHTML=(KIA.tab==="ins"?kiaSummary(d.summary):"")+kiaItems(d[KIA.tab]||[],KIA.tab);
+  body.classList.remove("swap");void body.offsetWidth;body.classList.add("swap");
+}
+function bindAlerts(){
+  const o=PAGECFG.kiaOpts||{},t=$("kia-trig");
+  t.classList.toggle("no-shine",o.shine===false);// drawer style: white (default) or blue — PAGECFG.kiaOpts.style, or ?kia=blue / ?kia=white in the address for review
+  const sv=new URLSearchParams(location.search).get("kia")||o.style||"blue";$("kia-drawer").classList.toggle("kia-blue",sv==="blue");t.classList.toggle("no-vec",o.vectors===false);$("kia-drawer").classList.toggle("no-vec",o.vectors===false);
+  const close=()=>{if(!KIA.open)return;KIA.open=false;renderAlerts();t.focus()};
+  t.onclick=()=>{KIA.open=true;renderAlerts();requestAnimationFrame(()=>{kiaIndicator();$("kia-x").focus()})};
+  $("kia-x").onclick=close;$("kia-scrim").onclick=close;
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&KIA.open)close()});
+  $("kia-tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.dataset.k===KIA.tab)return;KIA.tab=b.dataset.k;$("kia-body").scrollTop=0;renderAlerts()});
+  $("kia-tabs").addEventListener("keydown",e=>{if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;KIA.tab=KIA.tab==="ins"?"crit":"ins";renderAlerts();document.querySelector("#kia-tabs button.on").focus()});
+  // query box: accepts free text only — no AI is connected in this prototype
+  $("kia-q").addEventListener("submit",e=>{e.preventDefault();const i=$("kia-qi");if(!i.value.trim())return;
+    $("kia-qn").textContent=`Noted: “${i.value.trim()}”. AI answers aren’t connected in this prototype yet.`;i.value=""});
+  addEventListener("resize",()=>KIA.open&&kiaIndicator());
+}
 
 boot();
 // ===== Mobile layer (≤ 860px): menu drawer, filter bottom sheet, table-view dropdown =====
