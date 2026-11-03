@@ -892,6 +892,13 @@ body.x-on .content{padding-bottom:220px}
 @media (max-width:860px){.xbar{flex-direction:column;align-items:stretch;padding:20px 16px}.xb-r{justify-content:space-between;flex-wrap:wrap}}
 .xscope{margin:0 0 12px;font-size:15px;line-height:1.5;color:var(--subtle)}.xscope b{color:var(--heading);font-weight:600}.xsep{margin:0 8px;color:#D1D5DB}
 .tile.tro{cursor:default}.tile.tro:hover{transform:none;box-shadow:none}
+/* Benchmarking observations (3 Nov) */
+.plink{border:0;background:none;padding:0;font:inherit;color:var(--brand);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.obs-v{margin-left:10px;border:0;background:none;padding:0;font:inherit;font-size:13px;font-weight:600;color:var(--brand);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+tr.obs-on>td{background:var(--brand-softer)}
+tr.obs-r>td{background:#FAFBFF;font-size:13px;color:var(--heading);padding-top:8px;padding-bottom:8px}
+tr.obs-r>td.obs-n{color:var(--subtle);font-weight:600;white-space:nowrap;padding-left:24px}
+tr.obs-r>td.obs-t{text-align:left;min-width:300px;white-space:normal;line-height:1.4}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1848,7 +1855,7 @@ addEventListener("scroll",()=>tlxPop(null),true);
 const tlCrossed=(model,row)=>model in MODEL_MRD_DAYS&&MODEL_MRD_DAYS[model]+(PHASE_OFF[PAGE_PHASE]||0)<0&&row.some(v=>v>0);
 const tlxIdx=ch=>{if(typeof TL_ALERT==="undefined"||!TL_ALERT||ch.canvas.id!=="c-left")return[];const neg=ch.data.datasets.map((d,i)=>TL_ALERT.neg.includes(d.label)&&ch.isDatasetVisible(i)?i:-1).filter(i=>i>=0);
   return neg.length?ch.data.labels.map((m,i)=>typeof m==="string"&&tlCrossed(m,neg.map(j=>+ch.data.datasets[j].data[i]||0))?i:-1).filter(i=>i>=0):[]};
-Chart.register({id:"tlx2",beforeInit(ch){if(UIV2&&typeof TL_ALERT!=="undefined"&&TL_ALERT&&ch.canvas.id==="c-left"){const p=ch.options.layout.padding;ch.options.layout.padding=typeof p==="object"?{...p,top:(p.top||0)+38}:{top:(p||0)+38,left:p||0,right:p||0,bottom:p||0}}},
+Chart.register({id:"tlx2",beforeInit(ch){if(UIV2&&typeof TL_ALERT!=="undefined"&&TL_ALERT&&ch.canvas.id==="c-left"&&ch.data.datasets.some(d=>TL_ALERT.neg.includes(d.label))){const p=ch.options.layout.padding;ch.options.layout.padding=typeof p==="object"?{...p,top:(p.top||0)+38}:{top:(p||0)+38,left:p||0,right:p||0,bottom:p||0}}},
   beforeDatasetsDraw(ch){if(!UIV2)return;const I=tlxIdx(ch);if(!I.length)return;const x=ch.scales.x,a=ch.chartArea,w=(a.right-a.left)/ch.data.labels.length-8,c=ch.ctx;c.save();c.fillStyle="rgba(240,68,56,.07)";
     I.forEach(i=>{const cx=x.getPixelForValue(i),r=8,l=cx-w/2,t=a.top-38,h=a.bottom-t;c.beginPath();c.roundRect?c.roundRect(l,t,w,h,r):c.rect(l,t,w,h);c.fill()});c.restore()}});
 Chart.register({id:"tlx",afterDraw(ch){
@@ -2030,13 +2037,14 @@ function csApply(T){let b=$("t-csbtn");if(!b){const fb=$("t-fbtn");if(!fb)return
     w.innerHTML=`<button type="button" id="t-csbtn" aria-haspopup="dialog" aria-controls="cs-sheet">${ic("layers")}<span>Select Columns</span></button>`;fb.parentElement.before(w);b=$("t-csbtn");b.onclick=csOpen}
   const on=csParts(T);b.parentElement.hidden=!on;const tb=$("t-body").closest("table");if(!on)return;
   const {extra}=csOpts(T),ex=CS.extra.filter(k=>extra.some(([,L])=>L.some(o=>o.k===k))),lab=Object.fromEntries(FMORE.flatMap(([,L])=>L));
-  const hid=new Set(T.cols.map(([k],i)=>CS.hidden.has(k)&&i>=2?i:-1).filter(i=>i>=0)),head=$("t-thead").lastElementChild,rows=[...$("t-body").children];
+  const xh=PAGECFG.tableHide?PAGECFG.tableHide():null,hid=new Set(T.cols.map(([k],i)=>(CS.hidden.has(k)||xh&&xh.has(k))&&i>=2?i:-1).filter(i=>i>=0)),head=$("t-thead").lastElementChild,all=[...$("t-body").children],rows=all.filter(tr=>!tr.classList.contains("subrow"));
+  all.filter(tr=>tr.classList.contains("subrow")).forEach(tr=>{[...tr.children].forEach((td,i)=>{if(hid.has(i))td.style.display="none"});ex.forEach(()=>tr.appendChild(document.createElement("td")))});
   [head,...rows].forEach(tr=>{if(tr.children.length<2)return;[...tr.children].forEach((td,i)=>{if(hid.has(i))td.style.display="none"})});
   const pg=tableRows().slice(S.t.page*(T.pageSize||PAGE0));rows.forEach((tr,r)=>{if(tr.children.length<2)return;const p=pg[r];
     ex.forEach(k=>{const td=document.createElement("td");const v=p&&CSF[k]?p[CSF[k]]:null;td.innerHTML=v!=null?String(v):'<span class="cs-nr">Not recorded</span>';td.className="cs-x";tr.appendChild(td)})});
   const grp=$("t-thead").querySelector("tr.grp");if(grp){let i=0;[...grp.children].forEach(th=>{const n=th.colSpan||1;let v=0;for(let j=i;j<i+n;j++)if(!hid.has(j))v++;i+=n;th.colSpan=Math.max(v,1);th.style.display=v?"":"none"});
     if(ex.length){const th=document.createElement("th");th.colSpan=ex.length;th.textContent="Added Columns";grp.appendChild(th)}}
-  b.classList.toggle("on",ex.length>0||hid.size>0);b.querySelector("span").textContent=ex.length||hid.size?`Select Columns · ${T.cols.length-hid.size+ex.length}`:"Select Columns"}
+  const uh=T.cols.filter(([k],i)=>i>=2&&CS.hidden.has(k)).length;b.classList.toggle("on",ex.length>0||uh>0);b.querySelector("span").textContent=ex.length||uh?`Select Columns · ${T.cols.length-uh+ex.length}`:"Select Columns"}
 function csOpen(){const T=TBL(),{base,extra}=csOpts(T);let sh=$("cs-sheet");
   if(!sh){const sc=document.createElement("div");sc.className="fm-scrim";sc.id="cs-scrim";sh=document.createElement("section");sh.className="fm-sheet cs-sheet";sh.id="cs-sheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-modal","true");sh.setAttribute("aria-labelledby","cs-h");document.body.append(sc,sh);sc.onclick=()=>csClose()}
   const box=(o,on)=>`<label class="cs-o${o.lock?" lock":""}"><input type="checkbox" value="${o.k}"${on?" checked":""}${o.lock?" disabled":""}><span>${o.l}</span>${o.lock?'<em>Always shown</em>':""}</label>`;
