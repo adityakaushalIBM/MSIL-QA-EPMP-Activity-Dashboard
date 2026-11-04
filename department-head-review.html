@@ -904,6 +904,15 @@ tr.obs-r>td.obs-t{text-align:left;min-width:300px;white-space:normal;line-height
 .fcell.mcat{border:0;margin:0;padding:0;min-width:0}.fcell.mcat legend{padding:0;font-size:14px;font-weight:500;color:var(--heading);margin-bottom:6px}
 .mcat-l{display:flex;flex-wrap:wrap;gap:6px}.mcat-o{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;cursor:pointer}
 .mcat-o input{accent-color:#1C64F2;margin:0}.mcat-o.on{border-color:#B9CCF8;background:var(--brand-softer);color:var(--brand)}
+/* MRD Timeline v3 (4 Nov review, PDC): same timeline look, wider track in a horizontal scroller */
+.m3-scroll{overflow-x:auto;overflow-y:hidden;margin:0 -4px;padding:22px 4px 6px;scrollbar-width:none}.m3-scroll::-webkit-scrollbar{display:none}
+.mrdline.v3 .ml-track{flex:none}
+.m3-st{display:inline-block;align-self:center;margin-bottom:3px;padding:1px 7px;border-radius:999px;background:var(--brand-softer);color:var(--brand);font-size:11px;font-weight:700;font-style:normal;letter-spacing:.3px;line-height:16px}
+.mrdline.v3 .ml-flag em{display:flex;flex-direction:column;align-items:center}
+.m3-scroll{--fl:0px;--fr:56px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%)}
+.mrdline.v3 .ml-wk.mn{top:42px;height:12px;opacity:.55}  /* daily minor ticks between the weekly ones */
+.mrdline.v3 .m3-scroll{padding-top:19px;padding-bottom:2px}.mrdline.v3 .ml-track{margin-top:0;height:110px}
+.mrdline.v3 .ml-wk:not(.mn){top:28px;height:40px;width:1.5px}  /* weekly ticks stand out from the daily ones */
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1650,7 +1659,7 @@ MODELS.forEach((m,mi)=>DLIST.forEach((d,di)=>{
 // Part Category (3 Nov): options A, AR, A/AR, F, G. Sample value per part from a hash of its part number, so every other sample value is unchanged.
 const PCATS=["A","AR","A/AR","F","G"];
 // Part Timestamp (3 Nov): PP-, PP+, MPP+. Sample value per part (same hash), logic to be defined by MSIL.
-const PTIMES=["PP-","PP+","MPP+"];
+const PTIMES=["Before PP","Between PP & MPP","Between MPP & Pilot"];
 PARTS.forEach(p=>{let h=0;for(const ch of p.no+p.id)h=(h*31+ch.charCodeAt(0))>>>0;p.pcat=PCATS[h%5];p.ptime=PTIMES[Math.floor(h/5)%3]});
 
 // ===== State + shared filter layer =====
@@ -1757,7 +1766,8 @@ function bindFilters(){fmBuild();[document.querySelector(".fbar"),$("fm-body")].
 // ===== Tabs + tiles (config comes from the page) =====
 function renderTiles(){
   const rows=scoped(),cfg=PAGECFG;
-  $("tabs").innerHTML=cfg.tabs.map(c=>`<button class="tab${S.cat===c.k?" on":""}" role="tab" aria-selected="${S.cat===c.k}" data-cat="${c.k}">${c.icon}${c.label}</button>`).join("");
+  // every tile section has at least one tab (4 Nov): a page without tabs shows a single "Overall Summary" tab
+  $("tabs").innerHTML=(cfg.tabs&&cfg.tabs.length?cfg.tabs:[{k:S.cat,label:"Overall Summary",icon:ic("home")}]).map(c=>`<button class="tab${S.cat===c.k?" on":""}" role="tab" aria-selected="${S.cat===c.k}" data-cat="${c.k}">${c.icon}${c.label}</button>`).join("");
   const tiles=cfg.tiles(S.cat),vals=cfg.tileValues(rows,S.cat);
   // Overall Status (3 Nov): activity-level status shown at the top right of the tiles section (all tabs). ACT_OVERALL is worked out at
   // build time from the shared activity data; activities without one show an empty dot and say so on hover (no status is made up).
@@ -2224,13 +2234,15 @@ const MRD_MILESTONES=[{k:"pp",l:"PP MRD",off:0},{k:"mpp",l:"MPP MRD",off:77},{k:
 const PHASE_OFF={pp:0,mpp:77,sop:154};
 const modelMilestones=m=>MRD_MILESTONES.map(x=>({...x,d:MODEL_MRD_DAYS[m]+x.off}));   // d = days from today
 function renderStage(){const el=$("mrdline");if(!el)return;const m=S.f.model;el.hidden=!m||!(m in MODEL_MRD_DAYS);if(el.hidden){el.innerHTML="";return}
+  return renderStage3(el,m);  // 4 Nov: stage-milestone timeline on every page
   const ms=modelMilestones(m),next=ms.find(x=>x.d>=0),lo=Math.min(0,ms[0].d)-14,hi=Math.max(0,ms[ms.length-1].d)+14,X=d=>((d-lo)/(hi-lo)*100).toFixed(2)+"%";
   const fd=(d,o)=>dayDate(d).toLocaleDateString("en-GB",o||{day:"numeric",month:"short",year:"numeric"});
-  const cd=next?(next.d===0?`${next.l} today`:`${UIV2?next.l:"MRD"} − ${next.d} Day${next.d===1?"":"s"}`):"All MRDs passed";
+  const DT=true,nm=l=>l.replace("PILOT/SOP","Pilot/SOP");  // review (4 Nov, PDC only): "n days to <MRD>" wording
+  const cd=next?(next.d===0?`${next.l} today`:DT?`${next.d} day${next.d===1?"":"s"} to ${nm(next.l)}`:`${UIV2?next.l:"MRD"} − ${next.d} Day${next.d===1?"":"s"}`):"All MRDs passed";
   // preview (UIV2): a small tick for every week (Mondays) along the track
   const wk=[];if(UIV2){const a=(next||ms[ms.length-1]).d;for(let d=a-7*Math.floor((a-lo)/7);d<=hi;d+=7)wk.push(d)}
   // week callouts: every 4 weeks counting back from each upcoming MRD (after Today and clear of the previous MRD)
-  const wl={};if(UIV2)ms.forEach((x,i)=>{if(x.d<=0)return;const prev=i?ms[i-1].d:lo;for(let k=4;x.d-7*k>Math.max(0,prev)+10;k+=4)wl[x.d-7*k]=`${x.l.replace(" MRD","")} − ${7*k} days`});
+  const wl={};if(UIV2)ms.forEach((x,i)=>{if(x.d<=0)return;const prev=i?ms[i-1].d:lo;for(let k=4;x.d-7*k>Math.max(0,prev)+10;k+=4)wl[x.d-7*k]=DT?`${7*k} days to ${nm(x.l)}`:`${x.l.replace(" MRD","")} − ${7*k} days`});
   // a simple bar: three MRD flags placed by date, and Today with the days to the next MRD
   el.classList.toggle("v2",!!UIV2);el.innerHTML=`<div class="card-head"><div><h2 id="ml-h">MRD Timeline</h2><p class="sub">${m} · key MRD milestones</p></div></div><div class="ml-track" role="img" aria-label="${m} MRD timeline: ${ms.map(x=>`${x.l} ${fd(x.d)}`).join(", ")}. Today ${fd(0)}${next?`, ${next.d} days to ${next.l}`:""}."><i class="ml-line"></i><i class="ml-fill" style="width:${X(0)}"></i>${wk.map(d=>`<i class="ml-wk${d<=0?" done":""}${wl[d]?" lab":""}" style="left:${X(d)}"></i>${wl[d]?`<span class="ml-wl" style="left:${X(d)}">${wl[d]}</span>`:""}`).join("")}`+
     ms.map(x=>`<span class="ml-flag ${x.d<0?"past":x===next?"next":"future"}" style="left:${X(x.d)}" title="${x.l} · ${fd(x.d)}"><em><b>${x.l}</b><small>${fd(x.d,{day:"numeric",month:"short",year:"numeric"})}</small></em><i class="ml-dot"></i></span>`).join("")+
@@ -2434,15 +2446,17 @@ function mergePanes(){let row=document.querySelector(".charts");if(!row)return;
     if(top){const ml=$("mrdline"),col=document.createElement("div");col.className="mstack";(ml||tg).before(w);if(ml)col.appendChild(ml);col.appendChild(tg);w.appendChild(col)}
     else{tg.before(w);w.appendChild(tg)}mergeKia(w);return}
   if(row.children.length<2)return;const [L,R]=row.children;
-  const A=document.createElement("div"),B=document.createElement("div");A.className="mpane";B.className="mpane";B.hidden=true;
+  const A=document.createElement("div"),B=document.createElement("div");A.className="mpane";B.className="mpane";
   while(L.firstChild)A.appendChild(L.firstChild);while(R.firstChild)B.appendChild(R.firstChild);L.append(A,B);R.remove();L.classList.add("mcard");
   let seg=A.querySelector(".seg");const slot=p=>{let s=p.querySelector(".mseg");if(!s){s=document.createElement("div");s.className="mseg";p.querySelector(".card-head").after(s)}return s};
   // the overall pane keeps the toggle on the same row as its own controls (radios, Planned vs Actual) to avoid an extra row
-  const aCtx=A.querySelector(".ctx"),put=(p,el)=>{if(p===A&&aCtx){aCtx.prepend(el);aCtx.classList.add("has-mseg")}else slot(p).appendChild(el)};
+  const aCtx=A.querySelector(".ctx"),put=(p,el)=>{if(p===A&&aCtx&&!aCtx.querySelector(".tag")){aCtx.prepend(el);aCtx.classList.add("has-mseg")}else slot(p).appendChild(el)};  // a ctx that only holds tags (rewritten by renderLeft) keeps them on their own row below the toggle
   if(!seg){seg=document.createElement("div");seg.className="seg";seg.setAttribute("role","group");seg.setAttribute("aria-label","Chart shown");
     const b0=document.createElement("button");b0.type="button";b0.className="on";b0.textContent=($("lt-h")||{}).textContent||"Overview";seg.appendChild(b0)}
   if(seg){[...seg.querySelectorAll("[data-by]")].forEach(x=>x.textContent=x.dataset.by==="model"?"Model Wise":"Department Wise");
-    const bd=document.createElement("button");bd.type="button";bd.dataset.pane="bd";bd.textContent="Data Breakdown";seg.appendChild(bd);put(A,seg);slot(B);MFIX=()=>{if(!A.hidden&&!A.contains(seg))put(A,seg)};
+    const bd=document.createElement("button");bd.type="button";bd.dataset.pane="bd";bd.textContent="Data Breakdown";seg.prepend(bd);slot(A);
+    // 4 Nov: Data Breakdown (the tile-driven chart) is the first option and opens by default
+    seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===bd));A.hidden=true;B.hidden=false;put(B,seg);MFIX=()=>{if(!A.hidden&&(!A.contains(seg)||aCtx&&aCtx.contains(seg)&&aCtx.querySelector(".tag")))put(A,seg)};
     seg.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const toB=!!b.dataset.pane;
       seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));A.hidden=toB;B.hidden=!toB;put(toB?B:A,seg);
       toB?PAGECFG.renderRight():PAGECFG.renderLeft()})}
@@ -2459,6 +2473,30 @@ function mergeKia(row){const k=$("kia-drawer");if(k){Object.defineProperty(KIA,"
     $("kia-body").addEventListener("click",e=>{const li=e.target.closest(".kia-go");if(li&&KIA.cur)kiaGo(KIA.cur[+li.dataset.ix])});
     $("kia-body").addEventListener("keydown",e=>{const li=e.target.closest(".kia-go");if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault();kiaGo(KIA.cur[+li.dataset.ix])}});
     const t=$("kia-trig");if(t)t.hidden=true;const x=$("kia-x");if(x)x.hidden=true;const s=$("kia-scrim");if(s)s.style.display="none"}}
+
+// ===== MRD Timeline v3 (4 Nov, review on PDC): every stage milestone on a scrollable track. Dates are SAMPLE offsets before each
+// stage MRD (from the shared stage plan); replace with the model's real schedule. Spacing is fixed per day so labels never crowd.
+const MRD_SUB={pp:[["Kani MRD",-56],["Jig MRD",-49],["Weld MRD",-42],["Engine MRD",-35],["Transmission MRD",-28],["Assembly MRD",-21],["Actual QV Date",-10]],
+  mpp:[["Jig MRD",-49],["Weld MRD",-42],["Engine MRD",-35],["Transmission MRD",-28],["Assembly MRD",-21],["Actual QV Date",-10]],
+  sop:[["Jig MRD",-49],["Weld MRD",-42],["Engine MRD",-35],["Transmission MRD",-28],["Assembly MRD",-21],["Actual QV Date",-12],["SOP Date",-5]]};
+const STAGE_L={pp:"PP",mpp:"MPP",sop:"Pilot/SOP"};
+function renderStage3(el,m){const PX=21,ms=modelMilestones(m),fd=(d,o)=>dayDate(d).toLocaleDateString("en-GB",o||{day:"numeric",month:"short",year:"numeric"});
+  const pts=ms.flatMap(x=>[...MRD_SUB[x.k].map(([l,o])=>({l,d:x.d+o,st:x.k})),{l:x.k==="sop"?"Pilot/SOP MRD":x.l,d:x.d,st:x.k}]);
+  const lo=Math.min(0,pts[0].d)-14,hi=Math.max(0,pts[pts.length-1].d)+14,X=d=>Math.round((d-lo)*PX)+"px",W=(hi-lo)*PX;
+  const next=pts.find(p=>p.d>=0),nm=ms.find(x=>x.d>=0),nl=x=>x.k==="sop"?"Pilot/SOP MRD":x.l,cd=nm?(nm.d===0?`${nl(nm)} today`:`${nm.d} day${nm.d===1?"":"s"} to ${nl(nm)}`):"All MRDs passed";
+  // same look as the stage timeline: weekly fading ticks, flags with date, Today flag; the track is wider than the card and scrolls
+  const wk=[];for(let d=(next||pts[pts.length-1]).d-7*Math.floor(((next||pts[pts.length-1]).d-lo)/7);d<=hi;d+=7)wk.push(d);
+  el.classList.add("v2","v3");el.innerHTML=`<div class="card-head"><div><h2 id="ml-h">MRD Timeline</h2><p class="sub">${m} · stage milestones</p></div></div>`+
+    `<div class="m3-scroll" tabindex="0" aria-label="${m} MRD timeline"><div class="ml-track" style="width:${W}px" role="img" aria-label="${m} MRD timeline: ${pts.map(p=>`${p.l} ${fd(p.d)}`).join(", ")}. Today ${fd(0)}."><i class="ml-line"></i><i class="ml-fill" style="width:${X(0)}"></i>`+
+    wk.map(d=>`<i class="ml-wk${d<=0?" done":""}" style="left:${X(d)}"></i>`+[1,2,3,4,5,6].map(k=>`<i class="ml-wk mn${d+k<=0?" done":""}" style="left:${X(d+k)}"></i>`).join("")).join("")+
+    pts.map(p=>`<span class="ml-flag ${p.d<0?"past":p===next?"next":"future"}" style="left:${X(p.d)}" title="${p.l} · ${fd(p.d)}"><em><i class="m3-st">${STAGE_L[p.st]}</i><b>${p.l}</b><small>${fd(p.d)}</small></em><i class="ml-dot"></i></span>`).join("")+
+    `<span class="ml-today" style="left:${X(0)}"><span class="ml-tflag"><b>Today</b><span>${cd}</span></span></span></div></div>`;
+  const sc=el.querySelector(".m3-scroll"),go=()=>{sc.scrollLeft=Math.max(0,parseInt(X(0))-Math.round(sc.clientWidth*.25))};  // Today always opens in view, a quarter in from the left
+  requestAnimationFrame(()=>{mlLayout(el);go();setTimeout(go,60)});if(!el._ro&&window.ResizeObserver){el._ro=new ResizeObserver(()=>{const s=el.querySelector(".m3-scroll");if(s&&!s._user)go()});el._ro.observe(el)}
+  sc.addEventListener("scroll",()=>{sc._user=true},{once:true,passive:true});
+  // soft fade on whichever side has more to scroll to
+  const fade=()=>{sc.style.setProperty("--fl",sc.scrollLeft>4?"56px":"0px");sc.style.setProperty("--fr",sc.scrollLeft+sc.clientWidth<sc.scrollWidth-4?"56px":"0px")};
+  sc.addEventListener("scroll",fade,{passive:true});requestAnimationFrame(()=>requestAnimationFrame(fade));setTimeout(fade,120)}
 
 // ===== Summary dashboards: shared sample data and helpers (NPD Trials, Department Head Review, Divisional Head Review) =====
 // Only these summary pages load this file; the activity dashboards are untouched.
