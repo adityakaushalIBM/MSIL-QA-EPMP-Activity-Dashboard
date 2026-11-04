@@ -824,7 +824,7 @@ td .dot3{margin:2px 0}
 .tlx-pop::after{content:"";position:absolute;left:50%;bottom:-6px;width:10px;height:10px;margin-left:-5px;background:#fff;border-right:1px solid #F3C2C7;border-bottom:1px solid #F3C2C7;transform:rotate(45deg)}
 /* Overall Status at the top right of the tiles section (3 Nov) */
 .card.has-ovs{position:relative}
-.ovs-badge{position:absolute;top:20px;right:20px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--heading);line-height:24px}
+.ovs-badge{position:absolute;top:20px;right:20px;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;color:var(--heading);line-height:24px}
 .dot3.md{width:20px;height:20px}
 @media (max-width:860px){.ovs-badge{position:static;justify-content:flex-end;margin-bottom:8px}}
 /* ===== 3 Nov preview (UIV2, SOR Status only for now) ===== */
@@ -899,6 +899,11 @@ tr.obs-on>td{background:var(--brand-softer)}
 tr.obs-r>td{background:#FAFBFF;font-size:13px;color:var(--heading);padding-top:8px;padding-bottom:8px}
 tr.obs-r>td.obs-n{color:var(--subtle);font-weight:600;white-space:nowrap;padding-left:24px}
 tr.obs-r>td.obs-t{text-align:left;min-width:300px;white-space:normal;line-height:1.4}
+#mrd-hint{display:none}  /* 3 Nov: no MRD reference in the date selector (MRD is per model) */
+/* 4 Nov: multi-select table filters (NPD Gantt: Trial, Model) */
+.fcell.mcat{border:0;margin:0;padding:0;min-width:0}.fcell.mcat legend{padding:0;font-size:14px;font-weight:500;color:var(--heading);margin-bottom:6px}
+.mcat-l{display:flex;flex-wrap:wrap;gap:6px}.mcat-o{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;cursor:pointer}
+.mcat-o input{accent-color:#1C64F2;margin:0}.mcat-o.on{border-color:#B9CCF8;background:var(--brand-softer);color:var(--brand)}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1494,6 +1499,37 @@ html,body{overflow-x:clip}
   .drawer.kia-drawer{top:10px;right:10px;width:calc(100vw - 20px)!important;max-height:calc(100dvh - 20px);border-radius:18px}
   .kia-drawer .kia-band{padding:18px 16px 14px}.kia-drawer .kia-tabs{padding:0 16px}.kia-drawer .kia-body{padding:4px 16px 14px}.kia-drawer .kia-q{padding:10px 16px 14px}
 }
+/* 3 Nov: floating Key Insights drawer centred vertically on the right (desktop) */
+@media (min-width:861px){.drawer.kia-drawer{top:0;bottom:0;height:fit-content;margin-block:auto}.kia-drawer:not([hidden]){transform-origin:center right}}
+/* 3 Nov: Key Insights inline beside the merged graph card (Tier 2 trial) */
+.charts.merged{grid-template-columns:minmax(0,2fr) minmax(0,1fr);align-items:stretch}
+.drawer.kia-drawer.kia-inline{position:relative!important;inset:auto!important;margin:0!important;transform:none!important;animation:none!important;width:auto!important;height:auto!important;max-height:none!important;
+  z-index:auto;contain:size;display:flex!important;flex-direction:column;border-radius:16px;box-shadow:none;overflow:hidden}
+.kia-inline .kia-body{flex:1 1 auto;min-height:0;overflow:hidden auto}
+.mcard .mseg{margin:14px 0 12px}
+@media (max-width:860px){.charts.merged{grid-template-columns:1fr}.drawer.kia-drawer.kia-inline{contain:none;min-height:420px}}
+.kia-inline .kia-body{scrollbar-width:none}.kia-inline .kia-body::-webkit-scrollbar{display:none}
+.kia-inline .kia-band{padding-bottom:12px!important;min-height:0!important}.kia-inline .kia-tabs{margin-top:0!important}
+/* 3 Nov: inline panel follows the card design language (white card, card-head type scale); points are clickable */
+.kia-inline .kia-band{padding:24px 24px 12px!important;align-items:flex-start}
+.kia-inline .kia-band h2{font-size:16px;font-weight:600;line-height:1.35}
+.kia-inline .kia-band p{font-size:14px;margin-top:4px}
+.kia-inline .kia-tabs{padding:0 24px!important;gap:22px}
+.kia-inline .kia-tabs button{font-size:14px}
+.kia-inline .kia-body{padding:4px 24px 12px!important}
+.kia-inline .kia-txt p{font-size:14px;line-height:1.5}.kia-inline .kia-txt>span{font-size:13px}
+.kia-inline .kia-q{padding:12px 24px 18px!important}
+.kia-inline .kia-go{cursor:pointer;border-radius:10px;margin:0 -10px;padding-left:10px!important;padding-right:10px!important;transition:background .12s}
+.kia-inline .kia-go:hover,.kia-inline .kia-go:focus-visible{background:rgba(255,255,255,.12);outline:none}
+.kia-flash{animation:kiaFlash 1.2s ease-out}@keyframes kiaFlash{0%{box-shadow:0 0 0 3px #B9CCF8}100%{box-shadow:0 0 0 0 transparent}}
+.kia-inline .kia-tabs{gap:18px;overflow:hidden}.kia-inline .kia-tabs button{white-space:nowrap;flex:none}
+.kia-inline .kia-tabs{gap:14px;overflow-x:auto;scrollbar-width:none}.kia-inline .kia-tabs::-webkit-scrollbar{display:none}
+.kia-inline .kia-tabs button{font-size:13px}.kia-inline .kia-tabs button .c{display:none}
+.mcard .ctx.has-mseg{gap:12px 20px;margin-top:16px}.mcard .ctx.has-mseg .perf{margin-left:auto}.mcard .ctx.has-mseg .radios{flex-basis:100%}
+.charts.merged.side>section.card{min-width:0}
+.charts.merged.side>.mstack{display:flex;flex-direction:column;gap:24px;min-width:0}.charts.merged.side>.mstack>.card{margin:0}
+.mstack #tiles{display:flex;gap:12px}.mstack #tiles>.tile{flex:0 0 170px;min-width:0}.mstack #tiles>.tile.tgroup{flex:1 1 auto}
+.mstack .tgroup .tg-main{flex:0 0 120px;min-width:0}.mstack .tgroup .tg-subs .tile{min-width:0}
 </style>
 </head>
 <body style="margin:0">
@@ -1519,7 +1555,7 @@ html,body{overflow-x:clip}
 
 
       <section class="card" aria-labelledby="f-h">
-        <div class="card-head"><div><h2 id="f-h">Filter Dashboard Data</h2><p class="sub">Fine tunes dashboard data by your top level selections</p></div><div class="fhead-r"><button class="link" id="clear" hidden>Clear all filters</button></div></div>
+        <div class="card-head"><div><h2 id="f-h">Filter Dashboard Data</h2><p class="sub">Fine tunes dashboard data by your top level selections</p></div><div class="fhead-r"><div class="dsel"><div class="seg" id="asof-mode" role="group" aria-label="Date range"><button data-dm="day" class="on">Day</button><button data-dm="week">Week</button><button data-dm="month">Month</button></div><label class="mrd"><span><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1m3-7h.01v.01H8zm4 0h.01v.01H12zm4 0h.01v.01H16zm-8 4h.01v.01H8zm4 0h.01v.01H12zm4 0h.01v.01H16z"/></svg>As of</span><select id="asof" aria-label="As of date"></select></label><span class="mrdhint" id="mrd-hint"></span></div><button class="link" id="clear" hidden>Clear all filters</button></div></div>
         <div class="fbar" style="--fn:8">
           <select id="f-model" aria-label="Model"></select><select id="f-dept" aria-label="Department"></select><select id="f-category" aria-label="Part Category"></select><select id="f-variant" aria-label="Model Variant"></select><select id="f-fuel" aria-label="Fuel Type"></select><select id="f-pic" aria-label="PIC"></select><select id="f-trial" aria-label="Trial Status"></select><select id="f-ptime" aria-label="Part Timestamp"></select>
         </div>
@@ -1571,14 +1607,14 @@ html,body{overflow-x:clip}
 </div>
 <div class="scrim" id="kia-scrim" hidden></div>
 <aside class="drawer kia-drawer" id="kia-drawer" hidden role="dialog" aria-modal="true" aria-labelledby="kia-h">
-  <div class="kia-band"><svg class="kia-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg><div><h2 id="kia-h">Key Insights &amp; Alerts</h2><p>Lab Testing Status · Pilot/SOP Trial</p></div><button class="dr-x" id="kia-x" type="button" aria-label="Close"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 18 17.94 6M18 18 6.06 6"/></svg></button></div>
-  <div class="kia-tabs" id="kia-tabs" role="tablist" aria-label="Insights or alerts"><button type="button" role="tab" data-k="ins" class="on" aria-selected="true">Key Insights<span class="c"></span></button><button type="button" role="tab" data-k="crit" aria-selected="false">Critical Alerts<span class="c"></span></button><span class="kia-bar" id="kia-bar" aria-hidden="true"></span></div>
+  <div class="kia-band"><svg class="kia-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg><div><h2 id="kia-h">AI Summary, Insights &amp; Alerts</h2><p>Lab Testing Status · Pilot/SOP Trial</p></div><button class="dr-x" id="kia-x" type="button" aria-label="Close"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 18 17.94 6M18 18 6.06 6"/></svg></button></div>
+  <div class="kia-tabs" id="kia-tabs" role="tablist" aria-label="Insights or alerts"><button type="button" role="tab" data-k="mgmt" class="on" aria-selected="true">Management Summary<span class="c"></span></button><button type="button" role="tab" data-k="ins" aria-selected="false">Key Insights<span class="c"></span></button><button type="button" role="tab" data-k="crit" aria-selected="false">Critical Alerts<span class="c"></span></button><span class="kia-bar" id="kia-bar" aria-hidden="true"></span></div>
   <div class="kia-main"><div class="kia-body" id="kia-body" role="tabpanel" tabindex="0"></div>
   <div class="kia-q"><form id="kia-q" autocomplete="off"><svg class="kia-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg><input id="kia-qi" type="text" placeholder="Ask anything about Lab Testing Status..." aria-label="Ask about this dashboard"><button type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form><p class="kia-qn" id="kia-qn" aria-live="polite"></p></div></div>
 </aside>
 <script>
 
-const ACT_OVERALL=null;const PAGE_PHASE="sop";const TL_ALERT={"neg": ["NG", "Under Testing"]};const UIV2=true;
+const ACT_OVERALL=null;const PAGE_PHASE="sop";const TL_ALERT={"neg": ["NG", "Under Testing"]};const UIV2=true;const MERGE=true;
 const FB_ICONS={"users": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M16 19h4a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-2m-2.236-4a3 3 0 1 0 0-4M3 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z\"/>", "clipboard-list": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3z\"/>", "chart-line-up": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207\"/>", "desktop-pc": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1\"/>", "file-lines": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 3v4a1 1 0 0 1-1 1H5m4 8h6m-6-4h6m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1\"/>", "arrow-left-to-bracket": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2\"/>", "bell": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 5.365V3m0 2.365a5.34 5.34 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.34 5.34 0 0 1 12 5.365M8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112z\"/>", "search": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z\"/>", "filter": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z\"/>", "chevron-down": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m8 10 4 4 4-4\"/>", "chevron-right": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m10 16 4-4-4-4\"/>", "close": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18 17.94 6M18 18 6.06 6\"/>", "exclamation-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "building": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 4h12M6 4v16M6 4H5m13 0v16m0-16h1m-1 16H6m12 0h1M6 20H5M9 7h1v1H9zm5 0h1v1h-1zm-5 4h1v1H9zm5 0h1v1h-1zm-3 4h2a1 1 0 0 1 1 1v4h-4v-4a1 1 0 0 1 1-1\"/>", "wand-magic-sparkles": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16.872 9.687 20 6.56 17.44 4 4 17.44 6.56 20 16.873 9.687Zm0 0-2.56-2.56M6 7v2m0 0v2m0-2H4m2 0h2m7 7v2m0 0v2m0-2h-2m2 0h2M8 4h.01v.01H8zm2 2h.01v.01H10zm2-2h.01v.01H12zm8 8h.01v.01H20zm-2 2h.01v.01H18zm2 2h.01v.01H20z\"/>", "download": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01\"/>", "question-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.44 2.44 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "home": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5\"/>", "adjustments-horizontal": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4\"/>", "user-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18m0 0a8.95 8.95 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.95 8.95 0 0 0 12 21m3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0\"/>", "calendar-month": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1m3-7h.01v.01H8zm4 0h.01v.01H12zm4 0h.01v.01H16zm-8 4h.01v.01H8zm4 0h.01v.01H12zm4 0h.01v.01H16z\"/>", "check-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "close-circle": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0\"/>", "star": "<path stroke=\"currentColor\" d=\"M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597z\"/>", "clipboard-check": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 7 2 2 4-4m-5-9v4h4V3z\"/>", "bars-from-left": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M5 7h14M5 12h14M5 17h10\"/>", "chevron-sort": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m8 15 4 4 4-4m0-6-4-4-4 4\"/>", "chevron-up": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m16 14-4-4-4 4\"/>", "file-chart-bar": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 3v4a1 1 0 0 1-1 1H5m4 10v-2m3 2v-6m3 6v-3m4-11v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1\"/>", "eye-slash": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3.933 13.909A4.36 4.36 0 0 1 3 12c0-1 4-6 9-6m7.6 3.8A5.07 5.07 0 0 1 21 12c0 1-3 6-9 6q-.471 0-.918-.04M5 19 19 5m-4 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0\"/>", "layers": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5.005 11.19V12l6.998 4.042L19 12v-.81M5 16.15v.81L11.997 21l6.998-4.042v-.81M12.003 3 5.005 7.042l6.998 4.042L19 7.042z\"/>", "eye": "<path stroke=\"currentColor\" d=\"M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6 4.03-6 9-6 9 4.8 9 6Z\"/><path stroke=\"currentColor\" d=\"M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z\"/>", "palette": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 7h.01m3.486 1.513h.01m-6.978 0h.01M6.99 12H7m9 4h2.706a1.96 1.96 0 0 0 1.883-1.325A9 9 0 1 0 3.043 12.89 9.1 9.1 0 0 0 8.2 20.1a8.6 8.6 0 0 0 3.769.9 2.013 2.013 0 0 0 2.03-2v-.857A2.036 2.036 0 0 1 16 16\"/>", "truck": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0m-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0\"/>", "cog": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1\"/><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6\"/>", "scale-balanced": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5.5 21h13M12 21V7m0 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4m2-1.8c3.073.661 2.467 2.8 5 2.8M5 8c3.359 0 2.192-2.115 5.012-2.793M7 9.556V7.75m0 1.806-1.95 4.393a.773.773 0 0 0 .37.962.8.8 0 0 0 .362.089h2.436a.79.79 0 0 0 .643-.335.78.78 0 0 0 .09-.716zm10 0V7.313m0 2.243-1.95 4.393a.773.773 0 0 0 .37.962.8.8 0 0 0 .362.089h2.436a.79.79 0 0 0 .643-.335.78.78 0 0 0 .09-.716z\"/>", "bug": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 5 9 4V3m5 2 1-1V3m-3 6v11m0-11a5 5 0 0 1 5 5m-5-5a5 5 0 0 0-5 5m5-5a4.96 4.96 0 0 1 2.973 1H15V8a3 3 0 0 0-6 0v2h.027A4.96 4.96 0 0 1 12 9m-5 5H5m2 0v2a5 5 0 0 0 10 0v-2m2.025 0H17m-9.975 4H6a1 1 0 0 0-1 1v2m12-3h1.025a1 1 0 0 1 1 1v2M16 11h1a1 1 0 0 0 1-1V8m-9.975 3H7a1 1 0 0 1-1-1V8\"/>", "rectangle-list": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M11 9h6m-6 3h6m-6 3h6M6.996 9h.01m-.01 3h.01m-.01 3h.01M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1\"/>", "file-shield": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M18 9V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h6M9 3v4a1 1 0 0 1-1 1H4m11 13a11.4 11.4 0 0 1-3.637-3.99A11.14 11.14 0 0 1 10 11.833L15 10l5 1.833a11.14 11.14 0 0 1-1.363 5.176A11.4 11.4 0 0 1 15.001 21Z\"/>", "badge-check": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.98 1.98 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.98 1.98 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.98 1.98 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.99 1.99 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z\"/>", "atom": "<path stroke=\"currentColor\" stroke-linecap=\"round\" d=\"M8.737 8.737a21.5 21.5 0 0 1 3.308-2.724m0 0c3.063-2.026 5.99-2.641 7.331-1.3 1.827 1.828.026 6.591-4.023 10.64s-8.812 5.85-10.64 4.023c-1.33-1.33-.736-4.218 1.249-7.253m6.083-6.11c-3.063-2.026-5.99-2.641-7.331-1.3-1.827 1.828-.026 6.591 4.023 10.64m3.308-9.34a21.5 21.5 0 0 1 3.308 2.724m2.775 3.386c1.985 3.035 2.579 5.923 1.248 7.253-1.336 1.337-4.245.732-7.295-1.275M14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z\"/>", "shield-check": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.5 11.5 11 13l4-3.5M12 20a16.4 16.4 0 0 1-5.092-5.804A16.7 16.7 0 0 1 5 6.666L12 4l7 2.667a16.7 16.7 0 0 1-1.908 7.529A16.4 16.4 0 0 1 12 20\"/>", "hammer": "<path stroke=\"currentColor\" stroke-linejoin=\"round\" d=\"m20.953 11.763-2.052-2.052-2.052 2.052 2.052 2.053zm-1.368-2.736L15.48 4.922l-3.42 3.42 4.105 4.105zm-4.105 2.736-2.736-2.736-8.21 8.21 2.737 2.736z\"/><path stroke=\"currentColor\" stroke-linejoin=\"round\" d=\"m12.93 3.74 1.866 1.867-2.052 2.052-1.555-1.555c-.995-.995-3.234-.497-3.918.187l2.737-2.737c.684-.684 1.99-.746 2.923.187Z\"/>", "lightbulb": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 9a3 3 0 0 1 3-3m-2 15h4m0-3c0-4.1 4-4.9 4-9A6 6 0 1 0 6 9c0 4 4 5 4 9z\"/>", "chart-pie": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 6.025A7.5 7.5 0 1 0 17.975 14H10z\"/><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3\"/>", "chart-mixed": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 15v4m6-6v6m6-4v4m6-6v6M3 11l6-5 6 5 5.5-5.5\"/>", "file-pen": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M18 5V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M9 3v4a1 1 0 0 1-1 1H4m11.383.772 2.745 2.746m1.215-3.906a2.09 2.09 0 0 1 0 2.953l-6.65 6.646L9 17.95l.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0\"/>", "tag": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15.583 8.445h.01M10.86 19.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 12.31 4l5.734.007A1.97 1.97 0 0 1 20 5.983v5.5a1 1 0 0 1-.316.727l-7.44 7.5a.974.974 0 0 1-1.384.001Z\"/>", "chevron-double-left": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m17 16-4-4 4-4m-6 8-4-4 4-4\"/>", "chevron-double-right": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m7 16 4-4-4-4m6 8 4-4-4-4\"/>", "grid": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.143 4H4.857A.857.857 0 0 0 4 4.857v4.286c0 .473.384.857.857.857h4.286A.857.857 0 0 0 10 9.143V4.857A.857.857 0 0 0 9.143 4m10 0h-4.286a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286A.857.857 0 0 0 20 9.143V4.857A.857.857 0 0 0 19.143 4m-10 10H4.857a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286a.857.857 0 0 0 .857-.857v-4.286A.857.857 0 0 0 9.143 14m10 0h-4.286a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286a.857.857 0 0 0 .857-.857v-4.286a.857.857 0 0 0-.857-.857\"/>", "arrow-right": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19 12H5m14 0-4 4m4-4-4-4\"/>", "ruler": "<path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 7H7m2 3H7m2 3H7m4 2v2m3-2v2m3-2v2M4 5v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-9a1 1 0 0 1-1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1\"/>"};
 const ic=(n,sz=20,cls='ic')=>`<svg class="${cls}" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true">${FB_ICONS[n]}</svg>`;
 // ===== Shared sample data (identical on both pages: same seed, same order) =====
@@ -1725,9 +1761,10 @@ function renderTiles(){
   const tiles=cfg.tiles(S.cat),vals=cfg.tileValues(rows,S.cat);
   // Overall Status (3 Nov): activity-level status shown at the top right of the tiles section (all tabs). ACT_OVERALL is worked out at
   // build time from the shared activity data; activities without one show an empty dot and say so on hover (no status is made up).
-  const ovT=UIV2&&typeof ACT_OVERALL!=="undefined"&&PAGE_PHASE!=="sum"&&S.cat===cfg.tabs[0].k;
-  if(!UIV2&&typeof ACT_OVERALL!=="undefined"&&PAGE_PHASE!=="sum"){let bd=$("ovs-badge");if(!bd){bd=document.createElement("div");bd.id="ovs-badge";bd.className="ovs-badge";$("tabs").before(bd);$("tabs").parentNode.classList.add("has-ovs")}
-    bd.innerHTML=`<span>Overall Status</span>${ACT_OVERALL?dot3(ACT_OVERALL.status,"md",ACT_OVERALL.why):`<span class="dot3 none md" role="img" aria-label="Not available yet" title="Overall status is not available yet for this activity"></span>`}`}
+  const ovT=false;  // 3 Nov: Overall Status back to a badge at the top right of the section (not a tile)
+  const OVX=PAGE_PHASE==="sum"&&typeof sumOverall==="function"?sumOverall(rows):typeof ACT_OVERALL!=="undefined"?ACT_OVERALL:undefined;
+  if(OVX!==undefined){const ACT_OVERALL=OVX;let bd=$("ovs-badge");if(!bd){bd=document.createElement("div");bd.id="ovs-badge";bd.className="ovs-badge";$("tabs").before(bd);$("tabs").parentNode.classList.add("has-ovs")}
+    bd.innerHTML=`${ACT_OVERALL?dot3(ACT_OVERALL.status,"md",ACT_OVERALL.why):`<span class="dot3 none md" role="img" aria-label="Not available yet" title="Overall status is not available yet for this activity"></span>`}<span>Overall Status</span>`}
   // preview (UIV2): Overall Status as its own grey tile, first in the row under the first tab
   const used=tiles.reduce((a,t)=>a+(t.subs?(t.span||t.subs.length):1),0),cb=cfg.tileCols||tiles.length;
   $("tiles").style.setProperty("--cols",ovT&&used===cb?cb+1:cb);
@@ -1840,7 +1877,7 @@ addEventListener("scroll",()=>tlxPop(null),true);
 const tlCrossed=(model,row)=>model in MODEL_MRD_DAYS&&MODEL_MRD_DAYS[model]+(PHASE_OFF[PAGE_PHASE]||0)<0&&row.some(v=>v>0);
 const tlxIdx=ch=>{if(typeof TL_ALERT==="undefined"||!TL_ALERT||ch.canvas.id!=="c-left")return[];const neg=ch.data.datasets.map((d,i)=>TL_ALERT.neg.includes(d.label)&&ch.isDatasetVisible(i)?i:-1).filter(i=>i>=0);
   return neg.length?ch.data.labels.map((m,i)=>typeof m==="string"&&tlCrossed(m,neg.map(j=>+ch.data.datasets[j].data[i]||0))?i:-1).filter(i=>i>=0):[]};
-Chart.register({id:"tlx2",beforeInit(ch){if(UIV2&&typeof TL_ALERT!=="undefined"&&TL_ALERT&&ch.canvas.id==="c-left"&&ch.data.datasets.some(d=>TL_ALERT.neg.includes(d.label))){const p=ch.options.layout.padding;ch.options.layout.padding=typeof p==="object"?{...p,top:(p.top||0)+38}:{top:(p||0)+38,left:p||0,right:p||0,bottom:p||0}}},
+Chart.register({id:"tlx2",beforeInit(ch){if(UIV2&&typeof TL_ALERT!=="undefined"&&TL_ALERT&&ch.canvas.id==="c-left"&&ch.data.datasets.some(d=>TL_ALERT.neg.includes(d.label))){const p=ch.options.layout.padding;ch.options.layout.padding=typeof p==="object"?{...p,top:(p.top||0)+(MERGE?24:38)}:{top:(p||0)+(MERGE?24:38),left:p||0,right:p||0,bottom:p||0}}},
   beforeDatasetsDraw(ch){if(!UIV2)return;const I=tlxIdx(ch);if(!I.length)return;const x=ch.scales.x,a=ch.chartArea,w=(a.right-a.left)/ch.data.labels.length-8,c=ch.ctx;c.save();c.fillStyle="rgba(240,68,56,.07)";
     I.forEach(i=>{const cx=x.getPixelForValue(i),r=8,l=cx-w/2,t=a.top-38,h=a.bottom-t;c.beginPath();c.roundRect?c.roundRect(l,t,w,h,r):c.rect(l,t,w,h);c.fill()});c.restore()}});
 Chart.register({id:"tlx",afterDraw(ch){
@@ -1936,7 +1973,7 @@ function doExport(k,fmt){const page=document.querySelector("h1").textContent.tri
 // ===== Export selection (3 Nov, visual only): each section's Export button becomes an "Export" checkbox at its top right; checking
 // sections opens a bottom bar listing them, with a format choice and an Export button. No files are produced in this prototype.
 const XSEL=new Map();let XFMT="xlsx";
-function xsetup(){document.querySelectorAll(".xbtn").forEach(b=>{if(b.dataset.xs)return;b.dataset.xs=1;const sec=b.closest("section,.card");const name=(sec&&sec.querySelector("h2")?sec.querySelector("h2").textContent.trim():"Section");
+function xsetup(){document.querySelectorAll(".xbtn").forEach(b=>{if(b.dataset.xs)return;b.dataset.xs=1;const sec=b.closest(".mpane,section,.card");const name=(sec&&sec.querySelector("h2")?sec.querySelector("h2").textContent.trim():"Section");
     const id="x"+Math.random().toString(36).slice(2,7),l=document.createElement("label");l.className="xchk";l.innerHTML=`<input type="checkbox" data-xid="${id}"><span>Export</span>`;b.after(l);b.hidden=true;
     l.querySelector("input").onchange=e=>{e.target.checked?XSEL.set(id,name):XSEL.delete(id);sec&&sec.classList.toggle("xon",e.target.checked);xbar()}});
   if($("xbar"))return;const x=document.createElement("section");x.id="xbar";x.className="xbar";x.hidden=true;x.setAttribute("aria-label","Selected for export");document.body.appendChild(x);
@@ -1987,7 +2024,7 @@ function tileSel(){const m=S.metric;if(!m)return null;const t=allTiles().find(x=
   if(T.tileFilter){const f=T.tileFilter(m);if(f)return{t,f};if(f===false)return{t,f:null}}
   if(t.f)return{t,f:t.f};const v0=PAGECFG.tileValues(scoped().slice(0,1),S.cat)[m];if(typeof v0!=="number")return{t,f:null};// percentages cannot be mapped to rows
   return{t,f:p=>{const v=PAGECFG.tileValues([p],S.cat)[m];return typeof v==="number"&&v>0}}}
-function selPreds(){const out=[],ts=tileSel();if(ts&&ts.f)out.push(ts.f);const g=S.gsel;if(g)g.preds.forEach(f=>out.push(f));return out}
+function selPreds(){const out=[],ts=tileSel();if(ts&&ts.f)out.push(ts.f);if(S.kq){const v=S.kq;out.push(p=>Object.values(p).some(x=>x===v||Array.isArray(x)&&x.includes(v)))}const g=S.gsel;if(g)g.preds.forEach(f=>out.push(f));return out}
 function tableRows(){const t=S.t,q=t.q.toLowerCase().trim(),act=activeCF(),sp=selPreds();
   const T0=TBL(),src=T0.agg?T0.agg(baseRows().filter(p=>sp.every(f=>f(p)))):baseRows().filter(p=>sp.every(f=>f(p)));
   const rows=src.filter(p=>(!q||(T0.q?T0.q(p):[p.model,p.id,p.no,p.name,p.vcode,p.vname,p.pic,p.dept,p.trial]).join(" ").toLowerCase().includes(q))&&act.every(([k,f])=>passCol(p,k,f)));
@@ -2072,6 +2109,7 @@ function renderTable(){
   const act=activeCF(),lab=k=>meta.find(m=>m.k===k)?.fl||k;
   $("t-flabel").textContent=act.length?`Filters · ${act.length}`:"Filters";$("t-fbtn").classList.toggle("set",!!act.length);$("t-fbtn").setAttribute("aria-expanded",!$("t-fpanel").hidden);
   const ts=tileSel(),g=S.gsel,sel=(ts?[`<span class="chip sel">${ts.f?"Tile":"Tile (not applied: percentage)"}: ${ts.t.l}<button data-rm="__tile" aria-label="Clear tile selection">${ic("close",16)}</button></span>`]:[])
+    .concat(S.kq?[`<span class="chip sel">Insight: ${S.kq}<button data-rm="__kq" aria-label="Clear insight filter">${ic("close",16)}</button></span>`]:[])
     .concat(g?[`<span class="chip sel">Graph: ${g.desc}${g.note?` (${g.note})`:""}<button data-rm="__g" aria-label="Clear graph selection">${ic("close",16)}</button></span>`]:[]).join("");
   $("t-chips").innerHTML=sel+act.map(([k,f])=>`<span class="chip">${lab(k)}: ${f.type==="num"?`${f.min!==""?f.min:"…"}–${f.max!==""?f.max:"…"}`:f.v}<button data-rm="${k}" aria-label="Remove ${lab(k)} filter">${ic("close",16)}</button></span>`).join("")+(act.length>1?`<button class="link" data-rm="*">Clear all</button>`:"");
   $("t-chips").hidden=!act.length&&!sel;
@@ -2096,7 +2134,7 @@ function bindTable(){
     S.t.page=0;renderTable()};
   $("t-fpanel").addEventListener("input",onCF);$("t-fpanel").addEventListener("change",onCF);
   $("t-chips").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(!b)return;
-    if(b.dataset.rm==="__tile"){S.metric=null;S.t.page=0;render();return}if(b.dataset.rm==="__g"){S.gsel=null;S.t.page=0;renderTable();Object.values(CH).forEach(c=>c&&c.draw());PAGECFG.afterPick&&PAGECFG.afterPick();return}
+    if(b.dataset.rm==="__tile"){S.metric=null;S.t.page=0;render();return}if(b.dataset.rm==="__kq"){S.kq=null;S.t.page=0;renderTable();return}if(b.dataset.rm==="__g"){S.gsel=null;S.t.page=0;renderTable();Object.values(CH).forEach(c=>c&&c.draw());PAGECFG.afterPick&&PAGECFG.afterPick();return}
     if(b.dataset.rm==="*")S.t.cf={};else delete S.t.cf[b.dataset.rm];
     S.t.page=0;if(!$("t-fpanel").hidden)renderFilterPanel();renderTable()});
 }
@@ -2192,7 +2230,7 @@ function renderStage(){const el=$("mrdline");if(!el)return;const m=S.f.model;el.
   // preview (UIV2): a small tick for every week (Mondays) along the track
   const wk=[];if(UIV2){const a=(next||ms[ms.length-1]).d;for(let d=a-7*Math.floor((a-lo)/7);d<=hi;d+=7)wk.push(d)}
   // week callouts: every 4 weeks counting back from each upcoming MRD (after Today and clear of the previous MRD)
-  const wl={};if(UIV2)ms.forEach((x,i)=>{if(x.d<=0)return;const prev=i?ms[i-1].d:lo;for(let k=4;x.d-7*k>Math.max(0,prev)+10;k+=4)wl[x.d-7*k]=`${x.l.replace(" MRD","")} − ${k} wks`});
+  const wl={};if(UIV2)ms.forEach((x,i)=>{if(x.d<=0)return;const prev=i?ms[i-1].d:lo;for(let k=4;x.d-7*k>Math.max(0,prev)+10;k+=4)wl[x.d-7*k]=`${x.l.replace(" MRD","")} − ${7*k} days`});
   // a simple bar: three MRD flags placed by date, and Today with the days to the next MRD
   el.classList.toggle("v2",!!UIV2);el.innerHTML=`<div class="card-head"><div><h2 id="ml-h">MRD Timeline</h2><p class="sub">${m} · key MRD milestones</p></div></div><div class="ml-track" role="img" aria-label="${m} MRD timeline: ${ms.map(x=>`${x.l} ${fd(x.d)}`).join(", ")}. Today ${fd(0)}${next?`, ${next.d} days to ${next.l}`:""}."><i class="ml-line"></i><i class="ml-fill" style="width:${X(0)}"></i>${wk.map(d=>`<i class="ml-wk${d<=0?" done":""}${wl[d]?" lab":""}" style="left:${X(d)}"></i>${wl[d]?`<span class="ml-wl" style="left:${X(d)}">${wl[d]}</span>`:""}`).join("")}`+
     ms.map(x=>`<span class="ml-flag ${x.d<0?"past":x===next?"next":"future"}" style="left:${X(x.d)}" title="${x.l} · ${fd(x.d)}"><em><b>${x.l}</b><small>${fd(x.d,{day:"numeric",month:"short",year:"numeric"})}</small></em><i class="ml-dot"></i></span>`).join("")+
@@ -2246,7 +2284,7 @@ function urlFilters(){let q;try{q=new URLSearchParams(location.search)}catch(e){
 // link to another dashboard carrying the given filters (only the ones that dashboard has: its filters read them on open)
 function dashLink(file,carry){const q=Object.entries(carry).filter(([,v])=>v&&v.length).map(([k,v])=>`${k}=${encodeURIComponent([].concat(v).join("|"))}`).join("&");return file+(q?"?"+q:"")}
 renderFilters=(f=>function(){const r=f.apply(this,arguments);if(XSEL.size)xbar();return r})(renderFilters);
-function boot(){setTimeout(xsetup,0);urlFilters();{const r0=document.querySelector("input[name=tview]:checked");if(r0)S.tview=r0.value}S.cat=PAGECFG.defaultTab;bindExport();bindFilters();bindTiles();bindLeftToggle();bindTable();bindAlerts();PAGECFG.init&&PAGECFG.init();render();PAGECFG.renderLeft()}
+function boot(){setTimeout(xsetup,0);urlFilters();{const r0=document.querySelector("input[name=tview]:checked");if(r0)S.tview=r0.value}S.cat=PAGECFG.defaultTab;bindExport();bindFilters();bindTiles();bindLeftToggle();bindTable();bindAlerts();PAGECFG.init&&PAGECFG.init();mrdGen();if(MERGE)mergePanes();render();PAGECFG.renderLeft()}
 
 // Legend layout: up to 3 items in one row, otherwise two balanced rows (no single hanging item)
 // Legend: one row when it fits, otherwise two balanced rows (never one item hanging on its own)
@@ -2364,6 +2402,63 @@ document.addEventListener("click",e=>{if(e.target.closest("[data-view]"))S.gsel=
 // Nav groups (PP Trial Dashboards, MPP): expand / collapse each group's dashboards
 document.querySelectorAll(".mgrp").forEach(g=>{const sub=$(g.getAttribute("aria-controls"));if(!sub)return;g.onclick=()=>{const open=g.getAttribute("aria-expanded")!=="true";g.setAttribute("aria-expanded",open);sub.hidden=!open}});
 {const cur=document.querySelector(".msub a.cur");if(cur)cur.scrollIntoView({block:"nearest"})}
+
+// ===== MRD "As of" selector on every page (3 Nov) — same control as PDC (Day / Week / Month → MRD − n). PDC wires its own (plan vs actual).
+// Elsewhere it is a view filter only: each record has a SAMPLE entry date (p._rd, days from MRD), and choosing an earlier date shows
+// only records entered by then. Today shows everything, so default views are unchanged.
+function mrdGen(){const sel=$("asof");if(!sel||sel.onchange)return;
+  const DY=864e5,T=(()=>{const d=new Date();d.setHours(0,0,0,0);return d})(),M=new Date(+T-TODAY*DY),off=d=>Math.round((d-M)/DY),
+    fd=(d,o={day:"numeric",month:"short",year:"numeric"})=>d.toLocaleDateString("en-GB",o),rel=c=>c===0?"MRD":c%7===0?`MRD − ${-c/7} week${c===-7?"":"s"}`:`MRD − ${-c} days`;
+  const per=m=>{const out=[];
+    if(m==="day")for(let i=0;i<=7;i++){const d=new Date(+T-i*DY);out.push([off(d),i===0?`Today · ${fd(d,{weekday:"short",day:"numeric",month:"short"})}`:fd(d,{weekday:"short",day:"numeric",month:"short",year:"numeric"})])}
+    if(m==="week"){const mon=new Date(+T-((T.getDay()+6)%7)*DY);for(let i=0;i<5;i++){const s=new Date(+mon-i*7*DY),e=new Date(Math.min(+s+6*DY,+T));out.push([off(e),`${i===0?"This week · ":""}${fd(s,{day:"numeric",month:"short"})} – ${fd(e,{day:"numeric",month:"short"})}`])}}
+    if(m==="month")for(let i=0;i<4;i++){const s=new Date(T.getFullYear(),T.getMonth()-i,1),e=new Date(Math.min(+new Date(s.getFullYear(),s.getMonth()+1,0),+T));out.push([off(e),`${i===0?"This month · ":""}${fd(s,{month:"long",year:"numeric"})}`])}
+    return out};
+  if(typeof PARTS!=="undefined"){let x=97;PARTS.forEach(p=>{x=(x*16807)%2147483647;const r=x/2147483647;p._rd=TODAY-Math.floor(r*r*130)})}
+  S.asOf=TODAY;S.dmode="day";
+  scoped=(f=>function(){const r=f.apply(this,arguments);return S.asOf>=TODAY?r:r.filter(p=>p._rd==null||p._rd<=S.asOf)})(scoped);
+  const apply=()=>{sel.classList.toggle("set",S.asOf!==TODAY);$("mrd-hint").textContent=S.asOf===0?"MRD":`${rel(S.asOf)} · MRD ${fd(M,{day:"numeric",month:"short"})}`},
+    fill=()=>{const ps=per(S.dmode);sel.innerHTML=ps.map(([v,l],i)=>`<option value="${v}"${i===0?" selected":""}>${l}</option>`).join("");S.asOf=ps[0][0];apply()},
+    go=()=>{apply();render();PAGECFG.renderLeft()};
+  $("asof-mode").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;S.dmode=b.dataset.dm;$("asof-mode").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));fill();render();PAGECFG.renderLeft()});
+  sel.onchange=e=>{S.asOf=+e.target.value;go()};fill()}
+
+// ===== Merged graph pane (3 Nov, Tier 2 trial): the overall chart and the Data Breakdown chart share one card, chosen by the
+// Model Wise / Department Wise / Data Breakdown toggle (radios apply to the first two). Key Insights sits open to the right of it.
+let MFIX=()=>{};
+function mergePanes(){let row=document.querySelector(".charts");if(!row)return;
+  // Summary pages without the graph pair: the AI panel sits beside the Gantt (NPD) or the table (Department Head Review)
+  if(row.classList.contains("off")){const top=PAGECFG.kiaSide==="top",tl=$("tiles")&&$("tiles").closest("section.card");
+    const tg=top?tl:document.querySelector('[aria-labelledby="gt-h"]')||($("t-body")&&$("t-body").closest("section.card"));if(!tg)return;
+    const w=document.createElement("div");w.className="charts merged side";
+    if(top){const ml=$("mrdline"),col=document.createElement("div");col.className="mstack";(ml||tg).before(w);if(ml)col.appendChild(ml);col.appendChild(tg);w.appendChild(col)}
+    else{tg.before(w);w.appendChild(tg)}mergeKia(w);return}
+  if(row.children.length<2)return;const [L,R]=row.children;
+  const A=document.createElement("div"),B=document.createElement("div");A.className="mpane";B.className="mpane";B.hidden=true;
+  while(L.firstChild)A.appendChild(L.firstChild);while(R.firstChild)B.appendChild(R.firstChild);L.append(A,B);R.remove();L.classList.add("mcard");
+  let seg=A.querySelector(".seg");const slot=p=>{let s=p.querySelector(".mseg");if(!s){s=document.createElement("div");s.className="mseg";p.querySelector(".card-head").after(s)}return s};
+  // the overall pane keeps the toggle on the same row as its own controls (radios, Planned vs Actual) to avoid an extra row
+  const aCtx=A.querySelector(".ctx"),put=(p,el)=>{if(p===A&&aCtx){aCtx.prepend(el);aCtx.classList.add("has-mseg")}else slot(p).appendChild(el)};
+  if(!seg){seg=document.createElement("div");seg.className="seg";seg.setAttribute("role","group");seg.setAttribute("aria-label","Chart shown");
+    const b0=document.createElement("button");b0.type="button";b0.className="on";b0.textContent=($("lt-h")||{}).textContent||"Overview";seg.appendChild(b0)}
+  if(seg){[...seg.querySelectorAll("[data-by]")].forEach(x=>x.textContent=x.dataset.by==="model"?"Model Wise":"Department Wise");
+    const bd=document.createElement("button");bd.type="button";bd.dataset.pane="bd";bd.textContent="Data Breakdown";seg.appendChild(bd);put(A,seg);slot(B);MFIX=()=>{if(!A.hidden&&!A.contains(seg))put(A,seg)};
+    seg.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const toB=!!b.dataset.pane;
+      seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));A.hidden=toB;B.hidden=!toB;put(toB?B:A,seg);
+      toB?PAGECFG.renderRight():PAGECFG.renderLeft()})}
+  mergeKia(row);
+  // left graphs follow the filters: renderLeft runs over the filtered records (also when a page swaps in another view's renderLeft)
+  if(typeof PARTS!=="undefined"){const wrap=obj=>{let rl=obj.renderLeft;const w=function(){if(!rl)return;const sc=scoped();if(sc.length===PARTS.length){const r=rl.apply(this,arguments);MFIX();return r}
+      const all=PARTS.slice();PARTS.length=0;PARTS.push(...sc);try{return rl.apply(this,arguments)}finally{PARTS.length=0;PARTS.push(...all);MFIX()}};
+      Object.defineProperty(obj,"renderLeft",{configurable:true,get:()=>w,set:f=>{rl=f}})};
+    if(typeof VIEWS!=="undefined")Object.values(VIEWS).forEach(wrap);else wrap(PAGECFG)}
+  const r0=render;render=function(){r0.apply(this,arguments);PAGECFG.renderLeft()}}
+
+function mergeKia(row){const k=$("kia-drawer");if(k){Object.defineProperty(KIA,"open",{get:()=>true,set(){}});k.classList.add("kia-inline");k.removeAttribute("aria-modal");k.setAttribute("role","region");row.appendChild(k);row.classList.add("merged");
+    KIA.tab="mgmt";
+    $("kia-body").addEventListener("click",e=>{const li=e.target.closest(".kia-go");if(li&&KIA.cur)kiaGo(KIA.cur[+li.dataset.ix])});
+    $("kia-body").addEventListener("keydown",e=>{const li=e.target.closest(".kia-go");if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault();kiaGo(KIA.cur[+li.dataset.ix])}});
+    const t=$("kia-trig");if(t)t.hidden=true;const x=$("kia-x");if(x)x.hidden=true;const s=$("kia-scrim");if(s)s.style.display="none"}}
 
 // ===== Lab Testing Status =====
 // Sample data (own seed). One lab test request per part at most.
@@ -2495,7 +2590,7 @@ const KIA_TABS=[["ins","Key Insights"],["crit","Critical Alerts"]];
 const kiaEsc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
 function kiaItems(list,kind){
   if(!list.length)return `<p class="kia-empty">${kind==="crit"?"Nothing critical in this selection.":"No insights for this selection."}</p>`;
-  return `<ol class="kia-list">${list.map(i=>`<li class="kia-item${i.sev?" "+i.sev:""}"><span class="kia-mark" aria-hidden="true"></span>`+
+  KIA.cur=list;return `<ol class="kia-list">${list.map((i,ix)=>`<li class="kia-item${i.sev?" "+i.sev:""}${MERGE?' kia-go" data-ix="'+ix+'" role="button" tabindex="0" title="Show these records in the table':""}"><span class="kia-mark" aria-hidden="true"></span>`+
     `<div class="kia-txt">${i.l?`<em class="kia-lbl">${kiaEsc(i.l)}</em>`:""}<p>${i.t}</p>${i.d?`<span>${i.d}</span>`:""}</div>${i.o?`<span class="kia-own">${kiaEsc(i.o)}</span>`:""}</li>`).join("")}</ol>`}
 function kiaSummary(s){
   if(!s)return"";
@@ -2506,9 +2601,9 @@ function kiaIndicator(){const on=document.querySelector("#kia-tabs button.on"),b
 // pages without their own PAGECFG.kia: Key Insights = the page's management summary + insights, Critical Alerts = its key alerts,
 // taken from the existing PAGECFG.alerts rules (topped up as before) and capped at five each. Owner badges are not shown.
 function kiaFromAlerts(rows){const A=topUp(PAGECFG.alerts(rows),rows),m=(l,sev)=>(l||[]).map(i=>({t:i.t,d:i.d||"",sev}));
-  return{ins:[...m(A.mgmt),...m(A.ins)].slice(0,5),crit:m(A.crit,"high").slice(0,5)}}
+  return MERGE?{mgmt:kiaMgmtTop(m(A.mgmt),rows).slice(0,5),ins:m(A.ins).slice(0,5),crit:m(A.crit,"high").slice(0,5)}:{ins:[...m(A.mgmt),...m(A.ins)].slice(0,5),crit:m(A.crit,"high").slice(0,5)}}
 function renderAlerts(){
-  const d=PAGECFG.kia?PAGECFG.kia(scoped()):kiaFromAlerts(scoped());KIA.last=d;
+  let d=PAGECFG.kia?PAGECFG.kia(scoped()):kiaFromAlerts(scoped());if(MERGE&&!d.mgmt)d={...d,mgmt:kiaMgmtTop([],scoped())};KIA.last=d;
   const pl=(n,w)=>`${n} ${w}${n===1?"":"s"}`;$("kia-n").textContent=`${pl(d.ins.length,"insight")} · ${pl(d.crit.length,"alert")}`;
   const open=KIA.open;$("kia-drawer").hidden=!open;$("kia-scrim").hidden=!open;$("kia-trig").setAttribute("aria-expanded",open);
   if(!open)return;
@@ -2516,7 +2611,7 @@ function renderAlerts(){
     b.querySelector(".c").textContent=(d[b.dataset.k]||[]).length});
   kiaIndicator();
   const body=$("kia-body");
-  body.innerHTML=(KIA.tab==="ins"?kiaSummary(d.summary):"")+kiaItems(d[KIA.tab]||[],KIA.tab);
+  body.innerHTML=(KIA.tab===(MERGE?"mgmt":"ins")?kiaSummary(d.summary):"")+kiaItems(d[KIA.tab]||[],KIA.tab);
   body.classList.remove("swap");void body.offsetWidth;body.classList.add("swap");
 }
 function bindAlerts(){
@@ -2528,12 +2623,35 @@ function bindAlerts(){
   $("kia-x").onclick=close;$("kia-scrim").onclick=close;
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&KIA.open)close()});
   $("kia-tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.dataset.k===KIA.tab)return;KIA.tab=b.dataset.k;$("kia-body").scrollTop=0;renderAlerts()});
-  $("kia-tabs").addEventListener("keydown",e=>{if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;KIA.tab=KIA.tab==="ins"?"crit":"ins";renderAlerts();document.querySelector("#kia-tabs button.on").focus()});
+  $("kia-tabs").addEventListener("keydown",e=>{if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;{const ks=[...document.querySelectorAll("#kia-tabs button")].map(x=>x.dataset.k),i=ks.indexOf(KIA.tab);KIA.tab=ks[(i+(e.key==="ArrowRight"?1:ks.length-1))%ks.length]}renderAlerts();document.querySelector("#kia-tabs button.on").focus()});
   // query box: accepts free text only — no AI is connected in this prototype
   $("kia-q").addEventListener("submit",e=>{e.preventDefault();const i=$("kia-qi");if(!i.value.trim())return;
     $("kia-qn").textContent=`Noted: “${i.value.trim()}”. AI answers aren’t connected in this prototype yet.`;i.value=""});
   addEventListener("resize",()=>KIA.open&&kiaIndicator());
 }
+
+// 3 Nov (merged pages): selecting a point shows its records in the table — the tile it names (if any) is selected and any
+// department / model / PIC / vendor it names is put in the table search, in the By Parts view.
+function kiaGo(i){const strip=s=>(s||"").replace(/<[^>]+>/g,""),T=strip(i.t),D=strip(i.d),W=s=>s.toLowerCase().match(/[a-z0-9]+/g)||[];
+  const tiles=PAGECFG.tabs.flatMap(c=>(PAGECFG.tiles(c.k)||[]).flatMap(t=>[t,...(t.subs||[])]).map(t=>({...t,cat:c.k}))).filter(t=>t.l&&t.l.length>3);
+  // tile: named in the headline first (exact phrase, then all its words), then in the detail line; longest label wins
+  const pick=s=>{const lo=s.toLowerCase(),w=new Set(W(s)),by=f=>tiles.filter(f).sort((a,b)=>b.l.length-a.l.length)[0];
+    return by(t=>lo.includes(t.l.toLowerCase()))||by(t=>W(t.l).every(x=>w.has(x)))};
+  const tl=pick(T)||pick(D);
+  // record: a Tier 2 code, PIC, vendor, department or model named in the headline (else the detail line), earliest mention first
+  const ents=[...(typeof PICS!=="undefined"?PICS:[]),...VENDORS.map(v=>v[1]),...(typeof T2V!=="undefined"?T2V.map(v=>v.name):[]),...DLIST,...MODELS];
+  const find=s=>{const c=(s.match(/\bT2-\d+\b/)||[])[0];if(c)return c;let best=null,at=1e9;ents.forEach(x=>{const m=new RegExp("\\b"+x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b").exec(s);if(m&&m.index<at){at=m.index;best=x}});return best};
+  const ent=find(T)||find(D);
+  if(tl){S.cat=tl.cat;S.metric=tl.m}else S.metric=null;
+  const pv=document.querySelector('input[name=tview][value=parts]');if(pv&&!pv.checked){pv.checked=true;pv.dispatchEvent(new Event("change",{bubbles:true}))}
+  S.kq=ent||null;S.t.q="";$("t-q").value="";S.t.page=0;render();
+  const c=$("t-q").closest(".card");if(c){c.scrollIntoView({behavior:"smooth",block:"start"});c.classList.remove("kia-flash");void c.offsetWidth;c.classList.add("kia-flash")}}
+
+// Management Summary needs content on every page: when a page's rules give fewer than three progress points, add tile facts
+// from the first tab (e.g. "196 of 347 SOR Review Completed"), worded from the tiles' own labels and values.
+function kiaMgmtTop(list,rows){if(list.length>=3)return list;const c=PAGECFG.tabs[0].k,vals=PAGECFG.tileValues(rows,c)||{},out=list.slice();
+  (PAGECFG.tiles(c)||[]).flatMap(t=>[t,...(t.subs||[])]).forEach(t=>{const v=vals[t.m];if(out.length>=5||v==null||typeof v==="object")return;const b=t.of&&vals[t.of];
+    out.push({t:b?`<b>${v} of ${b}</b> ${t.l}`:`<b>${v}</b> ${t.l}`,d:b?`${Math.round(parseFloat(v)/b*100)||0}% · current selection`:"Current selection",sev:""})});return out}
 
 boot();
 // ===== Mobile layer (≤ 860px): menu drawer, filter bottom sheet, table-view dropdown =====
