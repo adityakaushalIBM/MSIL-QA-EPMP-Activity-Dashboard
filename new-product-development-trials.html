@@ -914,13 +914,13 @@ tr.obs-r>td.obs-t{text-align:left;min-width:300px;white-space:normal;line-height
 .mrdline.v3 .m3-scroll{padding-top:31px;padding-bottom:2px}.mrdline.v3 .ml-track{margin-top:0;height:110px}
 .mrdline.v3 .ml-wk:not(.mn){top:28px;height:40px;width:1.5px}  /* weekly ticks stand out from the daily ones */
 /* 4 Nov: countdown badge under every milestone; Today marker without a badge */
-.mrdline.v3 .ml-track{height:104px}.mrdline.v3.r1 .ml-track{height:132px}.mrdline.v3{padding-bottom:12px}
-.m3-cd{position:absolute;top:71px;white-space:nowrap;z-index:2;transform:translateX(-50%);max-width:168px;padding:3px 10px;border-radius:10px;background:#EAF1FF;color:#1447E6;font-size:12px;line-height:16px;text-align:center;white-space:normal;box-sizing:border-box;width:max-content}
+.mrdline.v3 .ml-track{height:96px}.mrdline.v3.r1 .ml-track{height:120px}.mrdline.v3{padding-bottom:12px}
+.m3-cd{position:absolute;top:71px;white-space:nowrap;z-index:2;transform:translateX(-50%);max-width:168px;padding:3px 6px;border-radius:10px;background:#EAF1FF;color:#1447E6;font-size:12px;letter-spacing:-.1px;line-height:16px;text-align:center;white-space:normal;box-sizing:border-box;width:max-content}
 .m3-cd b{font-weight:700}.m3-cd.r1{top:96px}.m3-cd.past{background:#F3F4F6;color:var(--subtle)}
 .m3-cd.r1::before{content:"";position:absolute;left:50%;top:-26px;height:26px;width:1px;background:#C9D2E0}
-.mrdline.v3 .ml-today::after{content:"";position:absolute;left:-1px;top:14px;height:24px;border-left:2px dashed rgba(20,71,230,.55)}.mrdline.v3.r1 .ml-today::after{height:48px}
-.mrdline.v3.r1 .m3-today{top:62px}
-.m3-today{position:absolute;top:38px;left:0;transform:translateX(-50%);padding:2px 10px;border-radius:999px;background:#1447E6;color:#fff;font-size:12px;font-weight:700;white-space:nowrap}
+.mrdline.v3 .ml-today::after{content:"";position:absolute;left:-1px;top:14px;height:14px;border-left:2px dashed rgba(20,71,230,.55)}
+
+.m3-today{position:absolute;top:28px;left:0;transform:translateX(-50%);padding:2px 10px;border-radius:999px;background:#1447E6;color:#fff;font-size:12px;font-weight:700;white-space:nowrap}
 .mrdline.v3 .m3-sym{position:absolute;left:50%;bottom:-10px;margin-left:-10px;color:#A3ADBD;filter:drop-shadow(0 2px 4px rgba(16,24,40,.14))}
 .mrdline.v3 .ml-flag.past .m3-sym,.mrdline.v3 .ml-flag.next .m3-sym{color:#1447E6}.mrdline.v3 .ml-flag.next .m3-sym{filter:drop-shadow(0 0 0 #fff) drop-shadow(0 2px 6px rgba(20,71,230,.35))}
 /* NPD: selectable Gantt dots, AI sparkle */
@@ -948,6 +948,7 @@ tr.gsel>td{background:var(--brand-softer)!important}
 /* 4 Nov: NPD Gantt stage groups alternate: PP plain, MPP grey, Pilot plain, SOP grey, */
 .gt-tbl tr.g-mpp>td,.gt-tbl tr.g-sop>td{background-color:#F6F7F9}.gt-tbl tr.g-mpp>td.gc.now,.gt-tbl tr.g-sop>td.gc.now{background-color:#E9EFFD}
 
+.tbl-wrap table td.ctr,.tbl-wrap table th.ctr{text-align:center}.tbl-wrap table th.ctr>button{margin:0 auto;justify-content:center}
 /* ═══ Mobile responsive layer: phones and small tablets (≤ 860px) ═══
    Same structure as the earlier mobile prototypes: sticky top bar with a menu button and slide-in nav drawer,
    filters in a bottom sheet, every section a full-width block, only tile rows / tab strips / tables scroll sideways.
@@ -1575,6 +1576,8 @@ html,body{overflow-x:clip}
 .mstack #tiles{display:flex;gap:12px}.mstack #tiles>.tile{flex:0 0 170px;min-width:0}.mstack #tiles>.tile.tgroup{flex:1 1 auto}
 .mstack .tgroup .tg-main{flex:0 0 120px;min-width:0}.mstack .tgroup .tg-subs .tile{min-width:0}
 .mstack #tiles:not(:has(.tgroup))>.tile{flex:1 1 0}
+
+.charts.merged.kfree{align-items:start}.charts.merged.kfree .drawer.kia-drawer.kia-inline{contain:none}
 </style>
 </head>
 <body style="margin:0">
@@ -2133,7 +2136,7 @@ function renderTable(){
   const pages=Math.max(1,Math.ceil(rows.length/PAGE));t.page=Math.min(t.page,pages-1);
   const meta=colMeta(TBL().agg?TBL().agg(baseRows()):baseRows());
   const hcells=meta.map(({k,l,sort},i)=>{const on=t.sort.k===k,dir=on?(t.sort.dir>0?"ascending":"descending"):"none";
-    return `<th class="${i<2?"stk s"+i:""}${on?" sorted":""}" aria-sort="${dir}">${sort?`<button data-k="${k}" title="Sort by ${l}">${l}${on?ic(t.sort.dir>0?"chevron-up":"chevron-down",16):CARET}</button>`:l}</th>`}).join("");
+    return `<th class="${i<2?"stk s"+i:""}${on?" sorted":""}${(TBL().ctr||[]).includes(k)?" ctr":""}" aria-sort="${dir}">${sort?`<button data-k="${k}" title="Sort by ${l}">${l}${on?ic(t.sort.dir>0?"chevron-up":"chevron-down",16):CARET}</button>`:l}</th>`}).join("");
   let grp="";
   if(T.groups){const g=T.groups.map(x=>[...x]);const first=g[0];
     grp=`<tr class="grp"><th colspan="2" class="stk s0">${first[0]}</th>${first[1]>2?`<th colspan="${first[1]-2}"></th>`:""}${g.slice(1).map(([l,n])=>`<th colspan="${n}">${l}</th>`).join("")}</tr>`}
@@ -2479,7 +2482,7 @@ function mergePanes(){let row=document.querySelector(".charts");if(!row)return;
   // Summary pages without the graph pair: the AI panel sits beside the Gantt (NPD), the Overall Summary table (Divisional Status) or the tiles (Department Status)
   if(row.classList.contains("off")){const top=PAGECFG.kiaSide==="top",tl=$("tiles")&&$("tiles").closest("section.card");
     const tg=top?tl:(PAGECFG.kiaSel&&document.querySelector(PAGECFG.kiaSel))||document.querySelector('[aria-labelledby="gt-h"]')||($("t-body")&&$("t-body").closest("section.card"));if(!tg)return;
-    const w=document.createElement("div");w.className="charts merged side";
+    const w=document.createElement("div");w.className="charts merged side"+(PAGECFG.kiaFree?" kfree":"");
     if(top){const ml=$("mrdline"),col=document.createElement("div");col.className="mstack";(ml||tg).before(w);if(ml)col.appendChild(ml);col.appendChild(tg);w.appendChild(col)}
     else{tg.before(w);w.appendChild(tg)}mergeKia(w);return}
   if(row.children.length<2)return;const [L,R]=row.children;
@@ -2528,7 +2531,7 @@ function renderStage3(el,m){const PX=26,ms=modelMilestones(m),fd=(d,o)=>dayDate(
   const lo=Math.min(0,pts[0].d)-14,hi=Math.max(0,pts[pts.length-1].d)+14,PXd=d=>Math.round((d-lo)*PX),X=d=>PXd(d)+"px",W=(hi-lo)*PX;
   const next=pts.find(p=>p.d>=0);
   // 4 Nov: a countdown badge under every milestone ("n days to MPP Jig MRD"); close neighbours drop to a second row so badges never touch
-  const BW=140,last=[-1e9,-1e9];pts.forEach(p=>{const x=PXd(p.d);p.row=x-last[0]>=BW?0:x-last[1]>=BW?1:0;last[p.row]=x});
+  const BW=122,last=[-1e9,-1e9],TW=96;[...pts,{tdy:1,d:0}].sort((a,b)=>a.d-b.d||(b.tdy?1:0)-(a.tdy?1:0)).forEach(p=>{const x=PXd(p.d);if(p.tdy){if(x-last[0]>=TW)last[0]=x;return}p.row=x-last[0]>=BW?0:x-last[1]>=BW?1:0;last[p.row]=x});  // 4 Nov: the Today pill sits on the badge row and takes a slot in it
   const nm=p=>p.main?p.l:`${STAGE_L[p.st]} ${p.l}`,cdl=p=>p.d>0?`<b>${p.d} day${p.d===1?"":"s"}</b> from today`:p.d===0?`<b>Today</b>`:`<b>${-p.d} day${p.d===-1?"":"s"}</b> ago`;
   const wk=[];for(let d=(next||pts[pts.length-1]).d-7*Math.floor(((next||pts[pts.length-1]).d-lo)/7);d<=hi;d+=7)wk.push(d);
   el.classList.add("v2","v3");el.innerHTML=`<div class="card-head"><div><h2 id="ml-h">MRD Timeline</h2><p class="sub">${m} · stage milestones</p></div></div>`+
@@ -2595,7 +2598,7 @@ const dot=(st,k)=>`<span class="sdot ${k||ACOL[st]}" title="${st}"></span>`;
 // link to an activity dashboard carrying the filters that dashboard has (Model, Department, PIC); row values take precedence
 function carry(file,row={}){const F=S.F,pick=k=>row[k]!==undefined?[].concat(row[k]):(F[k]||[]);return dashLink(file,{model:pick("model"),dept:pick("dept"),pic:pick("pic")})}
 // Activity Status Summary row (No., Activity link, Status, Progress, Group, U/I, NG, OK, Not Ready)
-function actRow(i,o,dotSt){const A=ACTS.find(a=>a[0]===o.k);return`<tr><td class="num">${i}</td><td class="wrap act"><a class="alink" href="${carry(A[2])}" title="Open ${A[1]}">${A[1]}</a></td><td>${hball(o.n?pct(o.actual,o.n):0,`${o.status} · ${o.actual} of ${o.n} parts finished (${o.n?pct(o.actual,o.n):0}%)`)}</td>${dotSt?`<td>${dot3(ovsOverall(o),"",ovsWhy(o))}</td>`:""}`+
+function actRow(i,o,dotSt){const A=ACTS.find(a=>a[0]===o.k);return`<tr><td class="num">${i}</td><td class="wrap act"><a class="alink" href="${carry(A[2])}" title="Open ${A[1]}">${A[1]}</a></td><td${dotSt?' class="ctr"':""}>${hball(o.n?pct(o.actual,o.n):0,`${o.status} · ${o.actual} of ${o.n} parts finished (${o.n?pct(o.actual,o.n):0}%)`)}</td>${dotSt?`<td class="ctr">${dot3(ovsOverall(o),"",ovsWhy(o))}</td>`:""}`+
   `<td class="num"><span class="pcell"><span class="pbar" aria-hidden="true"><i class="${ACOL[o.status]}" style="width:${o.pc}%"></i></span>${o.pc}% <span class="subtle">(${o.actual}/${o.plan})</span></span></td><td>${o.group}</td><td class="num">${o["U/I"]}</td><td class="num">${o.NG}</td><td class="num">${o.OK}</td><td class="num">${o["Not Ready"]}</td></tr>`}
 // quarter ball: progress rounded to the nearest quarter (0, 25, 50, 75 or 100%)
 function hball(pc,tip){const q=Math.round(pc/25),r=9,c=11,a=q*Math.PI/2,x=c+r*Math.sin(a),y=c-r*Math.cos(a);
@@ -2717,7 +2720,7 @@ const MILESTONES=[["20 Nov 2026","YCA MC 27 PP Trial","PP trial build for the YC
   ["18 Dec 2026","YHB CNG Pilot Trial","Pilot trial for the YHB CNG variant.","Programme Head"],
   ["15 Jan 2027","YCA MC 27 MPP Trial","MPP trial for the YCA model change after PP sign-off.","Programme Head"],
   ["26 Feb 2027","YTB Hybrid SOP","Start of production for the YTB hybrid.","Plant Head"]];
-const PAGECFG={
+const PAGECFG={kiaFree:true,
   defaultTab:"ov",get tileCols(){return S.cat==="ov"?5:3},fitTables:true,ownAlerts:true,tileHint:c=>c&&c.m==="models"?"Showing trials of every active model in the schedule. Select the tile again to clear it.":c?`Showing ${c.l} trials in the schedule and filtering Things to Focus. Select the tile again to clear it.`:"Select a tile to show those trials in the schedule and filter Things to Focus.",clearMetricOnTab:true,
   tabs:[{k:"ov",label:"Overall Summary",icon:ic('home')},{k:"cmp",label:"Trial Completion",icon:ic('check-circle')}],
   tiles:cat=>TILES[cat],tileValues:()=>tvals(trialsF()),
