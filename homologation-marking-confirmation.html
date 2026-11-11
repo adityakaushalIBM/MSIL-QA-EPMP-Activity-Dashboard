@@ -2557,15 +2557,15 @@ function renderStage3(el,m){const PX=26,ms=modelMilestones(m),fd=(d,o)=>dayDate(
 // Homologation Applicable ⊇ Homologation Marking Applicable (marking is decided only for homologation-applicable parts).
 // Camera availability is recorded for homologation-applicable parts only (Available / Not Available); other parts are "-".
 // Camera implementation applies to parts with a camera available. Each has a target date; once implemented, an implementation date.
-//   Completed = implemented on or before today · Pending = not implemented, target today or later · Overdue = not implemented, target passed.
-//   Verification Completed is a subset of Completed (verified after implementation).
+//   Completed = implemented on or before today · Pending = not implemented yet (whatever the target) · Overdue = the Pending parts whose target has passed.
+//   Verification Completed is a subset of Completed; Overdue is a subset of Pending (11 Nov: tiles nested accordingly).
 const RH=rng(811);
 PARTS.forEach(p=>{const mrd=MODEL_MRD_DAYS[p.model];p.hApp=RH()<.62;p.mApp=p.hApp&&RH()<.7;p.cam=p.hApp?(RH()<.74?"Available":"Not Available"):null;
   p.iTgt=null;p.iDate=null;p.iVer=false;p.iSt=null;
   if(p.cam==="Available"){p.iTgt=mrd-45+Math.floor(RH()*46);/* target dates all on or before MRD */const pr=p.iTgt<=0?.8:.25;
     if(RH()<pr){let d=p.iTgt-12+Math.floor(RH()*24);if(d>0)d=-Math.floor(RH()*6);p.iDate=d;p.iVer=RH()<.68}
     p.iSt=p.iDate!==null?"Completed":p.iTgt>=0?"Pending":"Overdue"}
-  p.hA=+p.hApp;p.mA=+p.mApp;p.camY=+(p.cam==="Available");p.camN=+(p.cam==="Not Available");p.iC=+(p.iSt==="Completed");p.iP=+(p.iSt==="Pending");p.iO=+(p.iSt==="Overdue");p.iV=+p.iVer});
+  p.hA=+p.hApp;p.mA=+p.mApp;p.camY=+(p.cam==="Available");p.camN=+(p.cam==="Not Available");p.iC=+(p.iSt==="Completed");p.iP=+(p.iSt==="Pending"||p.iSt==="Overdue");p.iO=+(p.iSt==="Overdue");p.iV=+p.iVer});
 const sum=(r,f)=>r.reduce((a,p)=>a+p[f],0),grp=(rows,key,groups)=>groups.map(g=>rows.filter(p=>p[key]===g)),has=f=>p=>p[f]>0;
 const word=k=>k==="model"?"Model":"Department";
 const groupsOf=(rows,key)=>{const all=key==="model"?MODELS:DLIST,g=all.filter(x=>rows.some(p=>p[key]===x));return g.length?g:all};
@@ -2574,7 +2574,10 @@ const M={total:["Total No. of Parts","tot","one"],hApp:["Homologation Applicable
 PARTS.forEach(p=>p.one=1);
 const hvals=r=>Object.fromEntries(Object.entries(M).map(([m,[, ,f]])=>[m,sum(r,f)]));
 const T=(m,c)=>({m,l:M[m][0],c:c||"t-"+M[m][1],bar:M[m][1]});
-const TILES={ov:[T("total","t-total"),T("hApp"),T("mApp"),T("camY"),T("iC")],cam:[T("iC"),T("iP"),T("iO"),T("iV")]};
+// 11 Nov: Overall Summary shows Camera Not Available (red) instead of Implementation Completed.
+// Camera Implementation Status: Verification Completed nests under Implementation Completed, Overdue under Pending; every tile stays clickable.
+const TILES={ov:[T("total","t-total"),T("hApp"),T("mApp"),T("camY"),T("camN")],
+  cam:[{m:"iC",l:M.iC[0],c:"t-plain",bar:"ok",span:2,subs:[T("iV")]},{m:"iP",l:M.iP[0],c:"t-plain",bar:"tbc",span:2,subs:[T("iO")]}]};
 const GT={app:["hApp","mApp"],cam:["hApp","camY","camN"],imp:["iC","iP","iO","iV"]};
 const GTL={app:"Homologation Applicability",cam:"Camera Availability",imp:"Camera Implementation Status"};
 const sets=(G,ms)=>ms.map(m=>Object.assign(ds(M[m][0],G.map(r=>sum(r,M[m][2])),M[m][1],{maxBarThickness:ms.length>3?22:28}),{f:has(M[m][2])}));
@@ -2627,7 +2630,7 @@ const yn=v=>v?"Yes":"No",dash='<span style="color:var(--subtle)">-</span>';
 const DEPT_T={title:"Part Wise Homologation Marking Details",
   agg:parts=>DLIST.map(d=>{const r=parts.filter(p=>p.dept===d),o={dept:d,parts:r.length};AGG.forEach(f=>o[f]=sum(r,f));return o}).filter(o=>o.parts),q:r=>[r.dept],
   groups:[["Parts",2],["Applicability",2],["Camera",2],["Camera Implementation",4]],
-  cols:[["dept","Department"],["one","Total Parts"],["hA","Homologation Applicable"],["mA","Marking Applicable"],["camY","Available"],["camN","Not Available"],["iC","Completed"],["iP","Pending"],["iO","Overdue"],["iV","Verification Completed"]],
+  cols:[["dept","Department"],["one","Total Parts"],["hA","Homologation Applicable"],["mA","Marking Applicable"],["camY","Available"],["camN","Not Available"],["iC","Completed"],["iP","Pending (incl. Overdue)"],["iO","Overdue"],["iV","Verification Completed"]],
   row:r=>`<tr><td class="id">${r.dept}</td>`+AGG.map(f=>`<td class="num">${f==="iO"&&r[f]?stCell(r[f],"bad"):r[f]}</td>`).join("")+`</tr>`,
   foot:rows=>`<tr><td>Total</td>`+AGG.map(f=>`<td class="num">${sum(rows,f)}</td>`).join("")+`</tr>`,
   count:rows=>`${rows.length} departments · ${sum(rows,"one")} parts`};
@@ -2644,7 +2647,7 @@ const PART_T={title:"Part Wise Homologation Marking Details",groups:[["Part Deta
 S.tview="dept";
 
 const PAGECFG={
-  defaultTab:"ov",clearMetricOnTab:true,get tileCols(){return TILES[S.cat].length},
+  defaultTab:"ov",clearMetricOnTab:true,get tileCols(){return S.cat==="cam"?4:TILES[S.cat].length},
   tabs:[{k:"ov",label:"Overall Summary",icon:ic('home')},{k:"cam",label:"Camera Implementation Status",icon:ic('eye')}],
   tiles:cat=>TILES[cat],tileValues:rows=>hvals(rows),
   get table(){return S.tview==="parts"?PART_T:DEPT_T},
@@ -2656,7 +2659,7 @@ const PAGECFG={
   renderLeft(){const rows=scoped(),key=S.leftBy==="model"?"model":"dept",groups=groupsOf(rows,key),G=grp(rows,key,groups),ms=GT[S.leftType];
     drawChart("L",{data:{labels:groups,datasets:sets(G,ms)}});
     $("cap-left").textContent=`${word(key)} Wise ${GTL[S.leftType]}`;$("lg-left").innerHTML=legendHtml(ms.map(m=>[M[m][0],M[m][1]]));
-    const v=hvals(rows);$("n-left").textContent=S.leftType==="app"?`${v.hApp} homologation applicable · ${v.mApp} of them marking applicable`:S.leftType==="cam"?`${v.hApp} homologation applicable = ${v.camY} camera available + ${v.camN} not available`:`${v.camY} parts with a camera · ${v.iC} completed (${v.iV} verified), ${v.iP} pending, ${v.iO} overdue`},
+    const v=hvals(rows);$("n-left").textContent=S.leftType==="app"?`${v.hApp} homologation applicable · ${v.mApp} of them marking applicable`:S.leftType==="cam"?`${v.hApp} homologation applicable = ${v.camY} camera available + ${v.camN} not available`:`${v.camY} parts with a camera · ${v.iC} completed (${v.iV} verified), ${v.iP} pending (${v.iO} overdue)`},
   renderRight(){renderPva();PAGECFG.renderLeft();
     const seg=PAGECFG.tabs.find(c=>c.k===S.cat),t=M[S.metric],rows=scoped(),{key,groups,word:w}=rightGroups(),G=grp(rows,key,groups);
     $("ctx-right").innerHTML=[`<span class="tag brand">${seg.label}</span>`].concat(t?[`<span class="tag brand">${t[0]}</span>`]:[],filterTags()).join("");
@@ -2664,17 +2667,17 @@ const PAGECFG={
     if(t){const v=G.map(r=>sum(r,t[2]));if(!v.some(Boolean))return showEmpty("Nothing to show",`No ${t[0]} for this selection.`);showRight();
       drawChart("R",{data:{labels:groups,datasets:[Object.assign(ds(t[0],v,t[1]),S.metric==="total"?{}:{f:has(t[2])})]}});
       $("cap-right").textContent=`${w} Wise ${t[0]}`;$("lg-right").innerHTML=legendHtml([[t[0],t[1]]]);$("n-right").textContent=`${v.reduce((a,b)=>a+b,0)} parts shown`;return}
-    const ms=S.cat==="ov"?["hApp","mApp","camY","iC"]:GT.imp;showRight();drawChart("R",{data:{labels:groups,datasets:sets(G,ms)}});
+    const ms=S.cat==="ov"?["hApp","mApp","camY","camN"]:GT.imp;showRight();drawChart("R",{data:{labels:groups,datasets:sets(G,ms)}});
     $("cap-right").textContent=`${w} Wise ${S.cat==="ov"?"Homologation Summary":"Camera Implementation Status"}`;$("lg-right").innerHTML=legendHtml(ms.map(m=>[M[m][0],M[m][1]]));
-    const v=hvals(rows);$("n-right").textContent=S.cat==="ov"?`${v.hApp} applicable · ${v.mApp} marking applicable · ${v.camY} with camera · ${v.iC} implemented`:`${v.iC} completed · ${v.iP} pending · ${v.iO} overdue · ${v.iV} verified`},
+    const v=hvals(rows);$("n-right").textContent=S.cat==="ov"?`${v.hApp} applicable · ${v.mApp} marking applicable · ${v.camY} with camera · ${v.camN} without a camera`:`${v.iC} completed (${v.iV} verified) · ${v.iP} pending (${v.iO} overdue)`},
   alerts(rows){const out={crit:[],mgmt:[],ins:[],sum:[]},v=hvals(rows);if(!v.hApp)return out;const pc=(a,b)=>b?pct(a,b):0;
     const od=rows.filter(p=>p.iSt==="Overdue").sort((a,b)=>a.iTgt-b.iTgt);
     od.slice(0,2).forEach(p=>out.crit.push({k:`${-p.iTgt}d`,s:`Camera implementation overdue on ${p.no}`,t:`${p.no} (${p.name}) camera implementation is ${-p.iTgt} days past target`,d:`${p.model} · ${p.dept}.`,o:p.pic}));
-    if(v.iO)out.crit.push({k:v.iO,s:"Camera implementations overdue",t:`${v.iO} camera implementations are past their target date`,d:`${v.iP} more pending within target.`,o:"QA Head"});
+    if(v.iO)out.crit.push({k:v.iO,s:"Camera implementations overdue",t:`${v.iO} camera implementations are past their target date`,d:`${v.iP-v.iO} more pending within target.`,o:"QA Head"});
     if(v.camN)out.crit.push({k:v.camN,s:"Applicable parts without a camera",t:`${v.camN} homologation applicable parts have no camera available`,d:`${pc(v.camN,v.hApp)}% of applicable parts.`,o:"Section Head"});
     out.sum.push({k:`${pc(v.hApp,v.total)}%`,s:"Of parts homologation applicable",t:`${v.hApp} of ${v.total} parts are homologation applicable`,d:`${v.mApp} need homologation marking.`,o:"Programme Head"},
       {k:`${pc(v.camY,v.hApp)}%`,s:"Of applicable parts with a camera",t:`${v.camY} of ${v.hApp} applicable parts have a camera available`,d:`${v.camN} without.`,o:"Section Head"},
-      {k:`${pc(v.iC,v.camY)}%`,s:"Of camera implementations completed",t:`${v.iC} of ${v.camY} camera implementations completed`,d:`${v.iP} pending, ${v.iO} overdue.`,o:"QA Head"},
+      {k:`${pc(v.iC,v.camY)}%`,s:"Of camera implementations completed",t:`${v.iC} of ${v.camY} camera implementations completed`,d:`${v.iP} pending, ${v.iO} of them overdue.`,o:"QA Head"},
       {k:`${pc(v.iV,v.iC)}%`,s:"Of completed implementations verified",t:`${v.iV} of ${v.iC} completed implementations verified`,d:`${v.iC-v.iV} awaiting verification.`,o:"QA Head"});
     const byd=DLIST.map(d=>{const r=rows.filter(p=>p.dept===d);return[d,sum(r,"iC"),sum(r,"camY")]}).filter(x=>x[2]).map(x=>[x[0],pc(x[1],x[2]),x[1],x[2]]).sort((a,b)=>b[1]-a[1]);
     if(byd[0])out.sum.push({k:byd[0][1]+"%",s:`Implementation done in ${byd[0][0]}, the best of any department`,t:`${byd[0][0]} has completed ${byd[0][1]}% of camera implementations`,d:`${byd[0][2]} of ${byd[0][3]}.`,o:`${byd[0][0]} Team`});

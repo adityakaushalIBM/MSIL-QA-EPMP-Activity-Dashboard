@@ -2578,6 +2578,9 @@ PARTS.forEach(p=>{const mrd=MODEL_MRD_DAYS[p.model],e=p.o={};p.ecnC=RE()<.42?"EC
   p.edR=p.en;p.edA=b(e.devS==="Approved");p.edP=b(e.devS==="Pending");p.edJ=b(e.devS==="Rejected");p.edy=b(e.dly);
   NRD.forEach(([k])=>p[k]=b(!e.otop&&e.nrd===k));p.esna=b(!e.otop&&e.sna);p.esby=b(!e.otop&&!e.sna);
   REASON.forEach(([k])=>{p["n_"+k]=b(!e.otop&&e.nr===k);p["d_"+k]=b(e.dly&&e.dr===k)})});
+// 11 Nov · OTOP Status Alignment (SAMPLE): Non-OTOP parts the vendor has declared OTOP (vendor OTOP, MSIL Non-OTOP).
+// The real source must supply the vendor's OTOP declaration; own seed so the other sample values stay unchanged.
+const RV=rng(2311);PARTS.forEach(p=>{p.o.vOtop=!p.o.otop&&RV()<.35;p.evm=p.o.vOtop?1:0});
 const sum=(r,f)=>r.reduce((a,p)=>a+p[f],0),grp=(rows,key,groups)=>groups.map(g=>rows.filter(p=>p[key]===g)),has=f=>p=>p[f]>0;
 const word=k=>k==="model"?"Model":"Department";
 const groupsOf=(rows,key)=>{const all=key==="model"?MODELS:DLIST,g=all.filter(x=>rows.some(p=>p[key]===x));return g.length?g:all};
@@ -2589,15 +2592,16 @@ const pop=()=>PV(scoped());
 
 const M={total:["Total Parts","tot","one"],otop:["Count of OTOP","ok","eo"],non:["Count of Non-OTOP","tbc","en"],nE:["ECN Parts","ini","nE"],nN:["Non ECN Parts","pt","nN"],
   devR:["Deviations Raised","pt","edR"],devA:["Deviations Approved","ok","edA"],dly:["OTOP Delay Cases","bad","edy"],
-  sna:["Schedule NA","na","esna"],sby:["Schedule Available but Beyond MRD","bad","esby"]};
+  sna:["Schedule NA","na","esna"],sby:["Schedule Available but Beyond MRD","bad","esby"],
+  vmo:["Vendor OTOP but MSIL Non-OTOP","bad","evm"]};
 NRD.forEach(([k,l,c])=>M[k]=[l,c,k]);REASON.forEach(([k,l,c])=>{M["n_"+k]=[l,c,"n_"+k];M["d_"+k]=[l,c,"d_"+k]});
 const evals=r=>Object.fromEntries(Object.entries(M).map(([m,[, ,f]])=>[m,sum(r,f)]));
 const T=(m,c)=>({m,l:M[m][0],c:c||"t-"+M[m][1],bar:M[m][1]});
 const TILES={ov:[T("total","t-total"),T("otop"),{m:"non",l:"Count of Non-OTOP",c:"t-plain",bar:"tbc",span:3,subCols:2,subs:[T("nE"),T("nN")]},T("devR"),T("devA"),T("dly")],
-  nb:NRD.map(([k])=>T(k)),rs:REASON.map(([k])=>T("n_"+k)),dv:[T("sna"),T("sby")],od:REASON.map(([k])=>T("d_"+k))};
-const SEGSET={nb:NRD.map(([k])=>k),rs:REASON.map(([k])=>"n_"+k),dv:["sna","sby"],od:REASON.map(([k])=>"d_"+k)};
-const SEGL={ov:"Overall Summary",nb:"Non OTOP Breakup",rs:"Non OTOP Reason",dv:"Deviation for Non OTOP Breakup",od:"OTOP Delay Cases Breakup"};
-const SEGBASE={nb:["non","Non-OTOP parts"],rs:["non","Non-OTOP parts"],dv:["non","Non-OTOP parts"],od:["dly","OTOP delay cases"]};
+  nb:NRD.map(([k])=>T(k)),rs:REASON.map(([k])=>T("n_"+k)),dv:[T("sna"),T("sby")],od:[T("vmo")]};
+const SEGSET={nb:NRD.map(([k])=>k),rs:REASON.map(([k])=>"n_"+k),dv:["sna","sby"],od:["vmo"]};
+const SEGL={ov:"Overall Summary",nb:"Non OTOP Breakup",rs:"Non OTOP Reason",dv:"Deviation for Non OTOP Breakup",od:"OTOP Status Alignment"};
+const SEGBASE={nb:["non","Non-OTOP parts"],rs:["non","Non-OTOP parts"],dv:["non","Non-OTOP parts"],od:["non","Non-OTOP parts"]};
 const TP=m=>m==="total"?(()=>true):has(M[m][2]);
 const sets=(G,ms,o={})=>ms.map(m=>Object.assign(ds(M[m][0],G.map(r=>sum(r,M[m][2])),M[m][1],{maxBarThickness:ms.length>3?22:28,...o}),{f:has(M[m][2])}));
 // parts a chart works on: page population, selected tile, and a column picked on ANOTHER chart (a chart never filters itself)
@@ -2633,7 +2637,7 @@ function renderRightChart(){const rows=selRows("c-right"),t=S.metric?M[S.metric]
   if(!ms.some(m=>sum(rows,M[m][2])))return showEmpty("Nothing to show",`No ${t?t[0]:SEGL[S.cat]} for this selection.`);
   showRight();drawChart("R",{data:{labels:groups,datasets:sets(G,ms)}});
   $("cap-right").textContent=`${word(key)} Wise ${t?t[0]:SEGL[S.cat]}`;$("lg-right").innerHTML=legendHtml(ms.map(m=>[M[m][0],M[m][1]]));
-  const base=SEGBASE[S.cat],v=evals(rows);$("n-right").textContent=`${ms.reduce((a,m)=>a+v[m],0)} of ${v[base[0]]} ${base[1]} shown · one ${S.cat==="dv"?"schedule category":S.cat==="nb"?"readiness gap":"reason"} each`}
+  const base=SEGBASE[S.cat],v=evals(rows);$("n-right").textContent=`${ms.reduce((a,m)=>a+v[m],0)} of ${v[base[0]]} ${base[1]} shown · ${S.cat==="od"?"declared OTOP by the vendor (sample)":`one ${S.cat==="dv"?"schedule category":S.cat==="nb"?"readiness gap":"reason"} each`}`}
 
 // ---------- Full width: OTOP Readiness by Week w.r.t. MRD (selected model, MRD − 4 … MRD + 4 weeks) ----------
 const POST={id:"post",beforeDatasetsDraw(ch,_,o){if(o.from==null)return;const{ctx,chartArea:a}=ch,xs=ch.scales.x,x=xs.getPixelForValue(o.from);if(x>=a.right)return;
@@ -2664,38 +2668,39 @@ function renderReady(){const m=S.f.model,rows=selRows("c-ng").filter(p=>p.o.otop
   $("n-ng").textContent=`${N} OTOP parts · ${done.length} ready today (${pct(done.length,N)}%) · weeks after today have no data yet${sel.length?" · showing "+sel.join(" · "):""}`}
 
 // ---------- tables ----------
-const DAGG=["one","ecP","necP","eo","en","edA","edP","edJ","edy",...NRD.map(([k])=>k),...REASON.map(([k])=>"n_"+k),"esna","esby",...REASON.map(([k])=>"d_"+k)];
+const DAGG=["one","ecP","necP","eo","en","evm","edA","edP","edJ","edy",...NRD.map(([k])=>k),...REASON.map(([k])=>"n_"+k),"esna","esby",...REASON.map(([k])=>"d_"+k)];
 const scopeF=p=>S.pv==="all"||p.ecnC===(S.pv==="ecn"?"ECN":"Non ECN");
 const DEPT_T={title:"OTOP Details",filter:scopeF,
   agg:parts=>DLIST.map(d=>{const r=parts.filter(p=>p.dept===d),o={dept:d,parts:r.length};DAGG.forEach(f=>o[f]=sum(r,f));return o}).filter(o=>o.parts),q:r=>[r.dept],
-  groups:[["Parts",4],["OTOP",2],["Non-OTOP Deviations",3],["OTOP Delay",1],["Non-OTOP Readiness",3],["Non-OTOP Reason",4],["Deviation for Non-OTOP",2],["OTOP Delay Reason",4]],
-  cols:[["dept","Department"],["one","Total Parts"],["ecP","ECN Parts"],["necP","Non ECN Parts"],["eo","OTOP"],["en","Non-OTOP"],["edA","Approved"],["edP","Pending"],["edJ","Rejected"],["edy","OTOP Delay Cases"],
+  groups:[["Parts",4],["OTOP",3],["Non-OTOP Deviations",3],["OTOP Delay",1],["Non-OTOP Readiness",3],["Non-OTOP Reason",4],["Deviation for Non-OTOP",2],["OTOP Delay Reason",4]],
+  cols:[["dept","Department"],["one","Total Parts"],["ecP","ECN Parts"],["necP","Non ECN Parts"],["eo","OTOP"],["en","Non-OTOP"],["evm","Vendor OTOP · MSIL Non-OTOP"],["edA","Approved"],["edP","Pending"],["edJ","Rejected"],["edy","OTOP Delay Cases"],
     ...NRD.map(([k,l])=>[k,l]),...REASON.map(([k,l])=>["n_"+k,l,{fl:`Non-OTOP · ${l}`}]),["esna","Schedule NA"],["esby","Beyond MRD"],...REASON.map(([k,l])=>["d_"+k,l,{fl:`OTOP Delay · ${l}`}])],
   row:r=>`<tr><td class="id">${r.dept}</td>`+DAGG.map(f=>`<td class="num">${r[f]}</td>`).join("")+`</tr>`,
   foot:rows=>`<tr><td>Total</td>`+DAGG.map(f=>`<td class="num">${sum(rows,f)}</td>`).join("")+`</tr>`,
   count:rows=>`${rows.length} departments · ${sum(rows,"one")} parts`};
 const dash='<span style="color:var(--subtle)">-</span>',DS={Approved:"ok",Pending:"tbc",Rejected:"bad"};
 const fd=n=>n==null?null:fmtDay(dayDate(n));
-const PCELL={otT:p=>p.o.otop?"OTOP":"Non-OTOP",plan:p=>p.o.otop?fd(p.o.plan):null,ready:p=>p.o.otop?(p.o.done!==null?"Ready":"Not Ready"):null,dlyT:p=>p.o.otop?(p.o.dly?"Yes":"No"):null,dr:p=>p.o.dr?RL[p.o.dr]:null,
+const PCELL={otT:p=>p.o.otop?"OTOP":"Non-OTOP",vT:p=>p.o.otop||p.o.vOtop?"OTOP":"Non-OTOP",plan:p=>p.o.otop?fd(p.o.plan):null,ready:p=>p.o.otop?(p.o.done!==null?"Ready":"Not Ready"):null,dlyT:p=>p.o.otop?(p.o.dly?"Yes":"No"):null,dr:p=>p.o.dr?RL[p.o.dr]:null,
   nrd:p=>p.o.otop?null:NL[p.o.nrd],nr:p=>p.o.otop?null:RL[p.o.nr],sch:p=>p.o.otop?null:(p.o.sna?"Schedule NA":`Beyond MRD (${fd(p.o.sched)})`),devS:p=>p.o.devS||null};
-const PART_T={title:"OTOP Details",filter:scopeF,groups:[["Part Details",7],["OTOP",5],["Non-OTOP",4]],
+const PART_T={title:"OTOP Details",filter:scopeF,groups:[["Part Details",7],["OTOP",6],["Non-OTOP",4]],
   cols:[["model","Model"],["no","Part Number"],["name","Part Name"],["pic","PIC"],["dept","Department"],["vname","Vendor Name"],["ecnC","ECN / Non ECN"],
-    ["otT","OTOP Status"],["plan","OTOP Plan Date"],["ready","Readiness"],["dlyT","OTOP Delay Case"],["dr","Delay Reason"],
+    ["otT","OTOP Status"],["vT","Vendor OTOP Status"],["plan","OTOP Plan Date"],["ready","Readiness"],["dlyT","OTOP Delay Case"],["dr","Delay Reason"],
     ["nrd","Non-OTOP Status"],["nr","Non-OTOP Reason"],["sch","Schedule"],["devS","Deviation Status"]],
   cell:(p,f)=>PCELL[f]?(PCELL[f](p)??"-"):p[f],
   row:p=>{const c=f=>PCELL[f](p);return`<tr><td class="id">${p.model}</td><td class="id">${p.no}</td><td class="wrap">${p.name}</td><td class="wrap">${p.pic}</td><td>${p.dept}</td><td class="wrap">${p.vname}</td><td>${p.ecnC}</td>`+
-    `<td>${p.o.otop?stCell("OTOP","ok"):stCell("Non-OTOP","tbc")}</td><td>${c("plan")||dash}</td><td>${c("ready")?stCell(c("ready"),c("ready")==="Ready"?"ok":"tbc"):dash}</td><td>${c("dlyT")?(p.o.dly?stCell("Yes","bad"):"No"):dash}</td><td>${c("dr")||dash}</td>`+
+    `<td>${p.o.otop?stCell("OTOP","ok"):stCell("Non-OTOP","tbc")}</td><td>${p.o.vOtop?stCell("OTOP","bad"):c("vT")}</td><td>${c("plan")||dash}</td><td>${c("ready")?stCell(c("ready"),c("ready")==="Ready"?"ok":"tbc"):dash}</td><td>${c("dlyT")?(p.o.dly?stCell("Yes","bad"):"No"):dash}</td><td>${c("dr")||dash}</td>`+
     `<td>${c("nrd")||dash}</td><td>${c("nr")||dash}</td><td>${c("sch")||dash}</td><td>${c("devS")?stCell(c("devS"),DS[c("devS")]):dash}</td></tr>`},
   count:rows=>`${rows.length} parts`};
 [DEPT_T,PART_T].forEach(t=>t.tileFilter=m=>m==="total"?null:has(M[m][2]));
 
 const PAGECFG={
-  defaultTab:"ov",clearMetricOnTab:true,get tileCols(){return S.cat==="ov"?8:TILES[S.cat].length},
+  defaultTab:"ov",clearMetricOnTab:true,get tileCols(){return S.cat==="ov"?8:S.cat==="od"?3:TILES[S.cat].length},
   tabs:[{k:"ov",label:"Overall Summary",icon:ic('home')},{k:"nb",label:"Non OTOP Breakup",icon:ic('layers')},{k:"rs",label:"Non OTOP Reason",icon:ic('clipboard-list')},
-        {k:"dv",label:"Deviation for Non OTOP Breakup",icon:ic('file-shield')},{k:"od",label:"OTOP Delay Cases Breakup",icon:ic('calendar-month')}],
+        {k:"dv",label:"Deviation for Non OTOP Breakup",icon:ic('file-shield')},{k:"od",label:"OTOP Status Alignment",icon:ic('scale-balanced')}],
   tiles:cat=>TILES[cat],tileValues:rows=>evals(PV(rows)),
   get table(){return S.tview==="parts"?PART_T:DEPT_T},
-  init(){$("ctx-right").addEventListener("click",e=>{const b=e.target.closest("[data-rby]");if(!b||S.rby===b.dataset.rby)return;S.rby=b.dataset.rby;clearGraphSel("R");PAGECFG.renderAll()});
+  // 11 Nov: tighter segment tabs on this page only (style lives here so no other page changes)
+  init(){document.head.insertAdjacentHTML("beforeend",`<style>.tabs.tight{gap:0}.tabs.tight .tab{padding:6px 6.5px 12px;gap:6px} @media (max-width:1440px){.tabs.tight .tab{font-size:13px;padding:6px 5.5px 12px;gap:5px}} @media (max-width:1370px){.card.has-ovs:has(.tabs.tight) .ovs-badge{position:static;justify-content:flex-end;margin-bottom:6px}}</style>`);$("tabs").classList.add("tight");$("ctx-right").addEventListener("click",e=>{const b=e.target.closest("[data-rby]");if(!b||S.rby===b.dataset.rby)return;S.rby=b.dataset.rby;clearGraphSel("R");PAGECFG.renderAll()});
     // page-level switch (same pattern as Tier 2): filters every section, layout unchanged
     document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{if(S.pv===b.dataset.view)return;S.pv=b.dataset.view;
       document.querySelectorAll("[data-view]").forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-selected",x===b)});S.gsel=null;S.t.page=0;render()}))},
@@ -2722,6 +2727,7 @@ const PAGECFG={
       v.dly&&{k:td[1],s:`${td[0]} is the top OTOP delay reason`,t:`${td[0]} explains ${td[1]} of ${v.dly} OTOP delay cases`,d:`${pct(td[1],v.dly)}% of delay cases.`,o:"QA Team"},
       S.pv==="all"&&{k:`${pct(sum(rows.filter(p=>p.ecnC==="ECN"),"eo"),sum(rows,"ecP"))}% · ${pct(sum(rows.filter(p=>p.ecnC!=="ECN"),"eo"),sum(rows,"necP"))}%`,s:"OTOP share, ECN vs Non ECN parts",t:`OTOP share is ${pct(sum(rows.filter(p=>p.ecnC==="ECN"),"eo"),sum(rows,"ecP"))}% for ECN and ${pct(sum(rows.filter(p=>p.ecnC!=="ECN"),"eo"),sum(rows,"necP"))}% for Non ECN parts`,d:`${sum(rows,"ecP")} ECN and ${sum(rows,"necP")} Non ECN parts.`,o:"Programme Head"},
       bd[1]&&{k:bd[1],s:`OTOP delay cases in ${bd[0]}, the most of any department`,t:`${bd[0]} has ${bd[1]} OTOP delay cases`,d:"Highest of all departments.",o:`${bd[0]} Team`},
+      v.vmo&&{k:v.vmo,s:"Parts the vendor marks OTOP but MSIL marks Non-OTOP",t:`${v.vmo} of ${v.non} Non-OTOP parts are declared OTOP by the vendor`,d:"OTOP status needs aligning with the vendor (sample).",o:"Supplier Quality"},
       v.non&&{k:`${pct(v.sna,v.non)}%`,s:"Of Non-OTOP parts have no schedule",t:`${v.sna} of ${v.non} Non-OTOP parts have no schedule (Schedule NA)`,d:`${v.sby} scheduled beyond MRD.`,o:"Section Head"}].filter(Boolean);
     return out}
 };
