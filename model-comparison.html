@@ -2643,7 +2643,9 @@ document.head.insertAdjacentHTML("beforeend",`<style>
 button.mr-card:hover .mr-car{transform:translateX(-8px)}button.mr-card:hover .mr-top,button.mr-card:hover .mc-row b{transform:translateX(3px)}button.mr-card:hover .mr-st{transform:translateX(-3px)}button.mr-card:hover .mr-rank{transform:translateX(4px)}
 @media (prefers-reduced-motion:reduce){.mr-car,.mr-top,.mr-st,.mr-rank{transition:none}}
 /* selected + suggested model cards reuse the ranking card */
-.mc-cards .mr-card{flex:none;width:250px;height:112px;cursor:default}
+.mc-cards .mr-card{flex:none;width:250px;height:112px;cursor:default;background-position:right -50px center;background-size:auto 230%}
+.mc-cards .mr-card>.mr-st,.mc-sug .mr-card>.mr-st{position:relative;top:auto;right:auto;z-index:2;align-self:flex-start;margin-top:2px;font-size:13px}
+.mc-sug .mr-card{background-position:right -50px center;background-size:auto 230%}
 .mc-row{position:relative;z-index:2;display:flex;align-items:center;gap:10px}.mc-row b{font-size:16px;font-weight:600;color:var(--heading);line-height:24px;white-space:nowrap;margin-right:auto}.mc-row .mr-st{position:static;font-size:13px;line-height:24px}
 .mc-rmx{all:unset;flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:6px;color:var(--muted);cursor:pointer}.mc-rmx:hover{color:var(--heading);background:#F3F4F6}.mc-rmx:focus-visible{outline:2px solid var(--brand)}
 .mc-sug .mr-card{flex:none;width:230px;height:104px;scroll-snap-align:start}
@@ -2781,7 +2783,7 @@ const tag=st=>`<span class="mc-tag ${OV3C[st]||""}"><i></i>${st}</span>`;
 const cardIn=m=>{const ov=mStat(m),nx=nextMrd(m);return`<span class="mr-st ${OV3C[ov.status]||""}" title="Overall Status · ${ov.why}"><i></i>${ov.status}</span>
     <span class="mr-top"><b>${m}</b>${nx?`<span class="mr-mrd" title="Next upcoming MRD"><span>${nx.l}<span class="mr-d">${fmtDay(dayDate(nx.d))}</span></span></span>`:""}</span>
     <span class="mr-car" aria-hidden="true"><img src="${IMG(m).src}" alt=""><img class="rf" src="${IMG(m).src}" alt=""></span>`};
-const cardMini=(m,x="")=>{const ov=mStat(m);return`<span class="mc-row"><b>${m}</b><span class="mr-st ${OV3C[ov.status]||""}" title="Overall Status · ${ov.why}"><i></i>${ov.status}</span>${x}</span>
+const cardMini=(m,x="")=>{const ov=mStat(m),st=`<span class="mr-st ${OV3C[ov.status]||""}" title="Overall Status · ${ov.why}"><i></i>${ov.status}</span>`;return`<span class="mc-row"><b>${m}</b>${x}</span>${st}
     <span class="mr-car" aria-hidden="true"><img src="${IMG(m).src}" alt=""><img class="rf" src="${IMG(m).src}" alt=""></span>`};
 function rankCard(m,i){
   return`<button type="button" class="mr-card r${i}" aria-label="Rank ${i+1}: ${m}" data-addm="${m}" title="${MC.sel.includes(m)?`${m} is in the comparison`:`Add ${m} to the comparison`}"><span class="mr-rank" aria-hidden="true">${i+1}</span>${cardIn(m)}</button>`}
