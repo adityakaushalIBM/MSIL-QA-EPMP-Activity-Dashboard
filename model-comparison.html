@@ -2742,6 +2742,7 @@ button.mr-card:hover .mr-car{transform:translateX(-8px)}button.mr-card:hover .mr
 .mc-note{margin:12px 2px 0;font-size:13px;color:var(--muted)}
 .mc-allm{all:unset;cursor:pointer;text-decoration:underline;font-weight:600}
 .mc-actbar{display:flex;align-items:center;gap:12px;margin:0 0 14px;flex-wrap:wrap}.mc-actbar b{font-size:16px;font-weight:600;color:var(--heading)}.mc-actbar span{color:var(--muted)}
+@keyframes mcflash{0%{box-shadow:0 0 0 0 rgba(240,68,56,.55)}100%{box-shadow:0 0 0 14px rgba(240,68,56,0)}}#kia-drawer.mc-flash{animation:mcflash .9s ease-out .25s}
 .mc-open{font-size:12px;font-weight:500;color:var(--brand);text-decoration:none;margin-left:8px}
 #kia-trig{display:none!important}
 @media (max-width:1100px){.mc-pod{flex-wrap:wrap}.mr-card{flex-basis:220px}}
@@ -2774,7 +2775,7 @@ function allAlerts(){const R=ranked(),A=R.map(m=>({m,a:modelAlerts(m),o:mStat(m)
   return{mgmt,ins,crit}}
 const PAGECFG={tabs:[],kiaOpts:{},renderLeft(){},renderRight(){},kia:()=>MC.cur?modelAlerts(MC.cur):allAlerts()};kiaGo=()=>{};
 function kiaBand(){const p=$("kia-drawer")&&$("kia-drawer").querySelector(".kia-band p");if(p)p.innerHTML=MC.cur?`${MC.cur} · <button type="button" class="mc-allm" data-allm="1">All models</button>`:"All models · Model Comparison"}
-function openDrawer(m){MC.cur=m;KIA.tab="crit";kiaBand();renderAlerts();const k=$("kia-drawer");if(k){const r=k.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)k.scrollIntoView({block:"nearest"})}}
+function openDrawer(m){MC.cur=m;KIA.tab="crit";kiaBand();renderAlerts();const k=$("kia-drawer");if(k){const top=k.getBoundingClientRect().top+scrollY-88;scrollTo({top:Math.max(0,top),behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"});k.classList.remove("mc-flash");void k.offsetWidth;k.classList.add("mc-flash")}}
 // ---- rankings (Best Performing / At Risk)
 function modelScore(m){const rows=mRows(m);let sc=0;ACTS.forEach(([k])=>{const st=ovsOverall(actStats(rows,k));sc+=st==="On Track"?2:st==="At Risk"?1:0});
   const o={n:0,NG:0,"Not Ready":0};ACTS.forEach(([k])=>{const a=actStats(rows,k);o.n+=a.n;o.NG+=a.NG;o["Not Ready"]+=a["Not Ready"]});return sc-(o.n?(o.NG+o["Not Ready"])/o.n:0)}
