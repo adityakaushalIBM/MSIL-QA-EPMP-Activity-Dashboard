@@ -2553,12 +2553,13 @@ function renderStage3(el,m){const PX=26,ms=modelMilestones(m),fd=(d,o)=>dayDate(
 // Lab Testing, Inspection, OT, Sheet Metal Accuracy. Each deviation record is NG (deviation taken) or Pending Approval.
 // Total Deviations = all deviation records; Deviations Taken (NG) = NG records.
 // Special Part = a separate part flag (special characteristic part), independent of deviations.
-// Total (All NGs) = Deviations Taken (NG) + Special Parts (the two nested tiles add up to it).
+// Total (All NGs) = Deviations Taken (NG) + Pending Approval + Special Parts (13 Nov: the three nested tiles add up to it).
 // Corrected parts and reverification apply to parts with at least one NG deviation taken:
 // each has a corrected-part availability date (actual if on or before today, otherwise expected) compared with its model's PP Trial end,
 // and a reverification: Done (OK / NG, only once the corrected part is available) or Pending.
 const RDV=rng(241);
 const DTYPES=[["lab","Lab Testing","r3"],["ins","Inspection","tot"],["ot","OT","dup"],["sma","Sheet Metal Accuracy","po"]];
+const TRL=/-mpp\.html$/.test(location.pathname)?"MPP":"PP";  // 13 Nov: the MPP copy of this page labels its trial end as MPP
 const PP_END=Object.fromEntries(MODELS.map(m=>[m,MODEL_MRD_DAYS[m]-21]));
 const Dl=n=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+n);return d};
 const fmtL=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
@@ -2571,10 +2572,10 @@ const cnt=(r,f)=>r.filter(f).length,grp=(rows,key,groups)=>groups.map(g=>rows.fi
 const recs=r=>r.flatMap(p=>p.devs);
 function dvals(r){const D=recs(r),o={total:r.length,devs:D.length,ng:cnt(D,d=>d.st==="NG"),pa:cnt(D,d=>d.st!=="NG"),spc:cnt(r,p=>p.special),
   bef:cnt(r,p=>p.corrWhen==="Before"),aft:cnt(r,p=>p.corrWhen==="After"),rvok:cnt(r,p=>p.rv==="OK"),rvng:cnt(r,p=>p.rv==="NG"),rvp:cnt(r,p=>p.rv==="Pending")};
-  o.rvd=o.rvok+o.rvng;o.sup=o.ng+o.spc;DTYPES.forEach(([k])=>o["t_"+k]=cnt(D,d=>d.type===k));return o}
+  o.rvd=o.rvok+o.rvng;o.sup=o.ng+o.pa+o.spc;DTYPES.forEach(([k])=>o["t_"+k]=cnt(D,d=>d.type===k));return o}
 const TILES={ov:[{m:"total",l:"Total No. of Parts",c:"t-total",bar:"tot"},{m:"devs",l:"Total Deviations",c:"t-pt",bar:"pt"}],
-  sp:[{m:"sup",l:"Total (All NGs)",c:"t-plain",bar:"dup",span:3,subCols:2,subs:[{m:"ng",l:"Deviations Taken (NG)",c:"t-bad",bar:"bad"},{m:"spc",l:"Special Parts",c:"t-r3",bar:"r3"}]}],
-  ca:[{m:"bef",l:"Corrected Parts Avbl Before PP Trial End",c:"t-ok",bar:"ok"},{m:"aft",l:"Corrected Parts Avbl After PP Trial End",c:"t-tbc",bar:"tbc"}],
+  sp:[{m:"sup",l:"Total (All NGs)",c:"t-plain",bar:"dup",span:3,subCols:3,subs:[{m:"ng",l:"Deviations Taken (NG)",c:"t-bad",bar:"bad"},{m:"pa",l:"Pending Approval",c:"t-tbc",bar:"tbc"},{m:"spc",l:"Special Parts",c:"t-r3",bar:"r3"}]}],
+  ca:[{m:"bef",l:"Corrected Parts Avbl Before "+TRL+" Trial End",c:"t-ok",bar:"ok"},{m:"aft",l:"Corrected Parts Avbl After "+TRL+" Trial End",c:"t-tbc",bar:"tbc"}],
   rv:[{m:"rvd",l:"Reverification Done",c:"t-plain",bar:"ini",span:2,subs:[{m:"rvok",l:"Done - OK",c:"t-ok",bar:"ok"},{m:"rvng",l:"Done - NG",c:"t-bad",bar:"bad"}]},{m:"rvp",l:"Reverification Pending",c:"t-tbc",bar:"tbc"}]};
 const UNIT={devs:"deviation records",ng:"deviation records"};
 S.leftType="spl";
@@ -2584,7 +2585,7 @@ const DEVB=DTYPES.map(([k,l,c])=>[l,r=>cnt(recs(r),d=>d.type===k),c]);
 const TL=Object.fromEntries(DTYPES.map(([k,l])=>[k,l])),dash='<span style="color:var(--subtle)">–</span>',yn=b=>b?"Yes":'<span style="color:var(--subtle)">No</span>';
 // table: one row per part-deviation record; parts without a deviation keep one row
 const expand=rows=>rows.flatMap(p=>p.devs.length?p.devs.map((d,i)=>({...p,dev:d,dtype:TL[d.type],dst:d.st,_k:p.id+"-"+i})):[{...p,dev:null,dtype:null,dst:null,_k:p.id}]);
-const TF={total:r=>true,devs:r=>!!r.dev,ng:r=>r.dst==="NG",sup:r=>r.dst==="NG"||r.special,spc:r=>r.special,bef:r=>r.corrWhen==="Before",aft:r=>r.corrWhen==="After",
+const TF={total:r=>true,devs:r=>!!r.dev,ng:r=>r.dst==="NG",sup:r=>!!r.dst||r.special,spc:r=>r.special,pa:r=>r.dst==="Pending Approval",bef:r=>r.corrWhen==="Before",aft:r=>r.corrWhen==="After",
   rvd:r=>r.rv==="OK"||r.rv==="NG",rvok:r=>r.rv==="OK",rvng:r=>r.rv==="NG",rvp:r=>r.rv==="Pending"};
 
 const PAGECFG={
@@ -2604,27 +2605,27 @@ const PAGECFG={
       showRight();drawChart("R",{data:{labels:groups,datasets:[ds(t.l,v,t.bar)]}});
       $("cap-right").textContent=`${word} Wise ${t.l}`;$("lg-right").innerHTML=legendHtml([[t.l,t.bar]]);$("n-right").textContent=`${v.reduce((a,b)=>a+b,0)} ${UNIT[t.m]||"parts"}`;return}
     const v=dvals(rows);showRight();
-    const S3={ov:[["Deviations Taken (NG)","ng","bad"],["Pending Approval","pa","tbc"]],sp:[["Total (All NGs)","sup","dup"],["Deviations Taken (NG)","ng","bad"],["Special Parts","spc","r3"]],
-      ca:[["Avbl Before PP Trial End","bef","ok"],["Avbl After PP Trial End","aft","tbc"]],rv:[["Done - OK","rvok","ok"],["Done - NG","rvng","bad"],["Pending","rvp","tbc"]]}[S.cat];
+    const S3={ov:[["Deviations Taken (NG)","ng","bad"],["Pending Approval","pa","tbc"]],sp:[["Total (All NGs)","sup","dup"],["Deviations Taken (NG)","ng","bad"],["Pending Approval","pa","tbc"],["Special Parts","spc","r3"]],
+      ca:[["Avbl Before "+TRL+" Trial End","bef","ok"],["Avbl After "+TRL+" Trial End","aft","tbc"]],rv:[["Done - OK","rvok","ok"],["Done - NG","rvng","bad"],["Pending","rvp","tbc"]]}[S.cat];
     drawChart("R",{data:{labels:groups,datasets:S3.map(([l,m,k])=>ds(l,G.map(r=>dvals(r)[m]),k,m==="pa"?{f:r=>r.dst==="Pending Approval"}:{}))}});
     $("cap-right").textContent=`${word} Wise ${{ov:"Deviation Status · deviation records",sp:"Special Parts",ca:"Corrected Parts Availability",rv:"Reverification Status"}[S.cat]}`;
     $("lg-right").innerHTML=legendHtml(S3.map(([l,,k])=>[l,k]));
-    $("n-right").textContent={ov:`${v.devs} deviation records: ${v.ng} NG, ${v.pa} pending approval`,sp:`Total (All NGs) ${v.sup} = ${v.ng} deviations taken (NG) + ${v.spc} special parts`,
+    $("n-right").textContent={ov:`${v.devs} deviation records: ${v.ng} NG, ${v.pa} pending approval`,sp:`Total (All NGs) ${v.sup} = ${v.ng} deviations taken (NG) + ${v.pa} pending approval + ${v.spc} special parts`,
       ca:`${v.bef+v.aft} parts with an NG deviation · dates after today are expected dates`,rv:`${v.rvd} done (${v.rvok} OK, ${v.rvng} NG) · ${v.rvp} pending`}[S.cat]},
   table:{title:"Part & Deviation Details",groups:[["Part Details",5],["Classification",2],["Deviation",2],["Correction & Reverification",3]],expand,
     tileFilter:m=>TF[m],count:r=>`${r.length} rows · ${new Set(r.map(x=>x.id)).size} parts · ${r.filter(x=>x.dev).length} deviation records`,
     cols:[["model","Model"],["no","Part Number"],["name","Part Name"],["dept","Dept."],["vname","Vendor Name"],["spT","Special Part"],["suT","In Total (All NGs)"],
-      ["dtype","Deviation Type"],["dst","Deviation Status"],["corrD","Corrected Part Avbl"],["corrWhen","vs PP Trial End"],["rv","Reverification"]],
-    cell:(r,f)=>f==="spT"?(r.special?"Yes":"No"):f==="suT"?(r.dst==="NG"||r.special?"Yes":"No"):f==="corrD"?(r.corr===null?null:fmtL(Dl(r.corr))):f==="corrWhen"?(r.corrWhen?r.corrWhen+" PP Trial End":null):r[f],
+      ["dtype","Deviation Type"],["dst","Deviation Status"],["corrD","Corrected Part Avbl"],["corrWhen","vs "+TRL+" Trial End"],["rv","Reverification"]],
+    cell:(r,f)=>f==="spT"?(r.special?"Yes":"No"):f==="suT"?(r.dst||r.special?"Yes":"No"):f==="corrD"?(r.corr===null?null:fmtL(Dl(r.corr))):f==="corrWhen"?(r.corrWhen?r.corrWhen+" "+TRL+" Trial End":null):r[f],
     row:r=>`<tr><td class="id">${r.model}</td><td class="id">${r.no}</td><td class="wrap">${r.name}</td><td>${r.dept}</td><td class="wrap">${r.vname}</td>`+
-      `<td>${yn(r.special)}</td><td>${yn(r.dst==="NG"||r.special)}</td><td>${r.dtype||dash}</td><td>${r.dst?stCell(r.dst,r.dst==="NG"?"bad":"tbc"):dash}</td>`+
-      `<td>${r.corr===null?dash:fmtL(Dl(r.corr))+(r.corr>0?' <span style="color:var(--subtle)">(expected)</span>':"")}</td><td>${r.corrWhen?stCell(r.corrWhen+" PP Trial End",r.corrWhen==="Before"?"ok":"tbc"):dash}</td>`+
+      `<td>${yn(r.special)}</td><td>${yn(!!r.dst||r.special)}</td><td>${r.dtype||dash}</td><td>${r.dst?stCell(r.dst,r.dst==="NG"?"bad":"tbc"):dash}</td>`+
+      `<td>${r.corr===null?dash:fmtL(Dl(r.corr))+(r.corr>0?' <span style="color:var(--subtle)">(expected)</span>':"")}</td><td>${r.corrWhen?stCell(r.corrWhen+" "+TRL+" Trial End",r.corrWhen==="Before"?"ok":"tbc"):dash}</td>`+
       `<td>${r.rv?stCell(r.rv,{OK:"ok",NG:"bad",Pending:"tbc"}[r.rv]):dash}</td></tr>`},
   alerts(rows){const out={crit:[],mgmt:[],ins:[]},v=dvals(rows);if(!rows.length)return out;
     if(v.rvng)out.crit.push({t:`${v.rvng} corrected parts NG on reverification`,d:"The deviation stays in use until a corrected part passes.",o:"QA Head"});
-    if(v.aft)out.mgmt.push({t:`${v.aft} corrected parts available only after PP Trial end`,d:`${v.bef} available before PP Trial end.`,o:"Section Head"});
+    if(v.aft)out.mgmt.push({t:`${v.aft} corrected parts available only after ${TRL} Trial end`,d:`${v.bef} available before ${TRL} Trial end.`,o:"Section Head"});
     if(v.pa)out.mgmt.push({t:`${v.pa} deviations pending approval`,d:`${v.ng} deviations taken (NG).`,o:"QA Head"});
-    out.ins.push({t:`Total (All NGs) ${v.sup}: ${v.ng} deviations taken (NG) + ${v.spc} special parts`,d:`${v.devs} deviation records on ${cnt(rows,p=>p.devs.length)} parts in total.`,o:"QA Team"});return out}
+    out.ins.push({t:`Total (All NGs) ${v.sup}: ${v.ng} deviations taken (NG) + ${v.pa} pending approval + ${v.spc} special parts`,d:`${v.devs} deviation records on ${cnt(rows,p=>p.devs.length)} parts in total.`,o:"QA Team"});return out}
 };
 
 // ===== Key Insights & Alerts — trigger card beside the page title + drawer (opt-in per page: PAGES[...]['kia']=True) =====
