@@ -1969,7 +1969,7 @@ function drawChart(slot,cfg){if(CH[slot])CH[slot].destroy();
     if(maxO>0&&maxT>2*maxO){const k=1.25*maxO/maxT;B.forEach(d=>{d._realT=d.data[TI];d.data[TI]=(+d.data[TI]||0)*k})}}
   const cv=$(CV[slot]),inner=cv.parentElement,box=inner.parentElement,n=cfg.data.labels.length;
   const BD=cfg.data.datasets.filter(d=>d.type!=="line"),bars=cfg.stacked?new Set(BD.map(d=>d.stack||"_")).size||1:Math.max(1,BD.filter(d=>d.grouped!==false).length+(BD.some(d=>d.grouped===false)?1:0));
-  const need=(cfg.type||"bar")==="bar"?Math.ceil(n*stdGroupW(bars,cfg.minPer)+70):0;inner.style.width=need>box.clientWidth?need+"px":"100%";box.parentElement.classList.toggle("scrolls",need>box.clientWidth);if(cfg.stacked)cfg.data.datasets.forEach(d=>{d.borderRadius=topOnly;d.borderSkipped=false});const opts=cfg.options||chartOpts(cfg);
+  const need=(cfg.type||"bar")==="bar"?Math.ceil(n*stdGroupW(bars,cfg.minPer,cfg.colGap)+70):0;inner.style.width=need>box.clientWidth?need+"px":"100%";box.parentElement.classList.toggle("scrolls",need>box.clientWidth);if(cfg.stacked)cfg.data.datasets.forEach(d=>{d.borderRadius=topOnly;d.borderSkipped=false});const opts=cfg.options||chartOpts(cfg);
   if(tot){if(opts.scales&&opts.scales.x){opts.scales.x.ticks=opts.scales.x.ticks||{};opts.scales.x.ticks.font=c=>({weight:c.index===TI?"700":"400"})}
     // the Total group gets no page-specific footer and shows its true (unshortened) values
     const cb=opts.plugins.tooltip.callbacks=opts.plugins.tooltip.callbacks||{};if(!cb.label)cb.label=c=>` ${c.dataset.label}: ${c.formattedValue}${c.dataset.suffix||""}`;Object.keys(cb).forEach(k=>{const f=cb[k];cb[k]=function(x){const arr=Array.isArray(x)?x:[x];if(!arr[0])return f.call(this,x);
@@ -1977,7 +1977,7 @@ function drawChart(slot,cfg){if(CH[slot])CH[slot].destroy();
       return f.call(this,x)}})}
 
   // clustered columns: fixed 6px gap between columns of one label, the rest of the label's width becomes the gap between labels
-  if((cfg.type||"bar")==="bar")opts.plugins.colstd={on:true,minPer:cfg.minPer||0};
+  if((cfg.type||"bar")==="bar")opts.plugins.colstd={on:true,minPer:cfg.minPer||0,gi:cfg.colGap};
   CH[slot]=new Chart(cv,{type:cfg.type||"bar",data:cfg.data,options:opts,plugins:cfg.plugins||[labelPlugin]});syncPlots()}
 // Total group look (last group): light grey band and a dashed divider before it
 const isTot=ch=>ch.data.labels.length>1&&ch.data.labels[ch.data.labels.length-1]==="Total";
@@ -1999,10 +1999,11 @@ const CGAP=6;
 // room the chart still spans the full width; only the gap between groups grows. Page-level column widths (maxBarThickness etc.) are overridden here.
 // A page may still pass minPer (minimum group width) where long category labels need room; that only widens the gap between groups.
 const COLSTD={1:{col:28,gi:0,go:32},2:{col:22,gi:5,go:36},3:{col:18,gi:5,go:45},4:{col:16,gi:5,go:50}};
-const stdGroupW=(bars,minPer)=>{const s=COLSTD[Math.min(Math.max(bars,1),4)];return Math.max(minPer||0,bars*(s.col+s.gi)-s.gi+s.go)};
+// colGap (optional, per chart): wider gap between columns in a group, e.g. where each column carries its own label underneath
+const stdGroupW=(bars,minPer,gi)=>{const s={...COLSTD[Math.min(Math.max(bars,1),4)]};if(gi!=null)s.gi=gi;return Math.max(minPer||0,bars*(s.col+s.gi)-s.gi+s.go)};
 Chart.register({id:"colstd",afterLayout(ch,_,o){if(!o||!o.on)return;const x=ch.scales.x,n=ch.data.labels.length,D=ch.data.datasets.filter(d=>d.type!=="line");if(!x||!n||!D.length)return;
   const st=!!(ch.options.scales&&ch.options.scales.x&&ch.options.scales.x.stacked),ov=D.filter(d=>d.grouped===false),gr=D.filter(d=>d.grouped!==false);
-  const bars=st?new Set(D.map(d=>d.stack||"_")).size:Math.max(1,gr.length+(ov.length?1:0)),s=COLSTD[Math.min(bars,4)],chunk=s.col+s.gi,Wc=stdGroupW(bars,o.minPer);
+  const bars=st?new Set(D.map(d=>d.stack||"_")).size:Math.max(1,gr.length+(ov.length?1:0)),s={...COLSTD[Math.min(bars,4)],...(o.gi!=null?{gi:o.gi}:{})},chunk=s.col+s.gi,Wc=stdGroupW(bars,o.minPer,o.gi);
   const plotW=x.right-x.left,inner=ch.canvas.parentElement,box=inner.parentElement,want=Math.ceil(n*Wc+(ch.width-plotW)),fits=want<=box.clientWidth+1,ws=fits?"100%":want+"px";
   if(inner.style.width!==ws){inner.style.width=ws;box.parentElement.classList.toggle("scrolls",!fits);if(!ch.$csq){ch.$csq=1;requestAnimationFrame(()=>{ch.$csq=0;if(ch.canvas)ch.resize()})}return}
   const W=plotW/n;let chg=false;const set=(d,cp,bp)=>{cp=Math.min(1,cp);if(Math.abs((d.categoryPercentage||0)-cp)>1e-4||Math.abs((d.barPercentage||0)-bp)>1e-4||d.maxBarThickness!=null||d.barThickness!=null){d.categoryPercentage=cp;d.barPercentage=bp;delete d.maxBarThickness;delete d.barThickness;chg=true}};
@@ -2655,7 +2656,7 @@ function renderWide(){const rows=selRows("c-ng"),ng=rows.filter(p=>p.ng),key=S.w
     sets.push(Object.assign(ds(`${cl} · ${crl}`,G.map(r=>cnt(r,f)),k,{stack:"s"+ci,maxBarThickness:64}),{f,clu:cl}))}));
   const o=chartOpts({stacked:true,mode:"stack",callbacks:{label:c=>` ${c.dataset.label}: ${c.raw}`,footer:it=>{const d=it[0].dataset,i=it[0].dataIndex,r=i<G.length?G[i]:ng,cf=CLU.find(x=>x[0]===d.clu)[1];return`${d.clu} NG: ${cnt(r,cf)}`}}});
   o.scales.x.ticks.padding=28;o.layout.padding.top=28;
-  drawChart("N",{data:{labels:groups,datasets:sets},stacked:true,keepStack:true,options:o,plugins:[labelPlugin,CLUS],minPer:300,totFooter:true});
+  drawChart("N",{data:{labels:groups,datasets:sets},stacked:true,keepStack:true,options:o,plugins:[labelPlugin,CLUS],minPer:300,colGap:48,totFooter:true});  // 17 Nov: 48px between Total / Quality / Capacity so their labels don't overlap
   $("cap-ng").textContent=`${word(key)} Wise PPVT NG Closure Status · Total, Quality and Capacity columns`;$("lg-ng").innerHTML=legendHtml(CRS.map(([l,,k])=>[l,k]));
   $("n-ng").textContent=`${ng.length} NG parts · ${sm(ng,"rp")} re-PPVT, ${sm(ng,"cmv")} counter measure verification, ${sm(ng,"oka")} OK as-is · each column stacks one cluster by closure status${selNote("c-ng")}`}
 
